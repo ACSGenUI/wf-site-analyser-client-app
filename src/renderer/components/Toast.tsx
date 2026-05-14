@@ -10,10 +10,10 @@ export interface ToastProps {
 }
 
 const variantClasses: Record<ToastVariant, string> = {
-  default: 'bg-gray-800 text-white',
+  default: 'bg-neutral-800 text-white',
   success: 'bg-green-600 text-white',
   warning: 'bg-amber-500 text-white',
-  error: 'bg-red-600 text-white',
+  error: 'bg-error text-white',
 };
 
 export function Toast({
@@ -28,7 +28,7 @@ export function Toast({
       aria-live="polite"
       aria-atomic="true"
       className={[
-        'flex items-center justify-between gap-3 rounded-lg px-4 py-3 text-sm shadow-lg',
+        'flex items-center justify-between gap-3 rounded-card px-4 py-3 text-sm shadow-medium',
         variantClasses[variant],
         className,
       ]

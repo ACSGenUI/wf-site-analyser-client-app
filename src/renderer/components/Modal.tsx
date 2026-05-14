@@ -23,7 +23,7 @@ export function Modal({
         <Dialog.Content
           className={[
             'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50',
-            'w-full max-w-lg rounded-xl bg-white p-6 shadow-xl',
+            'w-full max-w-lg rounded-modal bg-white p-6 shadow-medium',
             'focus:outline-none',
             className,
           ]
@@ -32,15 +32,12 @@ export function Modal({
           aria-labelledby="modal-title"
         >
           <div className="flex items-center justify-between mb-4">
-            <Dialog.Title
-              id="modal-title"
-              className="text-lg font-semibold text-gray-900"
-            >
+            <Dialog.Title id="modal-title" className="text-lg font-semibold text-neutral-900">
               {title}
             </Dialog.Title>
             <Dialog.Close
               onClick={onClose}
-              className="rounded p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="rounded p-1 text-neutral-400 hover:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
               aria-label="Close"
             >
               ✕

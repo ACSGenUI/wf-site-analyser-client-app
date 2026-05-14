@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { tokens } from './src/renderer/components/theme';
+import { tokens } from './src/renderer/design-system/tokens';
 
 export default {
   content: ['./src/renderer/**/*.{ts,tsx,html}'],

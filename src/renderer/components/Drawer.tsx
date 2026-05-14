@@ -31,7 +31,7 @@ export function Drawer({
         aria-modal="true"
         aria-label={title ?? 'Drawer'}
         className={[
-          'fixed top-0 bottom-0 z-50 flex w-80 flex-col bg-white shadow-xl transition-transform duration-300',
+          'fixed top-0 bottom-0 z-50 flex w-80 flex-col bg-white shadow-medium transition-transform duration-300',
           side === 'right' ? 'right-0' : 'left-0',
           open
             ? 'translate-x-0'
@@ -44,12 +44,12 @@ export function Drawer({
           .join(' ')}
       >
         {title && (
-          <div className="flex items-center justify-between border-b border-gray-200 p-4">
-            <h2 className="text-base font-semibold text-gray-900">{title}</h2>
+          <div className="flex items-center justify-between border-b border-neutral-200 p-4">
+            <h2 className="text-base font-semibold text-neutral-900">{title}</h2>
             <button
               type="button"
               onClick={onClose}
-              className="rounded p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="rounded p-1 text-neutral-400 hover:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
               aria-label="Close drawer"
             >
               ✕

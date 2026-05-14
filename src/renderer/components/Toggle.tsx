@@ -23,10 +23,7 @@ export function Toggle({
   return (
     <div className="flex items-center gap-2">
       {label && (
-        <label
-          htmlFor={switchId}
-          className="text-sm font-medium text-gray-700 cursor-pointer"
-        >
+        <label htmlFor={switchId} className="text-sm font-medium text-neutral-700 cursor-pointer">
           {label}
         </label>
       )}
@@ -38,8 +35,8 @@ export function Toggle({
         disabled={disabled}
         className={[
           'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-          'data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-300',
+          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
+          'data-[state=checked]:bg-primary data-[state=unchecked]:bg-neutral-300',
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
         ].join(' ')}
       >

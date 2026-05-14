@@ -22,7 +22,7 @@ export function Table({
   return (
     <div
       className={[
-        'w-full overflow-x-auto rounded-lg border border-gray-200',
+        'w-full overflow-x-auto rounded-card border border-neutral-200',
         className,
       ]
         .filter(Boolean)
@@ -30,37 +30,34 @@ export function Table({
     >
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="border-b border-gray-200 bg-gray-50">
+          <tr className="border-b border-neutral-200 bg-neutral-50">
             {columns.map((col) => (
               <th
                 key={col.key}
                 scope="col"
                 style={col.width ? { width: col.width } : undefined}
-                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"
+                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500"
               >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
+        <tbody className="divide-y divide-neutral-100 bg-white">
           {rows.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-4 py-8 text-center text-gray-400"
+                className="px-4 py-8 text-center text-neutral-400"
               >
                 {emptyMessage}
               </td>
             </tr>
           ) : (
             rows.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className="hover:bg-gray-50 transition-colors"
-              >
+              <tr key={rowIndex} className="hover:bg-neutral-50 transition-colors">
                 {columns.map((col) => (
-                  <td key={col.key} className="px-4 py-3 text-gray-700">
+                  <td key={col.key} className="px-4 py-3 text-neutral-700">
                     {row[col.key]}
                   </td>
                 ))}
