@@ -57,6 +57,10 @@ export default {
         caption: [tokens.typography.caption.fontSize, { lineHeight: tokens.typography.caption.lineHeight }],
         small: [tokens.typography.small.fontSize, { lineHeight: tokens.typography.small.lineHeight }],
       },
+      fontFamily: {
+        sans: tokens.fontFamilies.sans,
+        mono: tokens.fontFamilies.mono,
+      },
       spacing: {
         4.5: '18px',
         13: '52px',
