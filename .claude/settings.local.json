@@ -7,7 +7,10 @@
       "Bash(Select-Object Name, FullName)",
       "Bash(npm install *)",
       "Bash(npm test *)",
-      "Bash(npx vitest *)"
+      "Bash(npx vitest *)",
+      "Bash(npm run *)",
+      "Bash(npx electron-vite *)",
+      "PowerShell($env:ELECTRON_RUN_AS_NODE)"
     ]
   }
 }
