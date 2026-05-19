@@ -10,7 +10,18 @@ export default defineConfig({
     setupFiles: ['src/renderer/__tests__/setup.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'html'],
+      reporter: ['text', 'html', 'lcov'],
+      reportsDirectory: './coverage',
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/**/__tests__/**',
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.spec.{ts,tsx}',
+        'src/**/templates/**',
+        'src/renderer/index.tsx',
+        'src/main/index.ts',
+        'src/preload/index.ts',
+      ],
       thresholds: {
         lines: 50,
         functions: 50,
