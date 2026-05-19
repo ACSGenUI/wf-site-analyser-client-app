@@ -1,9 +1,18 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import importPlugin from 'eslint-plugin-import';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
+
+// Resolve __dirname in ESM context so FlatCompat can find legacy configs
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({ baseDirectory: __dirname });
 
 export default [
   // Global ignores
@@ -13,6 +22,12 @@ export default [
 
   // Base JS rules
   js.configs.recommended,
+
+  // Airbnb style guide (SA-106 — added via reviewer feedback).
+  // Note: airbnb-typescript intentionally omitted — its v18 references
+  // @typescript-eslint rules removed in v8 (e.g. brace-style, now handled
+  // by Prettier), which causes a runtime ESLint crash.
+  ...compat.extends('airbnb', 'airbnb/hooks'),
 
   // TypeScript + React source files
   {
