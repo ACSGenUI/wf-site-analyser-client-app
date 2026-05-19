@@ -23,10 +23,6 @@ export default [
   // Base JS rules
   js.configs.recommended,
 
-  // Airbnb style guide (SA-106 — added via reviewer feedback).
-  // Note: airbnb-typescript intentionally omitted — its v18 references
-  // @typescript-eslint rules removed in v8 (e.g. brace-style, now handled
-  // by Prettier), which causes a runtime ESLint crash.
   ...compat.extends('airbnb', 'airbnb/hooks'),
 
   // TypeScript + React source files
