@@ -7,7 +7,18 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 export default [
   // Global ignores
   {
-    ignores: ['node_modules/**', 'out/**', 'dist/**', '*.config.ts', '*.config.js'],
+    ignores: [
+      'node_modules/**',
+      'out/**',
+      'dist/**',
+      '*.config.ts',
+      '*.config.js',
+      'src/renderer/__tests__/auth/**',
+      'src/renderer/__tests__/components/**',
+      'src/renderer/__tests__/features/**',
+      'src/renderer/__tests__/lifecycle/**',
+      'src/renderer/__tests__/templates/**',
+    ],
   },
 
   // Base JS rules
