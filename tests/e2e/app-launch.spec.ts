@@ -16,6 +16,8 @@ test.describe('TC-05: Electron window launch', () => {
     const app = await electron.launch({ args: [MAIN_ENTRY] });
 
     try {
+      // Wait for the first window to be available
+      await app.firstWindow();
       const windowCount = app.windows().length;
       expect(windowCount).toBeGreaterThanOrEqual(1);
     } finally {
