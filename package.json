@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "WF Site Analyser – Electron desktop app for analysing web sites",
   "private": true,
+  "type": "module",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
