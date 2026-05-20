@@ -9,8 +9,7 @@
       "Bash(npm test *)",
       "Bash(npx vitest *)",
       "Bash(npm run *)",
-      "Bash(npx electron-vite *)",
-      "PowerShell($env:ELECTRON_RUN_AS_NODE)"
+      "Bash(npx electron-vite *)"
     ]
   }
 }
