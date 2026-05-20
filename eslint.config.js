@@ -51,6 +51,10 @@ export default [
       '@typescript-eslint/no-explicit-any': 'error',
       // TypeScript handles undefined checking
       'no-undef': 'off',
+      'react/jsx-filename-extension': 'off',
+      'import/extensions': 'off',
+      'import/no-unresolved': 'off',
+      'react/require-default-props': 'off',
       // Structured import ordering with blank-line separators (SA-106)
       'import/order': [
         'error',
