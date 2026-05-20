@@ -65,7 +65,7 @@ jobs:
       - name: Install Electron dependencies (Linux)
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-0 libxss1 libasound2 libgbm-dev xvfb
+          sudo apt-get install -y libgtk-3-0 libxss1 libpulse0 libgbm-dev xvfb
 
       - name: Build app
         run: npm run build
