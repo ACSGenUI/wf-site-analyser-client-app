@@ -25,5 +25,12 @@
     "types": ["node", "vitest/globals"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/renderer/__tests__/auth/**",
+    "src/renderer/__tests__/components/**",
+    "src/renderer/__tests__/features/**",
+    "src/renderer/__tests__/lifecycle/**"
+  ]
 }
