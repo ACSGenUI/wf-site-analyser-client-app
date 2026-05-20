@@ -8,9 +8,10 @@
  * Test File: src/renderer/__tests__/auth/GuestModeEntry.test.tsx
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { App } from '@/App';
 import { Header } from '@/components/Header';
 import { useSessionStore } from '@/store/sessionStore';
@@ -64,9 +65,7 @@ describe('SA-301 – Guest Mode Entry', () => {
     await waitFor(() => {
       expect(window.api.storeSet).toHaveBeenCalledWith(
         'sessionId',
-        expect.stringMatching(
-          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-        ),
+        expect.stringMatching(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i),
       );
     });
   });
@@ -80,9 +79,9 @@ describe('SA-301 – Guest Mode Entry', () => {
       expect(window.api.storeGet).toHaveBeenCalledWith('sessionId');
     });
     // storeSet should NOT be called with a new UUID
-    const setCallWithUUID = vi.mocked(window.api.storeSet).mock.calls.find(
-      ([key, value]) => key === 'sessionId' && value !== savedUUID,
-    );
+    const setCallWithUUID = vi
+      .mocked(window.api.storeSet)
+      .mock.calls.find(([key, value]) => key === 'sessionId' && value !== savedUUID);
     expect(setCallWithUUID).toBeUndefined();
   });
 

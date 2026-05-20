@@ -55,6 +55,14 @@ export default [
       'import/extensions': 'off',
       'import/no-unresolved': 'off',
       'react/require-default-props': 'off',
+      'linebreak-style': 'off',
+      'import/prefer-default-export': 'off',
+      'react/jsx-props-no-spreading': 'off',
+      'function-paren-newline': 'off',
+      'implicit-arrow-linebreak': 'off',
+      'no-confusing-arrow': 'off',
+      'object-curly-newline': 'off',
+      'operator-linebreak': 'off',
       // Structured import ordering with blank-line separators (SA-106)
       'import/order': [
         'error',
@@ -74,6 +82,18 @@ export default [
     },
     settings: {
       react: { version: 'detect' },
+    },
+  },
+
+  // Scaffold test files: components/hooks they reference don't exist yet
+  {
+    files: ['src/renderer/__tests__/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-unused-vars': 'off',
+      'no-promise-executor-return': 'off',
+      'no-restricted-syntax': 'off',
+      'no-await-in-loop': 'off',
     },
   },
 ];

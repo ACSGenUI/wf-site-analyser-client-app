@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/settings/ModelApiKeys.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ModelApiKeys } from '@/features/settings/ModelApiKeys';
 
 function renderApiKeys() {
@@ -80,9 +81,7 @@ describe('SA-902 – Model API Keys Configuration', () => {
   // TC-07: Helper text about encryption shown
   it('TC-07: "Keys are encrypted at rest and never shared." text is visible', () => {
     renderApiKeys();
-    expect(
-      screen.getByText(/keys are encrypted at rest and never shared/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/keys are encrypted at rest and never shared/i)).toBeInTheDocument();
   });
 
   // TC-08: Anthropic key requires sk-ant- prefix

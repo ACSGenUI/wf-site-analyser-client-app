@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/analysis/CsvUpload.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { CsvUpload } from '@/features/analysis/tabs/CsvUpload';
 
 const VALID_CSV_CONTENT = 'url\nhttps://example.com\nhttps://example.com/about';

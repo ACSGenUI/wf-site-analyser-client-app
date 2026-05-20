@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/chat/RAGKnowledgeBase.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { RAGStatusBadge } from '@/features/chat/RAGStatusBadge';
 import { useRAGStore } from '@/store/ragStore';
 

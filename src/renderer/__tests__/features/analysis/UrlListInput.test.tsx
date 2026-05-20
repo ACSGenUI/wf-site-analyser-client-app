@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/analysis/UrlListInput.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { UrlListInput } from '@/features/analysis/tabs/UrlListInput';
 
 const VALID_URLS = 'https://example.com\nhttps://example.com/about\nhttps://example.com/contact';

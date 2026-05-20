@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/chat/SuggestedPromptChips.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { SuggestedPromptChips } from '@/features/chat/SuggestedPromptChips';
 
 const defaultSuggestions = [
@@ -36,9 +37,7 @@ describe('SA-804 – Suggested Prompt Chips', () => {
   it('TC-02: clicking a chip invokes onSelect with the suggestion text', async () => {
     const onSelect = vi.fn();
     renderChips(defaultSuggestions, onSelect);
-    await userEvent.click(
-      screen.getByRole('button', { name: 'How many blocks were extracted?' }),
-    );
+    await userEvent.click(screen.getByRole('button', { name: 'How many blocks were extracted?' }));
     expect(onSelect).toHaveBeenCalledWith('How many blocks were extracted?');
   });
 
@@ -52,11 +51,7 @@ describe('SA-804 – Suggested Prompt Chips', () => {
   // TC-04: Chips hidden when conversation has messages
   it('TC-04: chips are not rendered when hasMessages=true', () => {
     render(
-      <SuggestedPromptChips
-        suggestions={defaultSuggestions}
-        onSelect={vi.fn()}
-        hasMessages={true}
-      />,
+      <SuggestedPromptChips suggestions={defaultSuggestions} onSelect={vi.fn()} hasMessages />,
     );
     expect(screen.queryByRole('button', { name: /how many blocks/i })).toBeNull();
   });
