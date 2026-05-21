@@ -23,10 +23,7 @@ export function Toggle({
   return (
     <div className="flex items-center gap-2">
       {label && (
-        <label
-          htmlFor={switchId}
-          className="text-sm font-medium text-gray-700 cursor-pointer"
-        >
+        <label htmlFor={switchId} className="text-sm font-medium text-gray-700 cursor-pointer">
           {label}
         </label>
       )}

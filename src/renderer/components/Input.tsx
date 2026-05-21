@@ -19,10 +19,7 @@ export function Input({
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label
-          htmlFor={inputId}
-          className="text-sm font-medium text-gray-700"
-        >
+        <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
@@ -32,9 +29,7 @@ export function Input({
         className={[
           'w-full rounded border px-3 py-2 text-sm',
           'focus:outline-none focus:ring-2 focus:ring-offset-0',
-          hasError
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-gray-300 focus:ring-blue-500',
+          hasError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500',
           disabled ? 'cursor-not-allowed opacity-50 bg-gray-50' : 'bg-white',
           className,
         ]

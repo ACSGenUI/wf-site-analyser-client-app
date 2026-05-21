@@ -21,10 +21,7 @@ export function Table({
 }: TableProps): React.ReactElement {
   return (
     <div
-      className={[
-        'w-full overflow-x-auto rounded-lg border border-gray-200',
-        className,
-      ]
+      className={['w-full overflow-x-auto rounded-lg border border-gray-200', className]
         .filter(Boolean)
         .join(' ')}
     >
@@ -46,19 +43,13 @@ export function Table({
         <tbody className="divide-y divide-gray-100 bg-white">
           {rows.length === 0 ? (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="px-4 py-8 text-center text-gray-400"
-              >
+              <td colSpan={columns.length} className="px-4 py-8 text-center text-gray-400">
                 {emptyMessage}
               </td>
             </tr>
           ) : (
             rows.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className="hover:bg-gray-50 transition-colors"
-              >
+              <tr key={rowIndex} className="hover:bg-gray-50 transition-colors">
                 {columns.map((col) => (
                   <td key={col.key} className="px-4 py-3 text-gray-700">
                     {row[col.key]}

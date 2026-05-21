@@ -1,16 +1,44 @@
 {
   "color": {
     "primary": {
-      "default":  { "value": "#0265dc", "type": "color", "description": "Primary brand blue — sidebar active, links" },
-      "dark":     { "value": "#004ead", "type": "color", "description": "Primary dark — icon fills, strong accents" },
-      "accent":   { "value": "#1d4ed8", "type": "color", "description": "Primary accent — URL card icon" },
-      "light":    { "value": "#dbeafe", "type": "color", "description": "Primary light — AI message bubble background" },
-      "lighter":  { "value": "#d8e2ff", "type": "color", "description": "Primary lighter — button text on dark primary" },
-      "surface":  { "value": "#e6ebff", "type": "color", "description": "Primary surface — user message background" }
+      "default": {
+        "value": "#0265dc",
+        "type": "color",
+        "description": "Primary brand blue — sidebar active, links"
+      },
+      "dark": {
+        "value": "#004ead",
+        "type": "color",
+        "description": "Primary dark — icon fills, strong accents"
+      },
+      "accent": {
+        "value": "#1d4ed8",
+        "type": "color",
+        "description": "Primary accent — URL card icon"
+      },
+      "light": {
+        "value": "#dbeafe",
+        "type": "color",
+        "description": "Primary light — AI message bubble background"
+      },
+      "lighter": {
+        "value": "#d8e2ff",
+        "type": "color",
+        "description": "Primary lighter — button text on dark primary"
+      },
+      "surface": {
+        "value": "#e6ebff",
+        "type": "color",
+        "description": "Primary surface — user message background"
+      }
     },
     "neutral": {
-      "50":  { "value": "#f8f9fa", "type": "color", "description": "Page / canvas background" },
-      "100": { "value": "#f3f4f5", "type": "color", "description": "Card surface, panel background" },
+      "50": { "value": "#f8f9fa", "type": "color", "description": "Page / canvas background" },
+      "100": {
+        "value": "#f3f4f5",
+        "type": "color",
+        "description": "Card surface, panel background"
+      },
       "150": { "value": "#edeeef", "type": "color", "description": "Gallery container background" },
       "200": { "value": "#e7e8e9", "type": "color", "description": "Table row, subtle dividers" },
       "250": { "value": "#e1e3e4", "type": "color", "description": "Code block background" },
@@ -25,40 +53,40 @@
       "900": { "value": "#191c1d", "type": "color", "description": "Primary text / heading" }
     },
     "surface": {
-      "page":      { "value": "{color.neutral.50}",  "type": "color" },
-      "card":      { "value": "#ffffff",              "type": "color", "description": "Card / modal surface" },
-      "sidebar":   { "value": "#f1f5f9",              "type": "color", "description": "Side nav rail background" },
-      "header":    { "value": "#d6e0f1",              "type": "color", "description": "Top nav bar background" },
-      "dark":      { "value": "#0f172a",              "type": "color", "description": "Dark onboarding info surface" }
+      "page": { "value": "{color.neutral.50}", "type": "color" },
+      "card": { "value": "#ffffff", "type": "color", "description": "Card / modal surface" },
+      "sidebar": { "value": "#f1f5f9", "type": "color", "description": "Side nav rail background" },
+      "header": { "value": "#d6e0f1", "type": "color", "description": "Top nav bar background" },
+      "dark": { "value": "#0f172a", "type": "color", "description": "Dark onboarding info surface" }
     },
     "text": {
-      "primary":     { "value": "{color.neutral.900}", "type": "color" },
-      "secondary":   { "value": "{color.neutral.800}", "type": "color" },
-      "tertiary":    { "value": "{color.neutral.750}", "type": "color" },
-      "muted":       { "value": "{color.neutral.700}", "type": "color" },
+      "primary": { "value": "{color.neutral.900}", "type": "color" },
+      "secondary": { "value": "{color.neutral.800}", "type": "color" },
+      "tertiary": { "value": "{color.neutral.750}", "type": "color" },
+      "muted": { "value": "{color.neutral.700}", "type": "color" },
       "placeholder": { "value": "{color.neutral.600}", "type": "color" },
-      "disabled":    { "value": "{color.neutral.650}", "type": "color" },
-      "subtle":      { "value": "{color.neutral.500}", "type": "color" }
+      "disabled": { "value": "{color.neutral.650}", "type": "color" },
+      "subtle": { "value": "{color.neutral.500}", "type": "color" }
     },
     "border": {
       "default": { "value": "{color.neutral.400}", "type": "color" },
-      "light":   { "value": "{color.neutral.300}", "type": "color" },
-      "subtle":  { "value": "{color.neutral.200}", "type": "color" }
+      "light": { "value": "{color.neutral.300}", "type": "color" },
+      "subtle": { "value": "{color.neutral.200}", "type": "color" }
     },
     "success": {
       "default": { "value": "#10b981", "type": "color" },
-      "dark":    { "value": "#15803d", "type": "color" },
-      "light":   { "value": "#22c55e", "type": "color" },
+      "dark": { "value": "#15803d", "type": "color" },
+      "light": { "value": "#22c55e", "type": "color" },
       "surface": { "value": "#dcfce7", "type": "color" }
     },
     "warning": {
       "default": { "value": "#f59e0b", "type": "color" },
-      "light":   { "value": "#f97316", "type": "color" },
+      "light": { "value": "#f97316", "type": "color" },
       "surface": { "value": "#fff7ed", "type": "color" }
     },
     "error": {
       "default": { "value": "#ba1a1a", "type": "color" },
-      "dark":    { "value": "#8f3500", "type": "color" },
+      "dark": { "value": "#8f3500", "type": "color" },
       "surface": { "value": "#ffdbcd", "type": "color" }
     },
     "info": {
@@ -75,10 +103,14 @@
     },
     "white": {
       "default": { "value": "#ffffff", "type": "color" },
-      "80":      { "value": "rgba(255,255,255,0.80)", "type": "color", "description": "Nav bar frosted glass" },
-      "70":      { "value": "rgba(255,255,255,0.70)", "type": "color" },
-      "50":      { "value": "rgba(255,255,255,0.50)", "type": "color" },
-      "20":      { "value": "rgba(255,255,255,0.20)", "type": "color" }
+      "80": {
+        "value": "rgba(255,255,255,0.80)",
+        "type": "color",
+        "description": "Nav bar frosted glass"
+      },
+      "70": { "value": "rgba(255,255,255,0.70)", "type": "color" },
+      "50": { "value": "rgba(255,255,255,0.50)", "type": "color" },
+      "20": { "value": "rgba(255,255,255,0.20)", "type": "color" }
     },
     "black": {
       "40": { "value": "rgba(0,0,0,0.40)", "type": "color", "description": "Overlay scrim" },
