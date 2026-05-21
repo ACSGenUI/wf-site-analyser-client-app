@@ -1,0 +1,21 @@
+{
+  "spacing": {
+    "0":  { "value": "0px",   "type": "spacing" },
+    "1":  { "value": "4px",   "type": "spacing", "description": "xs — badge padding vertical" },
+    "2":  { "value": "8px",   "type": "spacing", "description": "sm" },
+    "3":  { "value": "12px",  "type": "spacing", "description": "md — badge padding horizontal, button gap" },
+    "4":  { "value": "16px",  "type": "spacing", "description": "lg — button padding vertical, grid gap sm" },
+    "5":  { "value": "24px",  "type": "spacing", "description": "xl" },
+    "6":  { "value": "27px",  "type": "spacing", "description": "capability grid gap" },
+    "7":  { "value": "30px",  "type": "spacing", "description": "card inner gap" },
+    "8":  { "value": "32px",  "type": "spacing", "description": "2xl — section padding, button padding horizontal" },
+    "9":  { "value": "48px",  "type": "spacing", "description": "3xl — main content padding, section gap" },
+    "10": { "value": "64px",  "type": "spacing", "description": "4xl — page top offset" }
+  },
+  "size": {
+    "sidebar-width":    { "value": "240px", "type": "sizing", "description": "Side nav rail width" },
+    "header-height":    { "value": "64px",  "type": "sizing", "description": "Top nav bar height" },
+    "content-max-width":{ "value": "1152px","type": "sizing", "description": "Max width of main content area" },
+    "content-width":    { "value": "1040px","type": "sizing", "description": "Main content canvas width" }
+  }
+}
