@@ -56,6 +56,11 @@ export function Foo({
 }
 ```
 
+### React imports — what's actually needed
+- The project is on **React 19 with the new JSX transform**. `'react/react-in-jsx-scope': 'off'` is set in `eslint.config.js`, so **pure JSX no longer requires `import React from 'react'`**.
+- **Only import `React`** when you reference the `React.*` namespace — e.g. `React.ReactElement`, `React.ReactNode`, `React.memo`, `React.FC`.
+- For hooks and utilities, use named imports: `import { useState, useEffect } from 'react';`.
+
 - Explicit return type `React.ReactElement` (or `JSX.Element`) — no implicit returns.
 - Props interface exported alongside the component so consumers can extend.
 - Use `className` prop to allow downstream styling.
@@ -68,6 +73,17 @@ export function Foo({
   ```tsx
   className={['base', condition && 'extra', className].filter(Boolean).join(' ')}
   ```
+
+### Inline-style exception
+Inline `style={}` is acceptable **only** when the value is computed at runtime by a
+third-party library and can't be expressed as a static utility class — e.g. virtualizers
+that compute pixel offsets, drag-and-drop libraries, or canvas/SVG measurement code.
+Comment why. Example:
+
+```tsx
+{/* @tanstack/react-virtual computes pixel offsets at runtime — these cannot be Tailwind classes */}
+<div style={{ top: virtualRow.start, height: virtualRow.size }} />
+```
 
 ## State
 
@@ -95,12 +111,40 @@ export function Foo({
 - Vitest + `@testing-library/react` + `@testing-library/user-event`.
 - Test file lives in `src/renderer/__tests__/<mirror-path>/Foo.test.tsx`.
 - Test behavior, not implementation — query by role/label/text, not by class name.
-- **Mock IPC pattern (this project):** the global `window.api` is stubbed once in
-  `src/renderer/__tests__/setup.ts` via `Object.defineProperty(window, 'api', { value: {...} })`.
-  In individual tests, override specific methods with:
-  ```ts
-  vi.mocked(window.api['analysis:start']).mockResolvedValue({ id: 'abc' });
-  ```
+
+### Mock IPC
+
+The global `window.api` is stubbed once in `src/renderer/__tests__/setup.ts` via
+`Object.defineProperty(window, 'api', { value: {...} })`. In individual tests, override
+specific methods with:
+
+```ts
+vi.mocked(window.api['analysis:start']).mockResolvedValue({ id: 'abc' });
+```
+
+### Keyboard activation
+
+When testing button-like elements, verify activation via **both `Enter` and `Space`**.
+Native `<button>` handles both, but the explicit test catches regressions if the element
+is ever switched to a `<div role="button">` (which only auto-handles `Enter`).
+
+```ts
+it('activates on Enter', async () => {
+  const handleClick = vi.fn();
+  render(<CloseButton onClick={handleClick} />);
+  screen.getByRole('button').focus();
+  await userEvent.keyboard('{Enter}');
+  expect(handleClick).toHaveBeenCalledOnce();
+});
+
+it('activates on Space', async () => {
+  const handleClick = vi.fn();
+  render(<CloseButton onClick={handleClick} />);
+  screen.getByRole('button').focus();
+  await userEvent.keyboard(' ');
+  expect(handleClick).toHaveBeenCalledOnce();
+});
+```
 
 ## Never do
 

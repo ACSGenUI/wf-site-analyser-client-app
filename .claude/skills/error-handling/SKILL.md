@@ -79,6 +79,39 @@ async function startAnalysis(config: AnalysisConfig) {
 }
 ```
 
+### Promise chains — `.then().catch()` (when async/await isn't an option)
+
+If you use the promise-chain form (e.g. inside `useEffect`), the `.catch` handler is
+**not optional** and must never be empty. Apply the same rules: log via the project
+logger, surface to the user if recoverable, never swallow.
+
+```ts
+// ❌ WRONG — silent swallow.
+useEffect(() => {
+  window.api.getAppVersion().then(setVersion).catch(() => {});
+}, []);
+
+// ❌ STILL WRONG — bare console.error in production code.
+useEffect(() => {
+  window.api.getAppVersion().then(setVersion).catch(console.error);
+}, []);
+
+// ✅ RIGHT — log with context; decide whether to surface based on feature criticality.
+useEffect(() => {
+  window.api
+    .getAppVersion()
+    .then(setVersion)
+    .catch((err) => {
+      logger.warn('getAppVersion failed', { err, feature: 'app-version-badge' });
+      // For non-critical UI, hiding the element (component returns null) is acceptable.
+      // For critical operations, surface a Toast.
+    });
+}, []);
+```
+
+**Rule of thumb:** the minimum is one call to `logger`. Surfacing to the user is a separate
+decision based on whether the failure affects the user's workflow.
+
 ### ErrorBoundary placement
 - One per top-level feature: Analysis, Results, Chat, Settings, Auth.
 - Place them in the feature's root layout/screen component, not at App.tsx (a single root

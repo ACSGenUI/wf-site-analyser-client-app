@@ -27,6 +27,17 @@ Apply these accessibility patterns **by default** — they are not optional.
   doesn't read the SVG title in addition to the button's `aria-label` (avoids double announcement).
 - Use semantic landmarks: `<main>`, `<nav>`, `<header>`, `<footer>` — not generic `<div>`s.
 
+### When NOT to add `aria-label`
+- **Don't add `aria-label` to elements whose visible text already conveys their meaning.**
+  Screen readers will announce the text content; an `aria-label` that duplicates (or worse,
+  contradicts) it produces noise and confusion.
+- ❌ `<button aria-label="Save">Save</button>` — redundant; visible text is already the accessible name.
+- ✅ Add `aria-label` only when:
+  - The element has **no visible text** (icon-only buttons, decorative anchors)
+  - The visible text is **ambiguous** (`<a>Click here</a>` → add `aria-label="Read the docs"`)
+  - You need to provide a **fuller description** the visible text can't carry — and even then,
+    prefer `aria-describedby` pointing to nearby text over a duplicated `aria-label`.
+
 ### Live regions (status announcements)
 - Use `aria-live="polite"` (or `role="status"`) for non-urgent updates the user should know about —
   scan progress, save confirmations, info toasts. See `Toast.tsx` and `Input.tsx` for the
