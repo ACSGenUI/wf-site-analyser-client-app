@@ -4,10 +4,9 @@ import { resolve } from 'node:path';
 
 const ROOT = resolve(__dirname, '../../../../');
 
-const pkg: { name: string; version: string; description: string } = JSON.parse(
-  readFileSync(resolve(ROOT, 'package.json'), 'utf8'),
-);
-const builderConfig = readFileSync(resolve(ROOT, 'electron-builder.config.js'), 'utf8');
+const pkgRaw = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8'));
+const pkg: { name: string; version: string; description: string } = pkgRaw;
+const builderConfig = pkgRaw.build as Record<string, unknown>;
 const viteConfig = readFileSync(resolve(ROOT, 'electron.vite.config.ts'), 'utf8');
 const ipcSource = readFileSync(resolve(ROOT, 'src/main/ipc/index.ts'), 'utf8');
 
@@ -41,20 +40,25 @@ describe('TC-02: App metadata is correct', () => {
   });
 
   it('electron-builder config declares the correct bundle ID', () => {
-    expect(builderConfig).toContain("appId: 'com.adobe.wf-site-analyser'");
+    expect(builderConfig.appId).toBe('com.adobe.wf-site-analyser');
   });
 
   it('electron-builder config declares the correct product name', () => {
-    expect(builderConfig).toContain("productName: 'WF Site Analyser'");
+    expect(builderConfig.productName).toBe('WF Site Analyser');
   });
 
   it('electron-builder config targets a Universal macOS DMG', () => {
-    expect(builderConfig).toContain("target: 'dmg'");
-    expect(builderConfig).toContain("'universal'");
+    const mac = builderConfig.mac as Record<string, unknown>;
+    const macTarget = mac.target as { target: string; arch: string[] } | string;
+    const targetName = typeof macTarget === 'string' ? macTarget : macTarget.target;
+    const arch = typeof macTarget === 'object' ? macTarget.arch : [];
+    expect(targetName).toBe('dmg');
+    expect(arch).toContain('universal');
   });
 
   it('electron-builder config targets a Windows NSIS installer', () => {
-    expect(builderConfig).toContain("target: 'nsis'");
+    const win = builderConfig.win as Record<string, unknown>;
+    expect(win.target).toBe('nsis');
   });
 });
 
@@ -63,11 +67,13 @@ describe('TC-02: App metadata is correct', () => {
 // ---------------------------------------------------------------------------
 describe('TC-03: Asar packaging is enabled', () => {
   it('electron-builder config explicitly enables asar packaging', () => {
-    expect(builderConfig).toContain('asar: true');
+    expect(builderConfig.asar).toBe(true);
   });
 
   it('electron-builder config unpacks native addons from the asar archive', () => {
-    expect(builderConfig).toContain('asarUnpack');
+    const asarUnpack = builderConfig.asarUnpack as string[] | undefined;
+    expect(asarUnpack).toBeDefined();
+    expect((asarUnpack as string[]).length).toBeGreaterThan(0);
   });
 });
 
@@ -80,12 +86,10 @@ describe('TC-04: Version matches package.json', () => {
   });
 
   it('IPC GET_APP_VERSION handler delegates to app.getVersion() (reads package.json at runtime)', () => {
-    // Ensures the shipped version is always derived from package.json, not
-    // a hardcoded string somewhere in the main process.
     expect(ipcSource).toContain('app.getVersion()');
   });
 
   it('electron-builder config does not hardcode a version override', () => {
-    expect(builderConfig).not.toMatch(/version:\s+'?\d+\.\d+\.\d+/);
+    expect(builderConfig.version).toBeUndefined();
   });
 });

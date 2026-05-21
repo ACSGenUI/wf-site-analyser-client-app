@@ -6,7 +6,7 @@
   "private": true,
   "main": "out/main/index.js",
   "build": {
-    "appId": "com.wf.siteanalyser",
+    "appId": "com.adobe.wf-site-analyser",
     "productName": "WF Site Analyser",
     "directories": {
       "buildResources": "build",
@@ -17,17 +17,24 @@
       "package.json"
     ],
     "asar": true,
+    "asarUnpack": [
+      "**/*.node"
+    ],
     "win": {
       "target": "nsis",
       "icon": "build/icons/icon.ico"
     },
     "mac": {
-      "target": "dmg",
+      "target": {
+        "target": "dmg",
+        "arch": ["universal"]
+      },
       "icon": "build/icons/icon.png",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "afterSign": "scripts/notarize.mjs"
     },
     "publish": null
   },
