@@ -23,7 +23,19 @@ Apply these accessibility patterns **by default** — they are not optional.
 ### Labels & landmarks
 - Every form input needs a linked `<label>` (`htmlFor` matching input `id`), or an associated `aria-label` / `aria-labelledby`.
 - Icon-only buttons need `aria-label` (see how `Modal.tsx` labels the close button `aria-label="Close"`).
+- The SVG icon **inside** an icon-only button needs `aria-hidden="true"` so the screen reader
+  doesn't read the SVG title in addition to the button's `aria-label` (avoids double announcement).
 - Use semantic landmarks: `<main>`, `<nav>`, `<header>`, `<footer>` — not generic `<div>`s.
+
+### Live regions (status announcements)
+- Use `aria-live="polite"` (or `role="status"`) for non-urgent updates the user should know about —
+  scan progress, save confirmations, info toasts. See `Toast.tsx` and `Input.tsx` for the
+  project's canonical implementations.
+- Use `role="alert"` (or `aria-live="assertive"`) **only for errors and critical interruptions** —
+  it preempts what the screen reader is currently saying. Don't overuse.
+- For loading spinners, use `role="status" aria-label="Loading"` on the spinner element
+  (see `Button.tsx` for the canonical pattern). Screen readers announce the loading state without
+  the user having to look at the spinner.
 
 ### Visual
 - Color contrast: **4.5:1** minimum for body text, **3:1** for large text and UI components.
@@ -61,5 +73,7 @@ Run this mental check on every interactive element you generated:
 3. Is the contrast sufficient?
 4. Does it work without color?
 5. Does it have a visible focus indicator?
+6. If it's an icon-only button, does the inner SVG have `aria-hidden="true"`?
+7. If it announces status (loading, progress, errors), is it inside a live region?
 
 If any answer is no, fix it before reporting the work complete.

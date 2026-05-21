@@ -95,7 +95,12 @@ export function Foo({
 - Vitest + `@testing-library/react` + `@testing-library/user-event`.
 - Test file lives in `src/renderer/__tests__/<mirror-path>/Foo.test.tsx`.
 - Test behavior, not implementation — query by role/label/text, not by class name.
-- Mock IPC: `vi.mock('@/lib/api')` or override `window.api` in test setup.
+- **Mock IPC pattern (this project):** the global `window.api` is stubbed once in
+  `src/renderer/__tests__/setup.ts` via `Object.defineProperty(window, 'api', { value: {...} })`.
+  In individual tests, override specific methods with:
+  ```ts
+  vi.mocked(window.api['analysis:start']).mockResolvedValue({ id: 'abc' });
+  ```
 
 ## Never do
 

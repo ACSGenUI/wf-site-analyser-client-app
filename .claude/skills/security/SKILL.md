@@ -14,6 +14,10 @@ You are generating code for an Electron application. Electron has a unique secur
 - IPC handlers in `src/main/ipc/` use `ipcMain.handle()` with channels declared in `src/shared/types.ts` (`IPC_CHANNELS`).
 - Subscriptions returned by preload methods (e.g. `onUpdateStatus`) must return a cleanup function. Renderers must call it on unmount to prevent memory leaks.
 - Web preferences in `BrowserWindow` (see `src/main/index.ts`): `contextIsolation: true`, `sandbox: true`, `nodeIntegration: false`. Never weaken these.
+- **Set a strict Content-Security-Policy** on every `BrowserWindow`. Minimum acceptable:
+  `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;`
+  No `unsafe-eval`. Inline scripts must be removed before relying on `'unsafe-inline'`. CSP is item #1 on
+  Electron's official security checklist.
 
 ### Type safety
 - **Never** use `any`. Use `unknown` and narrow with a type guard (or a Zod schema, which is already installed).
@@ -54,6 +58,13 @@ You are generating code for an Electron application. Electron has a unique secur
   4. Expose it through `electronAPI` in `src/preload/index.ts`.
   5. Call from renderer via `window.api.<method>()`.
 - **Storing user data:** use `IPC_CHANNELS.STORE_SET` / `STORE_GET` / `STORE_DELETE`. For secrets, use `safeStorage:*` variants.
+- **`shell.openExternal` safety:** the renderer can request an external URL open via
+  `window.api['shell:openExternal'](url)`. The main-process handler **must** validate the URL before
+  calling Electron's `shell.openExternal`:
+  - Parse via `new URL(url)` — reject anything that throws
+  - Allow only `https:` scheme (no `file:`, `javascript:`, `data:`)
+  - Optionally restrict to an allow-list of known domains
+  - Never pass user-supplied strings to `shell.openExternal` without these checks
 
 ## Verification before completing the task
 
@@ -63,5 +74,7 @@ You are generating code for an Electron application. Electron has a unique secur
 4. Are secrets going through `safeStorage`, never plain `storeSet`?
 5. Are new IPC types declared in `src/shared/types.ts`?
 6. Did I log anything that could contain secrets?
+7. Is a strict CSP defined on every `BrowserWindow` I created or modified?
+8. If I used `shell.openExternal`, did I validate the URL scheme and host first?
 
 If any answer is wrong, fix it before reporting the work complete.

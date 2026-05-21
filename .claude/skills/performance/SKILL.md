@@ -28,6 +28,21 @@ The renderer is Chromium-based, so standard React/web performance patterns apply
 - Provide immediate visual feedback (spinner, optimistic UI) before any computation > 100ms.
 - Avoid blocking the main thread with synchronous heavy work in event handlers.
 
+### Offload CPU-bound work to the main process
+- The renderer is the wrong place for crawling, parsing HTML, file I/O, heavy data transforms,
+  or anything that takes more than ~200ms of sync CPU. It freezes the UI.
+- Move that work into an IPC handler in `src/main/ipc/`. The renderer calls it via
+  `window.api.<method>()` and shows a loading state while awaiting the result.
+- For long-running operations, push progress events back to the renderer (see `onUpdateStatus`
+  in `src/preload/index.ts` for the subscription pattern with a cleanup return).
+
+### React 19 — useTransition and useDeferredValue
+- Use `useTransition` to mark a state update as non-urgent (e.g. switching tabs in a results view
+  while a heavy filter recomputes). Keeps the UI responsive during the update.
+- Use `useDeferredValue` when rendering a derived value that's expensive to compute and may lag
+  behind input (e.g. filtering thousands of analysis rows as the user types).
+- Both are React 19 first-class APIs — prefer them over manual `setTimeout` deferral hacks.
+
 ### Code splitting
 - Use `React.lazy()` + `<Suspense>` for route-level splitting via `react-router-dom`.
 - Avoid importing entire libraries when only one function is needed — use named imports.
