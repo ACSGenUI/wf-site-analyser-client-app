@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "required": ["overall_pass", "score", "checks"],
+  "properties": {
+    "overall_pass": {
+      "type": "boolean",
+      "description": "True only if all checks pass"
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Weighted quality score"
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "pass"],
+        "properties": {
+          "name": { "type": "string" },
+          "pass": { "type": "boolean" },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

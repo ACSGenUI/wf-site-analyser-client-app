@@ -65,6 +65,7 @@ Example: `/tdd-story SA-601`
 - Edit `tokens/*.json` — never `src/renderer/styles/tokens.css` (auto-generated).
 - Always include `px` units in spacing, font-size, and border-radius token values.
 - Rebuild after any token edit: `npm run build:tokens`.
+- A pre-commit hook enforces token correctness automatically when token files are staged — see [`docs/design-tokens.md#token-governance`](docs/design-tokens.md#token-governance).
 
 ### Testing
 - Test runner: **Vitest** with `jsdom`.

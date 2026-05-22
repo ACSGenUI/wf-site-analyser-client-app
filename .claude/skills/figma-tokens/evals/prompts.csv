@@ -1,0 +1,13 @@
+id,category,should_trigger,prompt
+ft-01,explicit,true,"/figma-tokens https://www.figma.com/design/ABC123XYZ/Site-Analyser-E"
+ft-02,explicit,true,"Run figma-tokens with https://www.figma.com/design/DEF456/Brand-Refresh"
+ft-03,implicit,true,"The designer just pushed new colors to Figma — update the token files"
+ft-04,implicit,true,"Sync the design tokens from our Figma file, the URL is in the README"
+ft-05,implicit,true,"Our Figma palette changed, the primary blue is now a different shade"
+ft-06,contextual,true,"I finished the new type scale in Figma. Here's the file: https://www.figma.com/design/GHI789/Typography-v2 — can you pull the tokens across?"
+ft-07,contextual,true,"The spacing system was updated in Figma this morning. Pull the latest and rebuild CSS vars."
+ft-08,contextual,true,"Fresh project setup — no tokens/ directory yet. Figma file: https://www.figma.com/design/JKL012/NewApp"
+ft-09,negative,false,"How do I use Tailwind CSS with React components?"
+ft-10,negative,false,"What's the difference between rem and px in CSS?"
+ft-11,negative,false,"Update the button component to use the primary color"
+ft-12,negative,false,"Run the tests and show me the failures"
