@@ -17,7 +17,7 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 export default [
   // Global ignores
   {
-    ignores: ['node_modules/**', 'out/**', 'dist/**', '*.config.ts', '*.config.js'],
+    ignores: ['node_modules/**', 'out/**', 'dist/**', '*.config.{ts,js,mjs,cjs}'],
   },
 
   // Base JS rules
