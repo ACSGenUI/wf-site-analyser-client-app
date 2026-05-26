@@ -1,0 +1,21 @@
+{
+  "borderRadius": {
+    "sm": {
+      "value": "4px",
+      "type": "borderRadius",
+      "description": "Subtle rounding — table rows, small chips"
+    },
+    "md": {
+      "value": "8px",
+      "type": "borderRadius",
+      "description": "Default — cards, inputs, buttons"
+    },
+    "lg": { "value": "12px", "type": "borderRadius", "description": "Large cards, panels" },
+    "xl": { "value": "16px", "type": "borderRadius", "description": "Modal surfaces, drawers" },
+    "full": {
+      "value": "9999px",
+      "type": "borderRadius",
+      "description": "Pill / circular — FAB, avatar"
+    }
+  }
+}

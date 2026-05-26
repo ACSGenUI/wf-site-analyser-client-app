@@ -1,9 +1,9 @@
 /**
  * SA-102: Design System — Design Tokens
  *
- * Single source of truth for all design tokens.
- * Values align with the Adobe enterprise aesthetic from the Figma designs.
- * Consumed by Tailwind config and components.
+ * Single source of truth for JS/TS consumers (Tailwind config, components).
+ * Values are derived from the Figma file (Site Analyser - E) via Style Dictionary.
+ * The canonical token definitions live in /tokens/*.json.
  */
 
 export interface TypographyToken {
@@ -51,7 +51,7 @@ export const tokens: Tokens = {
       100: '#F3F4F5',
       200: '#EDEEEF',
       300: '#E1E3E4',
-      400: '#CBD5E1',
+      400: '#C2C6D6',
       500: '#94A3B8',
       600: '#6B7280',
       700: '#424754',
@@ -64,13 +64,13 @@ export const tokens: Tokens = {
     error: '#BA1A1A',
   },
   typography: {
-    h1: { fontSize: '34px', lineHeight: '42px', fontWeight: 700 },
-    h2: { fontSize: '28px', lineHeight: '36px', fontWeight: 600 },
-    h3: { fontSize: '24px', lineHeight: '32px', fontWeight: 600 },
-    h4: { fontSize: '20px', lineHeight: '28px', fontWeight: 600 },
-    body: { fontSize: '16px', lineHeight: '24px', fontWeight: 400 },
-    caption: { fontSize: '14px', lineHeight: '20px', fontWeight: 400 },
-    small: { fontSize: '12px', lineHeight: '16px', fontWeight: 400 },
+    h1: { fontSize: '48px', lineHeight: '1.1', fontWeight: 400 },
+    h2: { fontSize: '36px', lineHeight: '1.2', fontWeight: 400 },
+    h3: { fontSize: '20px', lineHeight: '1.3', fontWeight: 700 },
+    h4: { fontSize: '16px', lineHeight: '1.4', fontWeight: 400 },
+    body: { fontSize: '14px', lineHeight: '1.5', fontWeight: 400 },
+    caption: { fontSize: '12px', lineHeight: '1.4', fontWeight: 700 },
+    small: { fontSize: '12px', lineHeight: '1.4', fontWeight: 400 },
   },
   spacing: {
     4: '4px',
@@ -80,6 +80,7 @@ export const tokens: Tokens = {
     24: '24px',
     32: '32px',
     48: '48px',
+    64: '64px',
   },
   borderRadius: {
     input: '4px',
@@ -88,17 +89,12 @@ export const tokens: Tokens = {
     full: '9999px',
   },
   shadows: {
-    subtle: '0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04)',
-    medium: '0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05)',
+    subtle: '0 1px 2px rgba(0, 0, 0, 0.05)',
+    medium: '0 10px 15px rgba(0, 0, 0, 0.10)',
     none: 'none',
   },
 };
 
-/**
- * Dark mode token set — stubbed for structure.
- * Overrides light tokens with dark-theme-appropriate values.
- * Full implementation will be completed in a future story.
- */
 export const darkTokens: Pick<Tokens, 'colors'> = {
   colors: {
     primary: '#3B82F6',
@@ -109,7 +105,7 @@ export const darkTokens: Pick<Tokens, 'colors'> = {
       300: '#424754',
       400: '#6B7280',
       500: '#94A3B8',
-      600: '#CBD5E1',
+      600: '#C2C6D6',
       700: '#E1E3E4',
       800: '#EDEEEF',
       900: '#F3F4F5',
