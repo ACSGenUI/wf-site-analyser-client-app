@@ -7,7 +7,7 @@
   "main": "out/main/index.js",
   "scripts": {
     "build:tokens": "style-dictionary build --config style-dictionary.config.json",
-    "dev": "ELECTRON_RUN_AS_NODE= electron-vite dev",
+    "dev": "electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "start": "electron .",
