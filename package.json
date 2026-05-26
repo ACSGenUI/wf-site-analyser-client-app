@@ -24,6 +24,7 @@
       "target": "nsis",
       "icon": "build/icons/icon.ico"
     },
+    "afterSign": "scripts/notarize.mjs",
     "mac": {
       "target": {
         "target": "dmg",
@@ -33,8 +34,7 @@
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist",
-      "afterSign": "scripts/notarize.mjs"
+      "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "publish": null
   },
