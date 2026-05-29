@@ -8,11 +8,6 @@ export interface ReleaseNoteItem {
   category: ReleaseNoteCategory;
   title: string;
   description: string;
-  /**
-   * Optional icon hint from the server. Currently informational only —
-   * rendering uses `category` to look up the icon. Reserved for future use
-   * (e.g. a server-supplied custom icon name).
-   */
   icon?: string;
 }
 
@@ -21,7 +16,6 @@ export interface ReleaseNotesProps {
   className?: string;
 }
 
-// Human-readable label per category (used for icon aria-labels).
 const CATEGORY_LABEL: Record<ReleaseNoteCategory, string> = {
   feature: 'Feature',
   security: 'Security',
@@ -29,7 +23,6 @@ const CATEGORY_LABEL: Record<ReleaseNoteCategory, string> = {
   bugfix: 'Bug fix',
 };
 
-// Tailwind utility class for the icon tint per category.
 const CATEGORY_TINT: Record<ReleaseNoteCategory, string> = {
   feature: 'text-blue-600',
   security: 'text-rose-600',
@@ -37,8 +30,6 @@ const CATEGORY_TINT: Record<ReleaseNoteCategory, string> = {
   bugfix: 'text-amber-600',
 };
 
-// Category → lucide-react icon component. Ticket mapping:
-// feature → gear (Cog), security → Shield, ui → Sparkles, bugfix → Wrench.
 const CATEGORY_ICON: Record<ReleaseNoteCategory, ComponentType<LucideProps>> = {
   feature: Cog,
   security: Shield,
@@ -46,12 +37,6 @@ const CATEGORY_ICON: Record<ReleaseNoteCategory, ComponentType<LucideProps>> = {
   bugfix: Wrench,
 };
 
-/**
- * Render a subset of markdown (bold + http/https links) inside a description string.
- * Returns React nodes — never HTML strings — so we avoid dangerouslySetInnerHTML
- * and the security skill's XSS concerns. Links with non-http(s) schemes fall back
- * to plain text on purpose.
- */
 function renderDescription(text: string): ReactNode[] {
   const parts: ReactNode[] = [];
   const re = /\*\*([^*]+)\*\*|\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
