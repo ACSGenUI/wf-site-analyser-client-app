@@ -8,8 +8,9 @@
  * Test File: src/renderer/__tests__/auth/SessionStateDisplay.test.tsx
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { Header } from '@/components/Header';
 import { useSessionStore } from '@/store/sessionStore';
 
@@ -65,9 +66,7 @@ describe('SA-302 – Session State Display', () => {
     setGuestSession();
     render(<Header />);
     // Should show some kind of "session started" or elapsed time text
-    expect(
-      screen.getByText(/session|started|today/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/session|started|today/i)).toBeInTheDocument();
   });
 
   // TC-04: Badge hidden when authenticated
@@ -83,8 +82,7 @@ describe('SA-302 – Session State Display', () => {
     render(<Header />);
     // Avatar img or initials element
     expect(
-      screen.getByRole('img', { name: /avatar|jane doe/i }) ??
-      screen.getByText('JD'),
+      screen.getByRole('img', { name: /avatar|jane doe/i }) ?? screen.getByText('JD'),
     ).toBeInTheDocument();
   });
 });

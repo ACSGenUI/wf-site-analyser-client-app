@@ -8,9 +8,10 @@
  * Test File: src/renderer/__tests__/components/ForceUpdateModal.test.tsx
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { ForceUpdateModal } from '@/components/ForceUpdateModal';
 
 // Props shape expected by the component
@@ -66,7 +67,9 @@ describe('SA-201 – Force Update Modal', () => {
     expect(screen.getByText('2.3.0')).toBeInTheDocument();
     expect(screen.getByText('2.4.0')).toBeInTheDocument();
     // Arrow separator
-    expect(screen.getByRole('img', { name: /arrow|upgrade/i }) ?? screen.getByText(/→|➜/)).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: /arrow|upgrade/i }) ?? screen.getByText(/→|➜/),
+    ).toBeInTheDocument();
   });
 
   // TC-04: CTA triggers IPC update

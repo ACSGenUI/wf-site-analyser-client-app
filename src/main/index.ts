@@ -1,5 +1,8 @@
-import { app, BrowserWindow } from 'electron';
 import path from 'path';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { app, BrowserWindow } from 'electron';
+
 import { registerIpcHandlers } from './ipc';
 import { initAutoUpdater } from './services/updater';
 

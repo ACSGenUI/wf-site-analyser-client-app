@@ -8,10 +8,11 @@
  * Test File: src/renderer/__tests__/features/analysis/AnalysisSetupScreen.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+
 import { AnalysisSetupScreen } from '@/features/analysis/AnalysisSetupScreen';
 
 function renderSetup(search = '') {
@@ -34,7 +35,9 @@ describe('SA-501 – New Analysis Setup Screen', () => {
   // TC-02: Page title and description render
   it('TC-02: H1 "Setup New Analysis" and descriptive paragraph are present', () => {
     renderSetup();
-    expect(screen.getByRole('heading', { level: 1, name: /setup new analysis/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: /setup new analysis/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText(/configure|customize|scope/i)).toBeInTheDocument();
   });
 

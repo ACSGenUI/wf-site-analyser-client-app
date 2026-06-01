@@ -7,10 +7,11 @@
  * Test File: src/renderer/__tests__/auth/IMSSignIn.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+
 import { IMSSignInButton } from '@/features/auth/IMSSignInButton';
 
 function renderSignIn(onSuccess = vi.fn()) {
@@ -31,8 +32,7 @@ describe('SA-1001 – Adobe IMS Sign-In', () => {
     const btn = screen.getByRole('button', { name: /sign in with adobe ims/i });
     expect(btn).toBeInTheDocument();
     expect(
-      btn.querySelector('[data-icon="adobe"]') ??
-      screen.getByTestId('adobe-icon'),
+      btn.querySelector('[data-icon="adobe"]') ?? screen.getByTestId('adobe-icon'),
     ).toBeInTheDocument();
   });
 
@@ -86,9 +86,7 @@ describe('SA-1001 – Adobe IMS Sign-In', () => {
 
   // TC-06: Network error shows retry option
   it('TC-06: network error displays an error message with a retry button', async () => {
-    vi.mocked(window.api['auth:openOAuthWindow']).mockRejectedValue(
-      new Error('Network error'),
-    );
+    vi.mocked(window.api['auth:openOAuthWindow']).mockRejectedValue(new Error('Network error'));
     renderSignIn();
     await userEvent.click(screen.getByRole('button', { name: /sign in with adobe ims/i }));
     await waitFor(() => {

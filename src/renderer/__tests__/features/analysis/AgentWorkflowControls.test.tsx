@@ -8,9 +8,10 @@
  * Test File: src/renderer/__tests__/features/analysis/AgentWorkflowControls.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { AgentWorkflowControls } from '@/features/analysis/AgentWorkflowControls';
 
 const ANALYSIS_ID = 'analysis-xyz';

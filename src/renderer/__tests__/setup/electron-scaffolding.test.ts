@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { createElement } from 'react';
+import { describe, it, expect } from 'vitest';
+
 import App from '../../App';
 
 // ---------------------------------------------------------------------------
@@ -95,12 +96,9 @@ describe('TC-04: Preload contextBridge exposes typed API', () => {
     'rag:query',
   ];
 
-  it.each(expectedMethods)(
-    'window.api.%s is a function',
-    (method) => {
-      expect(typeof (window.api as Record<string, unknown>)[method]).toBe('function');
-    },
-  );
+  it.each(expectedMethods)('window.api.%s is a function', (method) => {
+    expect(typeof (window.api as Record<string, unknown>)[method]).toBe('function');
+  });
 });
 
 // ---------------------------------------------------------------------------

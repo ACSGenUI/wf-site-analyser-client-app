@@ -7,15 +7,31 @@
  * Test File: src/renderer/__tests__/features/results/ScreenshotGallery.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ScreenshotGallery } from '@/features/results/ScreenshotGallery';
 
 const mockScreenshots = [
-  { id: 'hero-01', blockId: 'BLOCK_01', src: '/screenshots/hero-01.png', alt: 'Hero Section' },
-  { id: 'nav-01', blockId: 'BLOCK_02', src: '/screenshots/nav-01.png', alt: 'Navigation' },
-  { id: 'footer-01', blockId: 'BLOCK_03', src: '/screenshots/footer-01.png', alt: 'Footer' },
+  {
+    id: 'hero-01',
+    blockId: 'BLOCK_01',
+    src: '/screenshots/hero-01.png',
+    alt: 'Hero Section',
+  },
+  {
+    id: 'nav-01',
+    blockId: 'BLOCK_02',
+    src: '/screenshots/nav-01.png',
+    alt: 'Navigation',
+  },
+  {
+    id: 'footer-01',
+    blockId: 'BLOCK_03',
+    src: '/screenshots/footer-01.png',
+    alt: 'Footer',
+  },
 ];
 
 function renderGallery(screenshots = mockScreenshots) {
@@ -41,8 +57,10 @@ describe('SA-704 – Screenshot Gallery', () => {
   it('TC-03: clicking a screenshot opens the lightbox modal', async () => {
     renderGallery();
     await userEvent.click(screen.getByAltText('Hero Section'));
-    expect(screen.getByRole('dialog', { name: /lightbox|screenshot/i }) ??
-      screen.getByTestId('lightbox')).toBeInTheDocument();
+    expect(
+      screen.getByRole('dialog', { name: /lightbox|screenshot/i }) ??
+        screen.getByTestId('lightbox'),
+    ).toBeInTheDocument();
   });
 
   // TC-04: Lightbox next/previous navigation

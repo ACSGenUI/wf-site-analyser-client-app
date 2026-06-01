@@ -8,8 +8,9 @@
  * Test File: src/renderer/__tests__/lifecycle/VersionCheckOnLaunch.test.tsx
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { VersionChecker } from '@/components/VersionChecker';
 
 // VersionChecker is a "behaviour" component — it renders nothing when up-to-date
