@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/results/ConfidenceStatusIndicators.test.tsx
  */
 
-import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect } from 'vitest';
+
 import { ConfidenceIndicator } from '@/features/results/ConfidenceIndicator';
 
 function renderIndicator(confidence: number, label = 'Hero Section') {
@@ -49,14 +50,19 @@ describe('SA-706 – Confidence & Status Indicators', () => {
     renderIndicator(0.95, 'Hero Section');
     const indicator = screen.getByTestId('confidence-indicator');
     await userEvent.hover(indicator);
-    expect(screen.getByRole('tooltip') ?? screen.getByText(/Hero Section.*95%|95%.*Hero Section/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole('tooltip') ?? screen.getByText(/Hero Section.*95%|95%.*Hero Section/i),
+    ).toBeInTheDocument();
   });
 
   // TC-06: Accessible aria-label present
   it('TC-06: indicator has aria-label describing confidence level', () => {
     renderIndicator(0.95, 'Hero Section');
     const indicator = screen.getByTestId('confidence-indicator');
-    expect(indicator).toHaveAttribute('aria-label', expect.stringMatching(/95%|high confidence|Hero Section/i));
+    expect(indicator).toHaveAttribute(
+      'aria-label',
+      expect.stringMatching(/95%|high confidence|Hero Section/i),
+    );
   });
 
   // TC-07: Zero confidence edge case

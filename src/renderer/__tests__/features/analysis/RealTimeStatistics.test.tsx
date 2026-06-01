@@ -7,8 +7,9 @@
  * Test File: src/renderer/__tests__/features/analysis/RealTimeStatistics.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+
 import { RealTimeStatistics } from '@/features/analysis/RealTimeStatistics';
 
 const defaultStats = {

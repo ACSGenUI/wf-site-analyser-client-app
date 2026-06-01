@@ -47,7 +47,7 @@ export const tokens: Tokens = {
   colors: {
     primary: '#0265DC',
     neutral: {
-      50:  '#F8F9FA',
+      50: '#F8F9FA',
       100: '#F3F4F5',
       200: '#EDEEEF',
       300: '#E1E3E4',
@@ -99,7 +99,7 @@ export const darkTokens: Pick<Tokens, 'colors'> = {
   colors: {
     primary: '#3B82F6',
     neutral: {
-      50:  '#000000',
+      50: '#000000',
       100: '#0F172A',
       200: '#191C1D',
       300: '#424754',

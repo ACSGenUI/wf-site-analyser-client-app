@@ -8,13 +8,18 @@
  * Test File: src/renderer/__tests__/features/chat/ChatPanel.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ChatPanel } from '@/features/chat/ChatPanel';
 
 const mockMessages = [
-  { id: '1', role: 'assistant' as const, content: 'Hello! I can answer questions about this analysis.' },
+  {
+    id: '1',
+    role: 'assistant' as const,
+    content: 'Hello! I can answer questions about this analysis.',
+  },
   { id: '2', role: 'user' as const, content: 'How many blocks were found?' },
   { id: '3', role: 'assistant' as const, content: 'A total of 12 blocks were extracted.' },
 ];
@@ -42,7 +47,9 @@ describe('SA-801 – Chat Panel Interface', () => {
   // TC-03: Assistant messages left-aligned with gray background
   it('TC-03: assistant message bubble has bg-gray-100 and left-alignment class', () => {
     renderChat();
-    const assistantMsg = screen.getByText(/hello! i can answer/i).closest('[data-role="assistant"]');
+    const assistantMsg = screen
+      .getByText(/hello! i can answer/i)
+      .closest('[data-role="assistant"]');
     expect(assistantMsg?.className).toMatch(/bg-gray-100/);
   });
 

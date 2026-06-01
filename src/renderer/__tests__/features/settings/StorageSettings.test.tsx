@@ -7,14 +7,15 @@
  * Test File: src/renderer/__tests__/features/settings/StorageSettings.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { StorageSettings } from '@/features/settings/StorageSettings';
 
 function renderStorage() {
   vi.mocked(window.api['data:getStorageUsage']).mockResolvedValue({
-    usedBytes: 2468987289,   // ~2.3 GB
+    usedBytes: 2468987289, // ~2.3 GB
     totalBytes: 10737418240, // 10 GB
   });
   return render(<StorageSettings />);
@@ -54,9 +55,7 @@ describe('SA-904 – Storage & Persistence Settings', () => {
   it('TC-04: clicking "Clear Data" opens a confirmation dialog', async () => {
     renderStorage();
     await userEvent.click(screen.getByRole('button', { name: /clear data/i }));
-    expect(
-      screen.getByRole('dialog') ?? screen.getByRole('alertdialog'),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('dialog') ?? screen.getByRole('alertdialog')).toBeInTheDocument();
     expect(screen.getByText(/are you sure|this action cannot/i)).toBeInTheDocument();
   });
 

@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { contextBridge, ipcRenderer } from 'electron';
+
 import { IPC_CHANNELS, type ElectronAPI } from '../shared/types';
 
 const electronAPI: ElectronAPI = {
@@ -10,8 +12,7 @@ const electronAPI: ElectronAPI = {
    * Returns a cleanup function; call it to remove the listener and prevent leaks.
    */
   onUpdateStatus: (callback) => {
-    const handler = (_event: Electron.IpcRendererEvent, status: string) =>
-      callback(status);
+    const handler = (_event: Electron.IpcRendererEvent, status: string) => callback(status);
     ipcRenderer.on('update-status', handler);
     return () => ipcRenderer.removeListener('update-status', handler);
   },
@@ -21,10 +22,8 @@ const electronAPI: ElectronAPI = {
   storeDelete: (key) => ipcRenderer.invoke(IPC_CHANNELS.STORE_DELETE, key),
   'safeStorage:encrypt': (key, value) =>
     ipcRenderer.invoke(IPC_CHANNELS.SAFE_STORAGE_ENCRYPT, key, value),
-  'safeStorage:decrypt': (key) =>
-    ipcRenderer.invoke(IPC_CHANNELS.SAFE_STORAGE_DECRYPT, key),
-  'safeStorage:delete': (key) =>
-    ipcRenderer.invoke(IPC_CHANNELS.SAFE_STORAGE_DELETE, key),
+  'safeStorage:decrypt': (key) => ipcRenderer.invoke(IPC_CHANNELS.SAFE_STORAGE_DECRYPT, key),
+  'safeStorage:delete': (key) => ipcRenderer.invoke(IPC_CHANNELS.SAFE_STORAGE_DELETE, key),
   'auth:openOAuthWindow': () => ipcRenderer.invoke(IPC_CHANNELS.AUTH_OPEN_OAUTH),
   'auth:signOut': () => ipcRenderer.invoke(IPC_CHANNELS.AUTH_SIGN_OUT),
   'auth:switchAccount': () => ipcRenderer.invoke(IPC_CHANNELS.AUTH_SWITCH_ACCOUNT),
@@ -35,15 +34,13 @@ const electronAPI: ElectronAPI = {
   'analysis:resume': (id) => ipcRenderer.invoke(IPC_CHANNELS.ANALYSIS_RESUME, id),
   'analysis:getStatus': (id) => ipcRenderer.invoke(IPC_CHANNELS.ANALYSIS_GET_STATUS, id),
   'analysis:saveAutoSave': (id) => ipcRenderer.invoke(IPC_CHANNELS.ANALYSIS_SAVE_AUTO, id),
-  'data:migrateGuestToAuth': (userId) =>
-    ipcRenderer.invoke(IPC_CHANNELS.DATA_MIGRATE, userId),
+  'data:migrateGuestToAuth': (userId) => ipcRenderer.invoke(IPC_CHANNELS.DATA_MIGRATE, userId),
   'data:discardGuestData': () => ipcRenderer.invoke(IPC_CHANNELS.DATA_DISCARD_GUEST),
   'data:getStorageUsage': () => ipcRenderer.invoke(IPC_CHANNELS.DATA_GET_STORAGE),
   'data:clearOldData': () => ipcRenderer.invoke(IPC_CHANNELS.DATA_CLEAR_OLD),
   'fs:openDialog': (options) => ipcRenderer.invoke(IPC_CHANNELS.FS_OPEN_DIALOG, options),
   'fs:exportFile': (payload) => ipcRenderer.invoke(IPC_CHANNELS.FS_EXPORT_FILE, payload),
-  'shell:openExternal': (url) =>
-    ipcRenderer.invoke(IPC_CHANNELS.SHELL_OPEN_EXTERNAL, url),
+  'shell:openExternal': (url) => ipcRenderer.invoke(IPC_CHANNELS.SHELL_OPEN_EXTERNAL, url),
   'rag:buildKnowledgeBase': (analysisId) =>
     ipcRenderer.invoke(IPC_CHANNELS.RAG_BUILD_KB, analysisId),
   'rag:query': (question) => ipcRenderer.invoke(IPC_CHANNELS.RAG_QUERY, question),
