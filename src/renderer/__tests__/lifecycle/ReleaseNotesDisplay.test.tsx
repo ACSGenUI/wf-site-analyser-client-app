@@ -7,8 +7,9 @@
  * Test File: src/renderer/__tests__/lifecycle/ReleaseNotesDisplay.test.tsx
  */
 
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+
 import { ReleaseNotes } from '@/components/ReleaseNotes';
 
 const mockNotes = [
@@ -62,8 +63,16 @@ describe('SA-203 – Release Notes Display', () => {
   // TC-06: Multiple versions render in order
   it('TC-06: renders multiple versions in descending order', () => {
     const multiNotes = [
-      { version: '2.3.0', date: '2026-03-01', changes: [{ type: 'fixed' as const, text: 'Minor bug fix' }] },
-      { version: '2.4.0', date: '2026-04-01', changes: [{ type: 'new' as const, text: 'New feature' }] },
+      {
+        version: '2.3.0',
+        date: '2026-03-01',
+        changes: [{ type: 'fixed' as const, text: 'Minor bug fix' }],
+      },
+      {
+        version: '2.4.0',
+        date: '2026-04-01',
+        changes: [{ type: 'new' as const, text: 'New feature' }],
+      },
     ];
     render(<ReleaseNotes notes={multiNotes} />);
     const versionHeadings = screen.getAllByRole('heading').map((h) => h.textContent);

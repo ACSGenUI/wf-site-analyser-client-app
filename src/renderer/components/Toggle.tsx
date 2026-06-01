@@ -1,5 +1,5 @@
-import React from 'react';
 import * as Switch from '@radix-ui/react-switch';
+import React from 'react';
 
 export interface ToggleProps {
   checked?: boolean;
@@ -23,10 +23,7 @@ export function Toggle({
   return (
     <div className="flex items-center gap-2">
       {label && (
-        <label
-          htmlFor={switchId}
-          className="text-sm font-medium text-gray-700 cursor-pointer"
-        >
+        <label htmlFor={switchId} className="text-sm font-medium text-gray-700 cursor-pointer">
           {label}
         </label>
       )}

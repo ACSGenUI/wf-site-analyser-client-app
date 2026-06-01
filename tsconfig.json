@@ -4,6 +4,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -22,12 +24,13 @@
       "@shared/*": ["src/shared/*"],
       "@preload/*": ["src/preload/*"]
     },
-    "types": ["node", "vitest/globals"]
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
     "node_modules",
     "dist",
+    "src/renderer/__tests__",
     "src/renderer/__tests__/auth/**",
     "src/renderer/__tests__/components/**",
     "src/renderer/__tests__/features/**",

@@ -14,6 +14,12 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
     build: {
       sourcemap: process.env.NODE_ENV !== 'production',
+      rollupOptions: {
+        output: {
+          format: 'cjs',
+          entryFileNames: '[name].js',
+        },
+      },
     },
   },
   renderer: {

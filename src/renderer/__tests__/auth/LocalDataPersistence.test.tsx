@@ -8,8 +8,9 @@
  * Test File: src/renderer/__tests__/auth/LocalDataPersistence.test.tsx
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { PersistenceService } from '@/services/persistenceService';
 import { useProjectStore } from '@/store/projectStore';
 
@@ -23,7 +24,11 @@ describe('SA-303 – Local Data Persistence', () => {
   // TC-01: Analysis result saved with user-scoped key
   it('TC-01: saves analysis result under a key scoped to the anonymous user ID', async () => {
     const service = new PersistenceService(GUEST_USER_ID);
-    const mockResult = { analysisId: 'analysis-001', url: 'https://example.com', status: 'completed' };
+    const mockResult = {
+      analysisId: 'analysis-001',
+      url: 'https://example.com',
+      status: 'completed',
+    };
     await service.saveAnalysisResult(mockResult);
     expect(window.api.storeSet).toHaveBeenCalledWith(
       `${GUEST_USER_ID}:analyses:analysis-001`,
@@ -61,7 +66,11 @@ describe('SA-303 – Local Data Persistence', () => {
   // TC-04: Data keys include userId for future migration
   it('TC-04: all storage keys are prefixed with the user ID', async () => {
     const service = new PersistenceService(GUEST_USER_ID);
-    await service.saveAnalysisResult({ analysisId: 'a-001', url: 'https://foo.com', status: 'running' });
+    await service.saveAnalysisResult({
+      analysisId: 'a-001',
+      url: 'https://foo.com',
+      status: 'running',
+    });
     const [calledKey] = vi.mocked(window.api.storeSet).mock.calls[0];
     expect(calledKey).toMatch(new RegExp(`^${GUEST_USER_ID}:`));
   });

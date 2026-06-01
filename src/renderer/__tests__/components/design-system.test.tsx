@@ -7,21 +7,21 @@
  * Test File: src/renderer/__tests__/components/design-system.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
 
-import { tokens, darkTokens } from '@/components/theme';
-import { Button } from '@/components/Button';
-import { Input } from '@/components/Input';
-import { Card } from '@/components/Card';
 import { Badge } from '@/components/Badge';
-import { Toggle } from '@/components/Toggle';
-import { Select } from '@/components/Select';
-import { Modal } from '@/components/Modal';
+import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
 import { Drawer } from '@/components/Drawer';
-import { Toast } from '@/components/Toast';
+import { Input } from '@/components/Input';
+import { Modal } from '@/components/Modal';
+import { Select } from '@/components/Select';
 import { Table } from '@/components/Table';
+import { tokens, darkTokens } from '@/components/theme';
+import { Toast } from '@/components/Toast';
+import { Toggle } from '@/components/Toggle';
 
 // ---------------------------------------------------------------------------
 // TC-01: Design tokens are defined
@@ -239,9 +239,7 @@ describe('TC-05: Storybook catalog — base components are importable and render
 
   it('Select is defined and renderable', () => {
     expect(Select).toBeDefined();
-    const { container } = render(
-      <Select options={[{ value: 'a', label: 'Option A' }]} />,
-    );
+    const { container } = render(<Select options={[{ value: 'a', label: 'Option A' }]} />);
     expect(container.firstChild).toBeInTheDocument();
   });
 
@@ -273,9 +271,7 @@ describe('TC-05: Storybook catalog — base components are importable and render
 
   it('Table is defined and renderable', () => {
     expect(Table).toBeDefined();
-    const { container } = render(
-      <Table columns={[{ key: 'name', header: 'Name' }]} rows={[]} />,
-    );
+    const { container } = render(<Table columns={[{ key: 'name', header: 'Name' }]} rows={[]} />);
     expect(container.firstChild).toBeInTheDocument();
   });
 });
@@ -295,9 +291,7 @@ describe('TC-06: Dark mode token set is stubbed', () => {
 
   it('dark mode token set does not break component rendering', () => {
     render(<Button variant="primary">Dark mode test</Button>);
-    expect(
-      screen.getByRole('button', { name: /dark mode test/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /dark mode test/i })).toBeInTheDocument();
   });
 
   it('darkTokens has the same shape as tokens for structural completeness', () => {

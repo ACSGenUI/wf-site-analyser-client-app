@@ -8,22 +8,23 @@
  * Test File: src/renderer/__tests__/features/analysis/ProgressDashboard.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ProgressDashboard } from '@/features/analysis/ProgressDashboard';
 
 const ANALYSIS_ID = 'analysis-abc-123';
 
-function renderDashboard(progress = 68, status: 'running' | 'paused' | 'completed' | 'failed' = 'running') {
+function renderDashboard(
+  progress = 68,
+  status: 'running' | 'paused' | 'completed' | 'failed' = 'running',
+) {
   vi.mocked(window.api['analysis:getStatus']).mockResolvedValue({ status, progress });
   return render(
     <MemoryRouter initialEntries={[`/analysis/${ANALYSIS_ID}/progress`]}>
       <Routes>
-        <Route
-          path="/analysis/:id/progress"
-          element={<ProgressDashboard />}
-        />
+        <Route path="/analysis/:id/progress" element={<ProgressDashboard />} />
         <Route path="/analysis/:id/results" element={<div>Results Page</div>} />
       </Routes>
     </MemoryRouter>,
@@ -76,7 +77,10 @@ describe('SA-601 – Analysis Progress Dashboard', () => {
     await waitFor(() => expect(screen.getByText(/45%/)).toBeInTheDocument());
     unmount();
     // Remount — store should retain the progress state
-    vi.mocked(window.api['analysis:getStatus']).mockResolvedValue({ status: 'running', progress: 55 });
+    vi.mocked(window.api['analysis:getStatus']).mockResolvedValue({
+      status: 'running',
+      progress: 55,
+    });
     renderDashboard(55);
     await waitFor(() => expect(screen.getByText(/55%/)).toBeInTheDocument());
   });
