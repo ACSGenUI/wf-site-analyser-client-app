@@ -27,6 +27,11 @@ You are implementing the user story **$ARGUMENTS** using Test-Driven Development
 
 ## PHASE 2 — IMPLEMENT
 
+> **Apply the `component`, `a11y`, `performance`, and `security` skill conventions
+> throughout implementation.** Those skills define file structure, accessible UI patterns,
+> Electron boundary rules, and React performance defaults that should be respected at
+> every step below.
+
 4. Create all necessary files following the project conventions:
    - Components → `src/renderer/components/`
    - Feature screens → `src/renderer/features/<area>/`
