@@ -11,13 +11,10 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
+      'out/**',
       'tests/e2e/**',
-      'src/renderer/__tests__/features/**',
-      'src/renderer/__tests__/helpers/**',
-      'src/renderer/__tests__/auth/**',
-      'src/renderer/__tests__/lifecycle/**',
-      'src/renderer/__tests__/components/SideNavRail.test.tsx',
-      'src/renderer/__tests__/components/TopHeaderBar.test.tsx',
+      'src/renderer/__tests__/templates/**',
+      '**/*.spec.ts',
     ],
     coverage: {
       provider: 'v8',
