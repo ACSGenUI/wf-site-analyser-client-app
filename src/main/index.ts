@@ -45,7 +45,7 @@ function createWindow(): void {
 
 app.whenReady().then(() => {
   createWindow();
-  if (mainWindow) initAutoUpdater(mainWindow);
+  initAutoUpdater();
 });
 
 app.on('window-all-closed', () => {

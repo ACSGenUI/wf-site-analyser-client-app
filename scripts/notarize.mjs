@@ -21,14 +21,11 @@ export default async function notarizing(context) {
 
   if (electronPlatformName !== 'darwin') return;
   if (!process.env.APPLE_ID) {
-    console.log('Skipping notarization — APPLE_ID not set.');
     return;
   }
 
   const appName = context.packager.appInfo.productFilename;
   const appPath = `${appOutDir}/${appName}.app`;
-
-  console.log(`Notarizing ${appPath}…`);
 
   await notarize({
     tool: 'notarytool',
@@ -37,6 +34,4 @@ export default async function notarizing(context) {
     appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD,
     teamId: process.env.APPLE_TEAM_ID,
   });
-
-  console.log('Notarization complete.');
 }
