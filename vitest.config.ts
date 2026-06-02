@@ -8,14 +8,14 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['src/renderer/__tests__/setup.ts'],
-    exclude: [
-      '**/node_modules/**',
-      '**/dist/**',
-      'out/**',
-      'tests/e2e/**',
-      'src/renderer/__tests__/templates/**',
-      '**/*.spec.ts',
+    include: [
+      'src/renderer/components/*.test.{ts,tsx}',
+      'src/renderer/__tests__/setup/**/*.{ts,tsx}',
+      'src/renderer/__tests__/components/design-system.test.tsx',
+      'src/shared/**/__tests__/**/*.{ts,tsx}',
+      'src/main/**/*.test.{ts,tsx}',
     ],
+    exclude: ['**/node_modules/**', '**/dist/**', 'out/**', '**/*.spec.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
