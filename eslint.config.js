@@ -31,9 +31,9 @@ export default [
 
   ...compat.extends('airbnb', 'airbnb/hooks'),
 
-  // TypeScript + React source files
+  // TypeScript + React source files and E2E tests
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -112,15 +112,16 @@ export default [
     },
   },
 
-  // Scaffold test files: components/hooks they reference don't exist yet
+  // Test files — relax rules that are legitimate in test/helper code
   {
-    files: ['src/renderer/__tests__/**/*.{ts,tsx}'],
+    files: ['src/renderer/__tests__/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
       'no-unused-vars': 'off',
       'no-promise-executor-return': 'off',
       'no-restricted-syntax': 'off',
       'no-await-in-loop': 'off',
+      'no-underscore-dangle': 'off',
     },
   },
 

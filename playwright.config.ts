@@ -1,5 +1,10 @@
+import { fileURLToPath } from 'url';
+
 import { defineConfig } from '@playwright/test';
 import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -16,10 +21,6 @@ export default defineConfig({
   projects: [
     {
       name: 'electron',
-      use: {
-        // The built app entry point; run `npm run build` before `npm run test:e2e`
-        executablePath: path.join(__dirname, 'out/main/index.js'),
-      },
     },
   ],
 });

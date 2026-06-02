@@ -6,6 +6,12 @@ import { app, BrowserWindow } from 'electron';
 import { registerIpcHandlers } from './ipc';
 import { initAutoUpdater } from './services/updater';
 
+// Electron 32+ dropped --remote-debugging-port as a CLI flag; it must be
+// registered via app.commandLine before the app is ready.
+if (process.env.PLAYWRIGHT_TEST === '1') {
+  app.commandLine.appendSwitch('remote-debugging-port', '9222');
+}
+
 let mainWindow: BrowserWindow | null = null;
 
 function createWindow(): void {
