@@ -47,6 +47,7 @@ export const ColorSuccessDark: string;
 export const ColorSuccessLight: string;
 export const ColorSuccessSurface: string;
 export const ColorWarningDefault: string;
+export const ColorWarningDark: string;
 export const ColorWarningLight: string;
 export const ColorWarningSurface: string;
 export const ColorErrorDefault: string;

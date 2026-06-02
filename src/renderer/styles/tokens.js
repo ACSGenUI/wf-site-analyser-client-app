@@ -47,6 +47,7 @@ export const ColorSuccessDark = "#15803d";
 export const ColorSuccessLight = "#22c55e";
 export const ColorSuccessSurface = "#dcfce7";
 export const ColorWarningDefault = "#f59e0b";
+export const ColorWarningDark = "#92400e";
 export const ColorWarningLight = "#f97316";
 export const ColorWarningSurface = "#fff7ed";
 export const ColorErrorDefault = "#ba1a1a";

@@ -2,14 +2,11 @@ import { type ComponentType, type ReactElement, type ReactNode } from 'react';
 
 import { Cog, Shield, Sparkles, Wrench, type LucideProps } from 'lucide-react';
 
-export type ReleaseNoteCategory = 'feature' | 'security' | 'ui' | 'bugfix';
+import type { ReleaseNote, ReleaseNoteCategory } from '@shared/types';
 
-export interface ReleaseNoteItem {
-  category: ReleaseNoteCategory;
-  title: string;
-  description: string;
-  icon?: string;
-}
+export type { ReleaseNoteCategory };
+
+export type ReleaseNoteItem = ReleaseNote;
 
 export interface ReleaseNotesProps {
   notes: ReleaseNoteItem[];
@@ -81,7 +78,7 @@ export function ReleaseNotes({ notes, className = '' }: ReleaseNotesProps): Reac
   const isScrollable = notes.length > 3;
   const listClasses = [
     'flex flex-col gap-4',
-    isScrollable ? 'max-h-72 overflow-y-auto pr-1' : '',
+    isScrollable ? 'max-h-52 overflow-y-auto pr-1' : '',
   ]
     .filter(Boolean)
     .join(' ');

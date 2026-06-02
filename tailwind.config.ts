@@ -58,6 +58,7 @@ export default {
         },
         warning: {
           DEFAULT: tokens.colors.warning,
+          dark:    '#92400E',
           light:   '#F97316',
           surface: '#FFF7ED',
         },
