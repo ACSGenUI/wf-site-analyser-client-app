@@ -11,17 +11,24 @@
  */
 
 import { spawn, type ChildProcess } from 'child_process';
+import { createRequire } from 'module';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { test, expect, chromium, type Browser } from '@playwright/test';
-import electronBin from 'electron';
+
+// createRequire gives us the path string; a default ESM import of 'electron'
+// resolves to the Electron API type (CrossProcessExports), not a string.
+const electronBin: string = createRequire(import.meta.url)('electron');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const MAIN_ENTRY = path.join(__dirname, '../../out/main/index.js');
 const CDP_URL = 'http://127.0.0.1:9222';
+// Linux CI environments (e.g. GitHub Actions) run without user namespaces,
+// so Electron's Chromium sandbox must be disabled.
+const EXTRA_ARGS = process.platform === 'linux' ? ['--no-sandbox'] : [];
 
 async function waitForCDP(timeout = 15_000): Promise<Browser> {
   const deadline = Date.now() + timeout;
@@ -54,7 +61,7 @@ test.beforeAll(async () => {
   // ELECTRON_RUN_AS_NODE=1 (set by Claude Code and similar tools) causes
   // electron.exe to behave as plain Node.js — delete it so Electron boots normally.
   const { ELECTRON_RUN_AS_NODE: _removed, ...cleanEnv } = process.env;
-  electronProcess = spawn(electronBin, [MAIN_ENTRY], {
+  electronProcess = spawn(electronBin, [...EXTRA_ARGS, MAIN_ENTRY], {
     env: { ...cleanEnv, PLAYWRIGHT_TEST: '1' },
     stdio: 'ignore',
   });

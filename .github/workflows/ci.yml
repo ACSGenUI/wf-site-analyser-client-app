@@ -65,7 +65,11 @@ jobs:
       - name: Install Electron dependencies (Linux)
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-0 libxss1 libasound2 libgbm-dev xvfb
+          # libasound2 was renamed to libasound2t64 in Ubuntu 24.04 (noble).
+          # libgtk-3-0 was similarly renamed. Install whichever is available.
+          sudo apt-get install -y libxss1 libgbm-dev xvfb \
+            $(apt-cache show libasound2t64 &>/dev/null && echo libasound2t64 || echo libasound2) \
+            $(apt-cache show libgtk-3-0t64 &>/dev/null && echo libgtk-3-0t64 || echo libgtk-3-0)
 
       - name: Build app
         run: npm run build
