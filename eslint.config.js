@@ -17,7 +17,13 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 export default [
   // Global ignores
   {
-    ignores: ['node_modules/**', 'out/**', 'dist/**', '*.config.{ts,js,mjs,cjs}', 'src/renderer/styles/tokens.js'],
+    ignores: [
+      'node_modules/**',
+      'out/**',
+      'dist/**',
+      '*.config.{ts,js,mjs,cjs}',
+      'src/renderer/styles/tokens.js',
+    ],
   },
 
   // Base JS rules
@@ -51,6 +57,8 @@ export default [
       '@typescript-eslint/no-explicit-any': 'error',
       // TypeScript handles undefined checking
       'no-undef': 'off',
+      // Allow _prefixed params to mark intentionally unused args (TypeScript convention)
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'react/jsx-filename-extension': 'off',
       'import/extensions': 'off',
       'import/no-unresolved': 'off',
@@ -82,6 +90,25 @@ export default [
     },
     settings: {
       react: { version: 'detect' },
+    },
+  },
+
+  // Build scripts — Node.js CJS/ESM, modern syntax, Windows line endings allowed.
+  // Bitwise operators and ++ are legitimate here (CRC32, PNG/ICO generation).
+  {
+    files: ['scripts/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: { process: 'readonly', console: 'readonly', require: 'readonly', __dirname: 'readonly' },
+    },
+    rules: {
+      'linebreak-style': 'off',
+      'no-multi-spaces': 'off',
+      'no-bitwise': 'off',
+      'no-plusplus': 'off',
+      'no-restricted-syntax': 'off',
+      'no-console': 'off',
+      'import/no-extraneous-dependencies': 'off',
     },
   },
 

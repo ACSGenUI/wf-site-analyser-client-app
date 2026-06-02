@@ -9,8 +9,9 @@
 import type { BrowserWindow } from 'electron';
 
 export function initAutoUpdater(_mainWindow: BrowserWindow): void {
-  if (process.env.NODE_ENV !== 'production') return;
-  // TODO(Epic 02): uncomment and implement once publish config is in place.
-  // const { autoUpdater } = await import('electron-updater');
-  // autoUpdater.checkForUpdatesAndNotify();
+  // TODO(Epic 02): wire up autoUpdater once publish config is in place.
+  // if (process.env.NODE_ENV === 'production') {
+  //   const { autoUpdater } = await import('electron-updater');
+  //   autoUpdater.checkForUpdatesAndNotify();
+  // }
 }
