@@ -1,7 +1,9 @@
 import { ipcMain, app } from 'electron';
 import { IPC_CHANNELS, type PingResult, type AppEnv } from '../../shared/types';
+import { registerStoreHandlers } from './store';
 
 export function registerIpcHandlers(): void {
+  registerStoreHandlers();
   ipcMain.handle(IPC_CHANNELS.PING, (): PingResult => ({
     pong: true,
     timestamp: Date.now(),
