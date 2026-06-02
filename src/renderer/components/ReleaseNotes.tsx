@@ -1,6 +1,5 @@
-import { type ComponentType, type ReactElement, type ReactNode } from 'react';
-
 import { Cog, Shield, Sparkles, Wrench, type LucideProps } from 'lucide-react';
+import { type ComponentType, type ReactElement, type ReactNode } from 'react';
 
 import type { ReleaseNote, ReleaseNoteCategory } from '@shared/types';
 
@@ -76,10 +75,7 @@ export function ReleaseNotes({ notes, className = '' }: ReleaseNotesProps): Reac
   if (notes.length === 0) return null;
 
   const isScrollable = notes.length > 3;
-  const listClasses = [
-    'flex flex-col gap-4',
-    isScrollable ? 'max-h-52 overflow-y-auto pr-1' : '',
-  ]
+  const listClasses = ['flex flex-col gap-4', isScrollable ? 'max-h-52 overflow-y-auto pr-1' : '']
     .filter(Boolean)
     .join(' ');
 
@@ -89,10 +85,13 @@ export function ReleaseNotes({ notes, className = '' }: ReleaseNotesProps): Reac
     <section className={containerClasses}>
       <p className="text-xs uppercase tracking-[1.2px] text-neutral-600">Release Notes</p>
       <ul className={listClasses}>
-        {notes.map((note, index) => {
+        {notes.map((note) => {
           const Icon = CATEGORY_ICON[note.category];
           return (
-            <li key={`${note.category}-${index}`} className="flex gap-3 items-start">
+            <li
+              key={`${note.category}-${note.title}-${note.description}`}
+              className="flex gap-3 items-start"
+            >
               <span
                 role="img"
                 aria-label={CATEGORY_LABEL[note.category]}

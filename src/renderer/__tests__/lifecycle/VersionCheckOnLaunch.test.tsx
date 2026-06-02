@@ -8,9 +8,10 @@
  * Test File: src/renderer/__tests__/lifecycle/VersionCheckOnLaunch.test.tsx
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { VersionChecker } from '@/components/VersionChecker';
 
 // VersionChecker is a "behaviour" component — it renders nothing when up-to-date
@@ -82,9 +83,7 @@ describe('SA-202 – Version Check on Launch', () => {
     render(<VersionChecker />);
     await waitFor(() => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
-      expect(
-        screen.getByText(/unable to check for updates/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/unable to check for updates/i)).toBeInTheDocument();
     });
     consoleSpy.mockRestore();
   });

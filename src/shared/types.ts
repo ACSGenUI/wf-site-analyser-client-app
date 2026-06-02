@@ -38,7 +38,8 @@ export const IPC_CHANNELS = {
   RAG_QUERY: 'rag:query',
   GET_ENV: 'app:getEnv',
   PING: 'app:ping',
-  /** Main → renderer push: lifecycle status string ('downloading' | 'installing' | 'restarting' | 'error' | 'ready'). */
+  /** Main → renderer push: lifecycle status string
+   * ('downloading' | 'installing' | 'restarting' | 'error' | 'ready'). */
   UPDATE_STATUS: 'update-status',
   /** Main → renderer push: download progress as an integer 0–100. */
   UPDATE_PROGRESS: 'update-progress',
@@ -239,7 +240,8 @@ export interface ElectronAPI {
    * the handler writes a minimal {schemaVersion, savedAt} marker.
    */
   'analysis:saveAutoSave': (payload?: AutoSavePayload) => Promise<AutoSaveResult>;
-  /** Read the autosave file if present. Returns null when no autosave exists or the file is unreadable. */
+  /** Read the autosave file if present. Returns null when no autosave exists
+   * or the file is unreadable. */
   'analysis:loadAutoSave': () => Promise<AutoSavePayload | null>;
 
   // Data / migration

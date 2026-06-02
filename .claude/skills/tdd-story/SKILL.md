@@ -1,7 +1,7 @@
 ---
 name: tdd-story
 description: Implement a user story using TDD — reads the story file, finds its test file, implements the component, and runs vitest until all tests are green.
-argument-hint: "<story-id>  e.g. SA-601"
+argument-hint: '<story-id>  e.g. SA-601'
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
@@ -27,6 +27,11 @@ You are implementing the user story **$ARGUMENTS** using Test-Driven Development
 
 ## PHASE 2 — IMPLEMENT
 
+> **Apply the `component`, `a11y`, `performance`, and `security` skill conventions
+> throughout implementation.** Those skills define file structure, accessible UI patterns,
+> Electron boundary rules, and React performance defaults that should be respected at
+> every step below.
+
 4. Create all necessary files following the project conventions:
    - Components → `src/renderer/components/`
    - Feature screens → `src/renderer/features/<area>/`
@@ -48,6 +53,7 @@ You are implementing the user story **$ARGUMENTS** using Test-Driven Development
 ## PHASE 3 — TDD LOOP
 
 6. Run the test file:
+
    ```
    npx vitest run <test-file-path> --reporter=verbose
    ```

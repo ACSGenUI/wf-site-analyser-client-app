@@ -14,9 +14,10 @@
  * the install is in flight) so the disabled-state assertion isn't lost.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { ForceUpdateModal } from '@/components/ForceUpdateModal';
 
 // Props shape expected by the component

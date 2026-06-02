@@ -1,15 +1,10 @@
-import { type ReactElement } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import { type ReactElement } from 'react';
 
 import { Button } from './Button';
 import { ReleaseNotes, type ReleaseNoteItem } from './ReleaseNotes';
 
-export type ForceUpdateStatus =
-  | 'ready'
-  | 'downloading'
-  | 'installing'
-  | 'error'
-  | 'restarting';
+export type ForceUpdateStatus = 'ready' | 'downloading' | 'installing' | 'error' | 'restarting';
 
 export interface ForceUpdateModalProps {
   currentVersion: string;
@@ -18,7 +13,10 @@ export interface ForceUpdateModalProps {
   downloadProgress?: number;
   /** Approximate install duration in seconds, surfaced in the footer. Defaults to 45. */
   estimatedSeconds?: number;
-  /** Release notes shown between the version pane and the footer. When empty, the section is hidden. */
+  /**
+   * Release notes shown between the version pane and the footer.
+   * When empty, the section is hidden.
+   */
   releaseNotes?: ReleaseNoteItem[];
   onInstall: () => void;
   onRetry?: () => void;
@@ -105,24 +103,14 @@ export function ForceUpdateModal({
               <p className="text-[10px] uppercase tracking-[1px] text-neutral-800/60">
                 Current Version
               </p>
-              <p className="font-mono text-xl font-bold text-neutral-900">
-                {currentVersion}
-              </p>
+              <p className="font-mono text-xl font-bold text-neutral-900">{currentVersion}</p>
             </div>
-            <span
-              role="img"
-              aria-label="arrow"
-              className="px-4 text-xl text-primary"
-            >
+            <span role="img" aria-label="arrow" className="px-4 text-xl text-primary">
               →
             </span>
             <div className="flex flex-col items-end">
-              <p className="text-[10px] uppercase tracking-[1px] text-primary">
-                New Version
-              </p>
-              <p className="font-mono text-xl font-bold text-primary-dark">
-                {newVersion}
-              </p>
+              <p className="text-[10px] uppercase tracking-[1px] text-primary">New Version</p>
+              <p className="font-mono text-xl font-bold text-primary-dark">{newVersion}</p>
             </div>
           </div>
 
@@ -137,8 +125,8 @@ export function ForceUpdateModal({
           <div className="flex items-center justify-between bg-neutral-100 px-8 py-6">
             <p className="max-w-[180px] text-[10px] leading-[12.5px] text-neutral-800">
               Approximate update time:{' '}
-              <span className="text-neutral-900">{estimatedSeconds} seconds</span>. Your work
-              will be saved.
+              <span className="text-neutral-900">{estimatedSeconds} seconds</span>. Your work will
+              be saved.
             </p>
 
             {isError ? (

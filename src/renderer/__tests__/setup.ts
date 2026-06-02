@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { vi, afterAll, afterEach, beforeAll } from 'vitest';
+
 import { mockServer } from '@main/mocks/server';
 
 // ---------------------------------------------------------------------------
@@ -25,10 +26,14 @@ const mockElectronAPI = {
   'safeStorage:delete': vi.fn().mockResolvedValue(undefined),
 
   // IMS Authentication
-  'auth:openOAuthWindow': vi.fn().mockResolvedValue({ accessToken: 'mock-token', userId: 'user-123' }),
+  'auth:openOAuthWindow': vi
+    .fn()
+    .mockResolvedValue({ accessToken: 'mock-token', userId: 'user-123' }),
   'auth:signOut': vi.fn().mockResolvedValue(undefined),
   'auth:switchAccount': vi.fn().mockResolvedValue(undefined),
-  'auth:getTokenClaims': vi.fn().mockResolvedValue({ name: 'Test User', email: 'test@example.com', org: 'Test Org' }),
+  'auth:getTokenClaims': vi
+    .fn()
+    .mockResolvedValue({ name: 'Test User', email: 'test@example.com', org: 'Test Org' }),
 
   // Analysis
   'analysis:start': vi.fn().mockResolvedValue({ analysisId: 'analysis-123' }),
@@ -45,7 +50,9 @@ const mockElectronAPI = {
   // Data / migration
   'data:migrateGuestToAuth': vi.fn().mockResolvedValue({ success: true }),
   'data:discardGuestData': vi.fn().mockResolvedValue(undefined),
-  'data:getStorageUsage': vi.fn().mockResolvedValue({ usedBytes: 2468987289, totalBytes: 10737418240 }),
+  'data:getStorageUsage': vi
+    .fn()
+    .mockResolvedValue({ usedBytes: 2468987289, totalBytes: 10737418240 }),
   'data:clearOldData': vi.fn().mockResolvedValue(undefined),
 
   // File system

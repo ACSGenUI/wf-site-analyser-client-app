@@ -8,8 +8,8 @@
  * Test File: src/renderer/__tests__/components/ReleaseNotes.test.tsx
  */
 
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 
 import { ReleaseNotes, type ReleaseNoteItem } from '@/components/ReleaseNotes';
 

@@ -1,5 +1,5 @@
-import React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import React from 'react';
 
 export interface ModalProps {
   open: boolean;
@@ -17,7 +17,12 @@ export function Modal({
   className = '',
 }: ModalProps): React.ReactElement {
   return (
-    <Dialog.Root open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) onClose();
+      }}
+    >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" />
         <Dialog.Content
@@ -32,10 +37,7 @@ export function Modal({
           aria-labelledby="modal-title"
         >
           <div className="flex items-center justify-between mb-4">
-            <Dialog.Title
-              id="modal-title"
-              className="text-lg font-semibold text-gray-900"
-            >
+            <Dialog.Title id="modal-title" className="text-lg font-semibold text-gray-900">
               {title}
             </Dialog.Title>
             <Dialog.Close

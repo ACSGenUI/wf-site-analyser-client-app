@@ -7,14 +7,25 @@
  * Test File: src/renderer/__tests__/features/settings/SettingsAIAssistant.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { SettingsAIAssistant } from '@/features/settings/SettingsAIAssistant';
 
 const mockHistory = [
-  { action: 'API Key Rotation', timestamp: Date.now() - 7200000, tab: 'api-keys', field: 'openai' },
-  { action: 'Browser Toggle', timestamp: Date.now() - 3600000, tab: 'browser', field: 'screenshots' },
+  {
+    action: 'API Key Rotation',
+    timestamp: Date.now() - 7200000,
+    tab: 'api-keys',
+    field: 'openai',
+  },
+  {
+    action: 'Browser Toggle',
+    timestamp: Date.now() - 3600000,
+    tab: 'browser',
+    field: 'screenshots',
+  },
 ];
 
 function renderPanel(props: { isOpen?: boolean; activeTab?: string; onClose?: () => void } = {}) {
@@ -65,12 +76,7 @@ describe('SA-906 – Settings AI Assistant Panel', () => {
     const apiTipText = screen.getByTestId('pro-tip-card').textContent;
 
     rerender(
-      <SettingsAIAssistant
-        isOpen={true}
-        activeTab="browser"
-        history={mockHistory}
-        onClose={vi.fn()}
-      />,
+      <SettingsAIAssistant isOpen activeTab="browser" history={mockHistory} onClose={vi.fn()} />,
     );
     const browserTipText = screen.getByTestId('pro-tip-card').textContent;
     expect(browserTipText).not.toBe(apiTipText);

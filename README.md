@@ -4,11 +4,11 @@ Desktop application for analysing web-site UI competency, built with **Electron 
 
 ## AI Agent guides
 
-| File | Purpose |
-|---|---|
-| [`CLAUDE.md`](CLAUDE.md) | Claude Code project memory — skills, conventions, commands auto-loaded on every session |
-| [`AGENTS.md`](AGENTS.md) | Agent-agnostic workflow reference — same procedures written for any AI tool |
-| [`docs/design-tokens.md`](docs/design-tokens.md) | Design token pipeline, token file reference, and Figma sync guide |
+| File                                             | Purpose                                                                                 |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| [`CLAUDE.md`](CLAUDE.md)                         | Claude Code project memory — skills, conventions, commands auto-loaded on every session |
+| [`AGENTS.md`](AGENTS.md)                         | Agent-agnostic workflow reference — same procedures written for any AI tool             |
+| [`docs/design-tokens.md`](docs/design-tokens.md) | Design token pipeline, token file reference, and Figma sync guide                       |
 
 ## Prerequisites
 
@@ -30,18 +30,18 @@ npm test
 
 ## Scripts
 
-| Command              | Description                                      |
-| -------------------- | ------------------------------------------------ |
-| `npm run dev`        | Launch Electron in dev mode with Vite HMR        |
-| `npm run build`      | Compile & bundle for production                  |
-| `npm run preview`    | Preview the production build locally             |
-| `npm run typecheck`  | Run `tsc --noEmit` (strict)                      |
-| `npm test`           | Run all Vitest tests (verbose)                   |
-| `npm run test:watch` | Run Vitest in watch mode                         |
-| `npm run test:coverage` | Run tests with V8 coverage                   |
-| `npm run build:tokens` | Rebuild CSS custom properties from `tokens/*.json` |
-| `npm run lint`       | ESLint check                                     |
-| `npm run format`     | Prettier format                                  |
+| Command                 | Description                                        |
+| ----------------------- | -------------------------------------------------- |
+| `npm run dev`           | Launch Electron in dev mode with Vite HMR          |
+| `npm run build`         | Compile & bundle for production                    |
+| `npm run preview`       | Preview the production build locally               |
+| `npm run typecheck`     | Run `tsc --noEmit` (strict)                        |
+| `npm test`              | Run all Vitest tests (verbose)                     |
+| `npm run test:watch`    | Run Vitest in watch mode                           |
+| `npm run test:coverage` | Run tests with V8 coverage                         |
+| `npm run build:tokens`  | Rebuild CSS custom properties from `tokens/*.json` |
+| `npm run lint`          | ESLint check                                       |
+| `npm run format`        | Prettier format                                    |
 
 ## Architecture
 
@@ -68,28 +68,28 @@ src/
 
 ### Key Design Decisions
 
-| Concern              | Choice                                                              |
-| -------------------- | ------------------------------------------------------------------- |
-| Process isolation    | `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true` |
-| IPC pattern          | `contextBridge` + `ipcRenderer.invoke` / `ipcMain.handle`          |
-| Bundler              | **Vite** via `electron-vite`                                        |
-| Styling              | **Tailwind CSS** (utility-first)                                    |
-| State management     | **Zustand**                                                         |
-| Routing              | **React Router v6**                                                 |
-| Accessible primitives| **Radix UI**                                                        |
-| Forms                | **React Hook Form** + **Zod** validation                           |
-| Testing              | **Vitest** + **React Testing Library** (`jsdom`)                    |
+| Concern               | Choice                                                              |
+| --------------------- | ------------------------------------------------------------------- |
+| Process isolation     | `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true` |
+| IPC pattern           | `contextBridge` + `ipcRenderer.invoke` / `ipcMain.handle`           |
+| Bundler               | **Vite** via `electron-vite`                                        |
+| Styling               | **Tailwind CSS** (utility-first)                                    |
+| State management      | **Zustand**                                                         |
+| Routing               | **React Router v6**                                                 |
+| Accessible primitives | **Radix UI**                                                        |
+| Forms                 | **React Hook Form** + **Zod** validation                            |
+| Testing               | **Vitest** + **React Testing Library** (`jsdom`)                    |
 
 ### Path Aliases
 
 Configured in both `tsconfig.json` and `vitest.config.ts`:
 
-| Alias       | Resolves to        |
-| ----------- | ------------------ |
-| `@/*`       | `src/renderer/*`   |
-| `@main/*`   | `src/main/*`       |
-| `@shared/*` | `src/shared/*`     |
-| `@preload/*`| `src/preload/*`    |
+| Alias        | Resolves to      |
+| ------------ | ---------------- |
+| `@/*`        | `src/renderer/*` |
+| `@main/*`    | `src/main/*`     |
+| `@shared/*`  | `src/shared/*`   |
+| `@preload/*` | `src/preload/*`  |
 
 ## Design Tokens
 

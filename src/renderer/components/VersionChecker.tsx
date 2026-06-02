@@ -17,12 +17,10 @@ type CheckState =
     }
   | { kind: 'failed' };
 
-// 30-min poll (SA-202 AC-7); exponential backoff with ±20% jitter on failures (cap 6h) to avoid thundering-herd retries.
 const BASE_POLL_INTERVAL_MS = 30 * 60 * 1000;
 const MAX_POLL_INTERVAL_MS = 6 * 60 * 60 * 1000;
 const BACKOFF_JITTER_RATIO = 0.2;
 
-/** Next poll delay: base on success, else `base * 2^failures` (capped at MAX_POLL_INTERVAL_MS) with ±20% jitter. */
 function backoffDelay(failures: number): number {
   if (failures <= 0) return BASE_POLL_INTERVAL_MS;
   const exponential = BASE_POLL_INTERVAL_MS * 2 ** failures;
@@ -31,7 +29,7 @@ function backoffDelay(failures: number): number {
   return Math.max(1000, Math.round(capped + jitter));
 }
 
-/** True if `current` < `minimum` per semver; false on invalid input so a bad server response can't force the modal. */
+// Returns false on invalid input so a bad server response can't force the modal.
 function isBelowMinimumVersion(current: string, minimum: string): boolean {
   if (!semverValid(current) || !semverValid(minimum)) return false;
   return semverLt(current, minimum);
@@ -45,7 +43,6 @@ const KNOWN_STATUSES: readonly ForceUpdateStatus[] = [
   'restarting',
 ];
 
-/** Map raw main-process `update-status` strings onto our 5-state enum; returns null for unknown values. */
 function normalizeStatus(raw: string): ForceUpdateStatus | null {
   const s = raw.trim().toLowerCase();
   if ((KNOWN_STATUSES as readonly string[]).includes(s)) {
@@ -56,7 +53,7 @@ function normalizeStatus(raw: string): ForceUpdateStatus | null {
   return null;
 }
 
-// Don't show "Checking…" if the check finishes in under this many ms — prevents a UI flash.
+// Suppress "Checking…" if the check finishes quickly — prevents a UI flash.
 const CHECKING_REVEAL_DELAY_MS = 200;
 
 export function VersionChecker(): ReactElement | null {
@@ -69,34 +66,36 @@ export function VersionChecker(): ReactElement | null {
   // Once mandatory is set, lock it — later polls must never unmount the modal mid-install.
   const mandatoryLockedRef = useRef(false);
 
-  // Initial check on mount + self-rescheduling timer (base interval on success, backoff on failure).
   useEffect(() => {
+    const { api } = window as Window & { api?: typeof window.api };
+    if (!api) {
+      setCheckState({ kind: 'failed' });
+      return undefined;
+    }
+
     let cancelled = false;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let failures = 0;
 
-    // Resolve local version once; never rejects (errors → '') so runCheck can await it deterministically.
     const localVersionPromise = window.api
       .getAppVersion()
       .then((v) => v)
       .catch(() => '');
 
-    // Fall back to local version; server-echoed currentVersion (set in runCheck) takes precedence via `prev || v`.
-    void localVersionPromise.then((v) => {
+    localVersionPromise.then((v) => {
       if (!cancelled && v) setCurrentVersion((prev) => prev || v);
     });
 
     const scheduleNext = (delayMs: number) => {
       if (cancelled || mandatoryLockedRef.current) return;
+      // eslint-disable-next-line no-use-before-define
       timeoutId = setTimeout(runCheck, delayMs);
     };
 
     const runCheck = () => {
-      // Wait for both so the minimumVersion gate always has a currentVersion to compare against.
-      Promise.all([window.api.checkForUpdates(), localVersionPromise])
+      Promise.all([api.checkForUpdates(), localVersionPromise])
         .then(([result, localVersion]) => {
           if (cancelled || mandatoryLockedRef.current) return;
-          // Network resolved (live or cached) → reset backoff counter.
           failures = 0;
 
           let lockedThisRun = false;
@@ -111,11 +110,9 @@ export function VersionChecker(): ReactElement | null {
               );
               setCheckState({ kind: 'failed' });
             } else {
-              // Server-echoed `currentVersion` is authoritative; fall back to locally-resolved version.
               const serverCurrentVersion = result.currentVersion ?? localVersion;
               if (serverCurrentVersion) setCurrentVersion(serverCurrentVersion);
 
-              // Below server's `minimumVersion` → treat as mandatory even if `mandatory` flag is false.
               const isBelowMinimum =
                 result.minimumVersion && serverCurrentVersion
                   ? isBelowMinimumVersion(serverCurrentVersion, result.minimumVersion)
@@ -136,7 +133,6 @@ export function VersionChecker(): ReactElement | null {
             }
           }
 
-          // Don't poll further once the blocking modal is committed.
           if (!lockedThisRun) scheduleNext(BASE_POLL_INTERVAL_MS);
         })
         .catch((err: unknown) => {
@@ -156,19 +152,19 @@ export function VersionChecker(): ReactElement | null {
     };
   }, []);
 
-  // Reveal "Checking…" only after the delay threshold to prevent UI flash on fast checks.
   useEffect(() => {
     const id = setTimeout(() => setShowCheckingIndicator(true), CHECKING_REVEAL_DELAY_MS);
     return () => clearTimeout(id);
   }, []);
 
-  // Subscribe to install events so the modal transitions through download → install → restart (and error).
   useEffect(() => {
-    const unsubStatus = window.api.onUpdateStatus?.((raw) => {
+    const { api } = window as Window & { api?: typeof window.api };
+    if (!api) return undefined;
+    const unsubStatus = api.onUpdateStatus?.((raw) => {
       const next = normalizeStatus(raw);
       if (next) setInstallStatus(next);
     });
-    const unsubProgress = window.api.onUpdateProgress?.((percent) => {
+    const unsubProgress = api.onUpdateProgress?.((percent) => {
       setDownloadProgress(Math.max(0, Math.min(100, Math.round(percent))));
     });
     return () => {
@@ -178,15 +174,18 @@ export function VersionChecker(): ReactElement | null {
   }, []);
 
   const handleInstall = useCallback(async () => {
-    // Flip to 'downloading' so the button disables now; main process drives later transitions via onUpdateStatus.
+    const { api } = window as Window & { api?: typeof window.api };
+    if (!api) return;
+    // Optimistically flip to 'downloading' so the button disables immediately;
+    // main process drives later transitions via onUpdateStatus.
     setInstallStatus('downloading');
     try {
-      await window.api['analysis:saveAutoSave']();
+      await api['analysis:saveAutoSave']();
     } catch {
       // Auto-save is best-effort — never block the update on it.
     }
     try {
-      await window.api.installUpdate();
+      await api.installUpdate();
     } catch (err) {
       console.error('Install update failed:', err);
       setInstallStatus('error');
@@ -194,7 +193,7 @@ export function VersionChecker(): ReactElement | null {
   }, []);
 
   const handleRetry = useCallback(() => {
-    void handleInstall();
+    handleInstall().catch(() => undefined);
   }, [handleInstall]);
 
   if (checkState.kind === 'mandatory') {
@@ -236,7 +235,6 @@ export function VersionChecker(): ReactElement | null {
     );
   }
 
-  // 'idle' — initial check in flight; subtle delayed-reveal indicator (see CHECKING_REVEAL_DELAY_MS).
   if (checkState.kind === 'idle' && showCheckingIndicator) {
     return (
       <aside
