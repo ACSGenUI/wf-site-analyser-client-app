@@ -123,12 +123,11 @@ export interface AnalysisStatus {
   /** Pages discovered and analysed so far in this run. */
   pages?: PageResult[];
 }
+export interface CachedUpdateManifest {
+  result: UpdateCheckResult;
+  cachedAt: string;
+}
 
-/**
- * Auto-save payload written to disk before a force-update restart (SA-201) and on
- * future analysis-feature autosave ticks. The schemaVersion field lets the
- * forthcoming analysis-persistence story migrate older files in place.
- */
 export interface AutoSavePayload {
   schemaVersion: 1;
   /** ISO-8601 timestamp set by the main process when the file is written. */
@@ -187,6 +186,8 @@ export interface AppEnv {
   NODE_ENV: string;
   APP_STAGE: string;
   API_BASE_URL: string;
+  /** Update-check endpoint (SA-202). Falls back to a dev default when unset. */
+  UPDATE_SERVER_URL: string;
   [key: string]: string;
 }
 

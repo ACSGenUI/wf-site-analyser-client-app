@@ -116,4 +116,4 @@ Environment-specific variables live in `.env.*` files at the project root:
 - `.env.staging` – staging builds
 - `.env.production` – production builds
 
-Key variables: `NODE_ENV`, `APP_STAGE`, `API_BASE_URL`.
+Key variables: `NODE_ENV`, `APP_STAGE`, `API_BASE_URL`, `UPDATE_SERVER_URL`.

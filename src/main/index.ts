@@ -39,7 +39,18 @@ function createWindow(): void {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      const { mockServer } = await import('./mocks/server');
+      mockServer.listen({ onUnhandledRequest: 'bypass' });
+      console.log('[dev] MSW mock server started — update-check requests intercepted.');
+    } catch (err) {
+      console.warn('[dev] MSW failed to start, requests will hit the real network:', err);
+    }
+  }
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -8,17 +8,47 @@ import {
   type AppEnv,
   type AutoSavePayload,
   type AutoSaveResult,
+  type CachedUpdateManifest,
   type PingResult,
   type UpdateCheckResult,
 } from '../../shared/types';
 
-const UPDATE_CHECK_ENDPOINT = 'https://updates.example.com/api/v1/updates/check';
+const DEFAULT_UPDATE_CHECK_ENDPOINT = 'https://updates.example.com/api/v1/updates/check';
+const UPDATE_CHECK_ENDPOINT =
+  process.env.UPDATE_SERVER_URL ?? DEFAULT_UPDATE_CHECK_ENDPOINT;
 
-// We drive download + install manually so the renderer can show progress and
-// the user must explicitly accept (mandatory-update modal). Without these
-// flags, electron-updater would auto-download on check and auto-install on quit.
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = false;
+
+const UPDATE_MANIFEST_CACHE_FILE = 'update-manifest.json';
+const UPDATE_MANIFEST_CACHE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+function updateManifestCachePath(): string {
+  return path.join(app.getPath('userData'), UPDATE_MANIFEST_CACHE_FILE);
+}
+
+async function readCachedUpdateManifest(): Promise<UpdateCheckResult | null> {
+  try {
+    const raw = await fs.readFile(updateManifestCachePath(), 'utf8');
+    const parsed = JSON.parse(raw) as CachedUpdateManifest;
+    const age = Date.now() - new Date(parsed.cachedAt).getTime();
+    if (Number.isNaN(age) || age > UPDATE_MANIFEST_CACHE_MAX_AGE_MS) {
+      console.log('[update-check] cached manifest stale, ignoring');
+      return null;
+    }
+    return parsed.result;
+  } catch {
+    // ENOENT (no cache yet) or malformed JSON (corrupt cache) → no fallback.
+    return null;
+  }
+}
+
+async function writeCachedUpdateManifest(result: UpdateCheckResult): Promise<void> {
+  const body: CachedUpdateManifest = { result, cachedAt: new Date().toISOString() };
+  const filePath = updateManifestCachePath();
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(body, null, 2), 'utf8');
+}
 
 export function registerIpcHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.PING, (): PingResult => ({
@@ -32,11 +62,25 @@ export function registerIpcHandlers(): void {
     IPC_CHANNELS.CHECK_FOR_UPDATES,
     async (): Promise<UpdateCheckResult> => {
       const url = `${UPDATE_CHECK_ENDPOINT}?version=${app.getVersion()}&platform=${process.platform}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(`Update check failed: HTTP ${res.status}`);
+      try {
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`Update check failed: HTTP ${res.status}`);
+        }
+        const result = (await res.json()) as UpdateCheckResult;
+        // Best-effort cache write; never fail the call on cache write failure.
+        void writeCachedUpdateManifest(result).catch((err) =>
+          console.warn('[update-check] cache write failed:', err),
+        );
+        return result;
+      } catch (err) {
+        const cached = await readCachedUpdateManifest();
+        if (cached) {
+          console.log('[update-check] network failed, serving cached manifest');
+          return cached;
+        }
+        throw err;
       }
-      return (await res.json()) as UpdateCheckResult;
     },
   );
 
@@ -137,5 +181,6 @@ export function registerIpcHandlers(): void {
     NODE_ENV: process.env.NODE_ENV ?? 'production',
     APP_STAGE: process.env.APP_STAGE ?? 'production',
     API_BASE_URL: process.env.API_BASE_URL ?? '',
+    UPDATE_SERVER_URL: UPDATE_CHECK_ENDPOINT,
   }));
 }
