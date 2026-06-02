@@ -96,4 +96,12 @@ export default [
       'no-await-in-loop': 'off',
     },
   },
+
+  // All test files may import from devDependencies (vitest, @testing-library/*, electron in tests)
+  {
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', 'src/renderer/__tests__/**/*.{ts,tsx}'],
+    rules: {
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    },
+  },
 ];
