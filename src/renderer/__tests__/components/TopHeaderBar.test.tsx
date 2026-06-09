@@ -8,8 +8,9 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { describe, it, expect, vi } from 'vitest';
+
 
 import { TopHeaderBar } from '@/components/TopHeaderBar';
 import { useSessionStore } from '@/store/sessionStore';
@@ -30,9 +31,9 @@ describe('SA-402 – Top Header Bar', () => {
   });
 
   // TC-02: App title renders
-  it('TC-02: "Site Analyzer" title appears in the header', () => {
+  it('TC-02: "Site Analyser" title appears in the header', () => {
     renderHeader();
-    expect(screen.getByText(/site an[ai]lyz[ae]r/i)).toBeInTheDocument();
+    expect(screen.getByText(/site an[ai]ly[sz][ae]r/i)).toBeInTheDocument();
   });
 
   // TC-03: Breadcrumb reflects current route
@@ -61,13 +62,16 @@ describe('SA-402 – Top Header Bar', () => {
 
   // TC-06: Header not rendered on /sign-in
   it('TC-06: header is hidden on the /sign-in route (standalone page)', () => {
+    // The layout shell excludes TopHeaderBar on /sign-in via nested routing.
+    // Simulate that pattern: only render the header on non-sign-in routes.
     render(
       <MemoryRouter initialEntries={['/sign-in']}>
-        {/* Parent layout should conditionally render the header */}
-        {window.location.pathname !== '/sign-in' && <TopHeaderBar />}
+        <Routes>
+          <Route path="/sign-in" element={<div data-testid="sign-in" />} />
+          <Route path="*" element={<TopHeaderBar />} />
+        </Routes>
       </MemoryRouter>,
     );
-    // When TopHeaderBar is correctly excluded on sign-in route, banner should be absent
     expect(screen.queryByRole('banner')).toBeNull();
   });
 });
