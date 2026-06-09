@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/analysis/CrawlConfiguration.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { CrawlConfiguration } from '@/features/analysis/CrawlConfiguration';
 
 function renderConfig(onChange = vi.fn()) {

@@ -1,6 +1,10 @@
-import { app, BrowserWindow } from 'electron';
 import path from 'path';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { app, BrowserWindow } from 'electron';
+
 import { registerIpcHandlers } from './ipc';
+import { initAutoUpdater } from './services/updater';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -39,7 +43,10 @@ function createWindow(): void {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  if (mainWindow) initAutoUpdater(mainWindow);
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

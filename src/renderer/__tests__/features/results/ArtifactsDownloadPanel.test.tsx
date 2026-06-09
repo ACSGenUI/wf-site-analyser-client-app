@@ -7,16 +7,37 @@
  * Test File: src/renderer/__tests__/features/results/ArtifactsDownloadPanel.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ArtifactsDownloadPanel } from '@/features/results/ArtifactsDownloadPanel';
 
 const mockArtifacts = [
-  { name: 'block-mapping.csv', type: 'csv', size: '12 KB', path: '/output/block-mapping.csv' },
-  { name: 'template-mapping.md', type: 'md', size: '3 KB', path: '/output/template-mapping.md' },
-  { name: 'integrations.json', type: 'json', size: '5 KB', path: '/output/integrations.json' },
-  { name: 'consolidated-blocks.csv', type: 'csv', size: '18 KB', path: '/output/consolidated-blocks.csv' },
+  {
+    name: 'block-mapping.csv',
+    type: 'csv',
+    size: '12 KB',
+    path: '/output/block-mapping.csv',
+  },
+  {
+    name: 'template-mapping.md',
+    type: 'md',
+    size: '3 KB',
+    path: '/output/template-mapping.md',
+  },
+  {
+    name: 'integrations.json',
+    type: 'json',
+    size: '5 KB',
+    path: '/output/integrations.json',
+  },
+  {
+    name: 'consolidated-blocks.csv',
+    type: 'csv',
+    size: '18 KB',
+    path: '/output/consolidated-blocks.csv',
+  },
 ];
 
 function renderPanel(artifacts = mockArtifacts) {
