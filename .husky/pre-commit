@@ -1,40 +1,46 @@
 #!/usr/bin/env sh
-# Token governance gate.
+# Husky pre-commit orchestrator.
 #
-# Runs deterministic checks when any token-pipeline file is staged.
-# Blocks the commit if the pipeline is in a broken state.
+# Hooks live in .husky/hooks/. Enable or disable individually:
 #
-# Checks enforced:
-#   - tokens/*.json all exist and are valid JSON
-#   - tokens.css has :root with --wf-* properties and correct px units
-#   - No [object Object] in generated output
-#   - index.css imports tokens.css first
-#   - npm run build:tokens exits 0
-#   - TypeScript reports no errors in token files
+#   1. Environment variable (one-off):
+#        HUSKY_HOOK_TOKEN_GOVERNANCE=0 git commit
+#        HUSKY_HOOK_FALLOW_AUDIT=0 git commit
 #
-# To run manually:
-#   bash .claude/skills/figma-tokens/evals/checks/deterministic.sh
+#   2. Local overrides file (persistent, gitignored):
+#        cp .husky/hooks.local.example .husky/hooks.local
+#        # edit hooks.local — comment out lines to disable hooks
+#
+# Run a hook manually:
+#   sh .husky/hooks/token-governance.sh
+#   sh .husky/hooks/fallow-audit.sh
 
-CHANGED=$(git diff --cached --name-only)
+HOOK_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/hooks" && pwd)"
 
-TOKEN_PATTERN='^(tokens/|tailwind\.config|src/renderer/styles/|src/renderer/components/theme\.ts|style-dictionary\.config)'
-
-if ! echo "$CHANGED" | grep -qE "$TOKEN_PATTERN"; then
-  exit 0
+# Optional local overrides (gitignored)
+if [ -f "$(dirname -- "$0")/hooks.local" ]; then
+  # shellcheck disable=SC1090
+  . "$(dirname -- "$0")/hooks.local"
 fi
 
-echo ""
-echo "Token pipeline files staged -- running governance checks..."
-echo ""
+run_hook() {
+  env_var_name=$1
+  script_name=$2
 
-if bash .claude/skills/figma-tokens/evals/checks/deterministic.sh; then
-  echo ""
-  echo "Token governance: all checks passed."
-  echo ""
-else
-  echo ""
-  echo "Token governance FAILED. Fix the errors above before committing."
-  echo "Re-run manually: bash .claude/skills/figma-tokens/evals/checks/deterministic.sh"
-  echo ""
-  exit 1
-fi
+  # Default: enabled (1). Set env var to 0 to skip.
+  enabled=$(eval "printf '%s' \"\${${env_var_name}:-1}\"")
+  if [ "$enabled" = "0" ]; then
+    return 0
+  fi
+
+  script_path="$HOOK_DIR/$script_name"
+  if [ ! -f "$script_path" ]; then
+    echo "pre-commit: hook not found: $script_path" >&2
+    exit 1
+  fi
+
+  sh "$script_path" || exit 1
+}
+
+run_hook HUSKY_HOOK_TOKEN_GOVERNANCE token-governance.sh
+run_hook HUSKY_HOOK_FALLOW_AUDIT fallow-audit.sh
