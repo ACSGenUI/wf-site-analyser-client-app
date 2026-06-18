@@ -8,19 +8,19 @@
  * Test File: src/renderer/__tests__/features/chat/SourceCitations.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { MessageBubble } from '@/features/chat/MessageBubble';
 
-function renderMessage(content: string, role: 'user' | 'assistant' = 'assistant', onCitationClick = vi.fn()) {
+function renderMessage(
+  content: string,
+  role: 'user' | 'assistant' = 'assistant',
+  onCitationClick = vi.fn(),
+) {
   return render(
-    <MessageBubble
-      id="msg-1"
-      role={role}
-      content={content}
-      onCitationClick={onCitationClick}
-    />,
+    <MessageBubble id="msg-1" role={role} content={content} onCitationClick={onCitationClick} />,
   );
 }
 
@@ -43,7 +43,9 @@ describe('SA-802 – Source Citations & References', () => {
   it('TC-03: clicking a chip invokes onCitationClick with the reference ID', async () => {
     const onCitationClick = vi.fn();
     renderMessage('Refer to [Block 03].', 'assistant', onCitationClick);
-    await userEvent.click(screen.getByText('Block 03').closest('button') ?? screen.getByText('Block 03'));
+    await userEvent.click(
+      screen.getByText('Block 03').closest('button') ?? screen.getByText('Block 03'),
+    );
     expect(onCitationClick).toHaveBeenCalledWith('Block 03');
   });
 

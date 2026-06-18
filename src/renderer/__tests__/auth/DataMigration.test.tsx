@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/auth/DataMigration.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { DataMigrationDialog } from '@/features/auth/DataMigrationDialog';
 
 function renderDialog(hasGuestData = true) {
@@ -31,9 +32,7 @@ describe('SA-1004 – Guest-to-Authenticated Data Migration', () => {
   // TC-01: Migration dialog shown when local data exists
   it('TC-01: dialog is rendered when local guest data is detected', () => {
     renderDialog(true);
-    expect(
-      screen.getByText(/found local data|guest session/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/found local data|guest session/i)).toBeInTheDocument();
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 

@@ -45,16 +45,18 @@ Example: `/tdd-story SA-601`
 ## Key conventions
 
 ### File placement
-| Type | Path |
-|---|---|
-| Reusable components | `src/renderer/components/` |
-| Feature screens | `src/renderer/features/<area>/` |
-| Zustand stores | `src/renderer/store/` |
-| Custom hooks | `src/renderer/hooks/` |
-| Shared types | `src/shared/types.ts` |
-| Tests | `src/renderer/__tests__/<area>/` |
+
+| Type                | Path                             |
+| ------------------- | -------------------------------- |
+| Reusable components | `src/renderer/components/`       |
+| Feature screens     | `src/renderer/features/<area>/`  |
+| Zustand stores      | `src/renderer/store/`            |
+| Custom hooks        | `src/renderer/hooks/`            |
+| Shared types        | `src/shared/types.ts`            |
+| Tests               | `src/renderer/__tests__/<area>/` |
 
 ### Tech choices
+
 - **Tailwind CSS** — utility classes only, no inline styles, no CSS modules.
 - **Zustand** — for all shared/global state.
 - **Radix UI** — for accessible primitives (Dialog, Switch, Select, DropdownMenu, Tabs).
@@ -62,12 +64,14 @@ Example: `/tdd-story SA-601`
 - **window.api** — all Electron IPC calls; never import `electron` directly in the renderer.
 
 ### Design tokens
+
 - Edit `tokens/*.json` — never `src/renderer/styles/tokens.css` (auto-generated).
 - Always include `px` units in spacing, font-size, and border-radius token values.
 - Rebuild after any token edit: `npm run build:tokens`.
 - A pre-commit hook enforces token correctness automatically when token files are staged — see [`docs/design-tokens.md#token-governance`](docs/design-tokens.md#token-governance).
 
 ### Testing
+
 - Test runner: **Vitest** with `jsdom`.
 - Assertion library: **React Testing Library**.
 - Run a single test file: `npx vitest run <path> --reporter=verbose`.

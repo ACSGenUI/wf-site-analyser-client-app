@@ -53,26 +53,29 @@ Token files and their contents:
    - Never log or commit the token.
 
 3. Fetch the full file tree at depth 10 and save to `/tmp/figma_raw.json`:
+
    ```bash
    curl -s -H "X-Figma-Token: <TOKEN>" \
      "https://api.figma.com/v1/files/<FILE_ID>?depth=10" \
      > /tmp/figma_raw.json
    ```
+
    Confirm it is not an error (`jq '.error' /tmp/figma_raw.json` must be `null`). If the file is empty (no children, no styles), stop here and report it — do not overwrite existing tokens with empty data.
 
 4. Attempt to fetch named variables (requires `file_variables:read` scope on the token):
+
    ```bash
    curl -s -H "X-Figma-Token: <TOKEN>" \
      "https://api.figma.com/v1/files/<FILE_ID>/variables/local" \
      > /tmp/figma_variables.json
    ```
+
    If `jq '.error' /tmp/figma_variables.json` is `true`, the token lacks the scope — skip this and derive tokens from the node tree instead. If it succeeds, prefer the variable names and values from this response as they are the designer's explicit token intent.
 
-5. Run the extraction script to mine raw values from the node tree.
-   Save the following to `/tmp/figma_extract.js` and run with `node /tmp/figma_extract.js`:
-   ```js
-   const fs = require('fs');
-   const data = JSON.parse(fs.readFileSync('/tmp/figma_raw.json', 'utf8'));
+5. Run the extraction script to mine raw values from the node tree:
+
+   ```python
+   import json
 
    const colors = {}, typography = {}, spacing = {}, effects = {}, radii = {};
 
@@ -159,9 +162,11 @@ Token files and their contents:
 11. Update `tokens/shadow.json` — map DROP_SHADOW effects to sm / md / lg elevation levels.
 
 12. Build the tokens:
+
     ```bash
     npm run build:tokens
     ```
+
     The build must complete with zero errors.
 
 13. Verify `src/renderer/styles/tokens.css` was regenerated:

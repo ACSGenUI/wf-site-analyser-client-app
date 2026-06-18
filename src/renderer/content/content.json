@@ -1,0 +1,39 @@
+{
+  "help": [
+    {
+      "title": "Getting Started",
+      "description": "Learn how to run your first site analysis in minutes.",
+      "icon": "🚀"
+    },
+    {
+      "title": "URL & CSV Input",
+      "description": "How to provide URLs manually or upload a CSV file for batch analysis.",
+      "icon": "📄"
+    },
+    {
+      "title": "Reading Results",
+      "description": "Understand templates, UI blocks, confidence scores, and screenshots.",
+      "icon": "📊"
+    },
+    {
+      "title": "AI Assistant",
+      "description": "Ask questions about your results using the built-in AI chat panel.",
+      "icon": "🤖"
+    },
+    {
+      "title": "Settings & API Keys",
+      "description": "Configure model providers, browser settings, and storage preferences.",
+      "icon": "⚙️"
+    },
+    {
+      "title": "Keyboard Shortcuts",
+      "description": "Speed up your workflow with keyboard shortcuts.",
+      "icon": "⌨️"
+    }
+  ],
+  "projects": [
+    { "name": "Alpha Site Audit" },
+    { "name": "Beta Redesign Review" },
+    { "name": "Q2 Accessibility Scan" }
+  ]
+}

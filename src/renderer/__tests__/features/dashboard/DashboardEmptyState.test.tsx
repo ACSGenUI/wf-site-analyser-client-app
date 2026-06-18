@@ -8,10 +8,11 @@
  * Test File: src/renderer/__tests__/features/dashboard/DashboardEmptyState.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+
 import { DashboardEmptyState } from '@/features/dashboard/DashboardEmptyState';
 import { useProjectStore } from '@/store/projectStore';
 
@@ -27,9 +28,7 @@ describe('SA-403 – Dashboard Empty State', () => {
   // TC-01: Welcome heading renders
   it('TC-01: "Welcome to your Workspace" heading is present and visible', () => {
     renderEmptyState();
-    expect(
-      screen.getByRole('heading', { name: /welcome to your workspace/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /welcome to your workspace/i })).toBeInTheDocument();
   });
 
   // TC-02: Launch AI Agent navigates to /analysis/new
@@ -67,16 +66,23 @@ describe('SA-403 – Dashboard Empty State', () => {
   it('TC-05: project list view is shown instead of empty state when projects are available', async () => {
     useProjectStore.setState({
       projects: [
-        { id: 'proj-1', name: 'My First Project', createdAt: '2026-04-01', status: 'completed' },
+        {
+          id: 'proj-1',
+          name: 'My First Project',
+          createdAt: '2026-04-01',
+          status: 'completed',
+        },
       ],
     });
 
     render(
       <MemoryRouter>
         {/* Dashboard page renders either empty state or project list */}
-        {useProjectStore.getState().projects.length > 0
-          ? <div data-testid="project-list">Project List</div>
-          : <DashboardEmptyState />}
+        {useProjectStore.getState().projects.length > 0 ? (
+          <div data-testid="project-list">Project List</div>
+        ) : (
+          <DashboardEmptyState />
+        )}
       </MemoryRouter>,
     );
 

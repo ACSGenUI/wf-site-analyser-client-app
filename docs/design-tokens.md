@@ -35,61 +35,61 @@ All source files live in `tokens/`. Each file owns one category.
 
 Organised into semantic groups:
 
-| Group | Purpose |
-|---|---|
-| `color.primary.*` | Brand blue — default, dark, accent, light, lighter, surface |
-| `color.neutral.*` | Gray scale — 50 (lightest) → 900 (darkest) |
-| `color.surface.*` | Named surfaces — page, card, sidebar, header, dark |
-| `color.text.*` | Text roles — primary, secondary, tertiary, muted, placeholder, disabled, subtle |
-| `color.border.*` | Border roles — default, light, subtle |
-| `color.success.*` | Green — default, dark, light, surface |
-| `color.warning.*` | Amber — default, light, surface |
-| `color.error.*` | Red — default, dark, surface |
-| `color.info.*` | Sky blue — default, surface |
-| `color.figma.*` | Figma input card accent — default, surface |
-| `color.csv.*` | CSV input card accent — default, surface |
-| `color.white.*` | White opacity variants — 20, 50, 70, 80, default |
-| `color.black.*` | Black opacity variants — 05, 20, 40 |
+| Group             | Purpose                                                                         |
+| ----------------- | ------------------------------------------------------------------------------- |
+| `color.primary.*` | Brand blue — default, dark, accent, light, lighter, surface                     |
+| `color.neutral.*` | Gray scale — 50 (lightest) → 900 (darkest)                                      |
+| `color.surface.*` | Named surfaces — page, card, sidebar, header, dark                              |
+| `color.text.*`    | Text roles — primary, secondary, tertiary, muted, placeholder, disabled, subtle |
+| `color.border.*`  | Border roles — default, light, subtle                                           |
+| `color.success.*` | Green — default, dark, light, surface                                           |
+| `color.warning.*` | Amber — default, light, surface                                                 |
+| `color.error.*`   | Red — default, dark, surface                                                    |
+| `color.info.*`    | Sky blue — default, surface                                                     |
+| `color.figma.*`   | Figma input card accent — default, surface                                      |
+| `color.csv.*`     | CSV input card accent — default, surface                                        |
+| `color.white.*`   | White opacity variants — 20, 50, 70, 80, default                                |
+| `color.black.*`   | Black opacity variants — 05, 20, 40                                             |
 
 ### `tokens/typography.json`
 
 Primitive tokens only (no composite objects):
 
-| Group | Values |
-|---|---|
-| `font.family.base` | `'Inter', system-ui, sans-serif` |
-| `font.size.*` | xs (12px) → 3xl (48px) — 7 steps |
-| `font.weight.*` | regular (400), bold (700), black (900) |
-| `font.lineHeight.*` | tight (1.1) → looser (1.6) — 6 steps |
+| Group               | Values                                 |
+| ------------------- | -------------------------------------- |
+| `font.family.base`  | `'Inter', system-ui, sans-serif`       |
+| `font.size.*`       | xs (12px) → 3xl (48px) — 7 steps       |
+| `font.weight.*`     | regular (400), bold (700), black (900) |
+| `font.lineHeight.*` | tight (1.1) → looser (1.6) — 6 steps   |
 
 ### `tokens/spacing.json`
 
-| Group | Values |
-|---|---|
-| `spacing.*` | 0–10 → 0px, 4px, 8px, 12px, 16px, 24px, 27px, 30px, 32px, 48px, 64px |
-| `size.sidebar-width` | 240px |
-| `size.header-height` | 64px |
-| `size.content-max-width` | 1152px |
-| `size.content-width` | 1040px |
+| Group                    | Values                                                               |
+| ------------------------ | -------------------------------------------------------------------- |
+| `spacing.*`              | 0–10 → 0px, 4px, 8px, 12px, 16px, 24px, 27px, 30px, 32px, 48px, 64px |
+| `size.sidebar-width`     | 240px                                                                |
+| `size.header-height`     | 64px                                                                 |
+| `size.content-max-width` | 1152px                                                               |
+| `size.content-width`     | 1040px                                                               |
 
 ### `tokens/border-radius.json`
 
-| Token | Value | Usage |
-|---|---|---|
-| `borderRadius.sm` | 4px | Table rows, small chips |
-| `borderRadius.md` | 8px | Cards, inputs, buttons |
-| `borderRadius.lg` | 12px | Large cards, panels |
-| `borderRadius.xl` | 16px | Modals, drawers |
-| `borderRadius.full` | 9999px | Pill / FAB / avatar |
+| Token               | Value  | Usage                   |
+| ------------------- | ------ | ----------------------- |
+| `borderRadius.sm`   | 4px    | Table rows, small chips |
+| `borderRadius.md`   | 8px    | Cards, inputs, buttons  |
+| `borderRadius.lg`   | 12px   | Large cards, panels     |
+| `borderRadius.xl`   | 16px   | Modals, drawers         |
+| `borderRadius.full` | 9999px | Pill / FAB / avatar     |
 
 ### `tokens/shadow.json`
 
-| Token | Value | Usage |
-|---|---|---|
-| `shadow.sm` | `0 1px 2px rgba(0,0,0,0.05)` | Cards, nav bar |
-| `shadow.md` | `0 10px 15px rgba(0,0,0,0.10)` | Side nav, button hover |
-| `shadow.lg` | `0 25px 50px rgba(0,0,0,0.25)` | FAB, drawers, modals |
-| `shadow.blur-backdrop` | `blur(24px)` | Frosted glass nav bar |
+| Token                  | Value                          | Usage                  |
+| ---------------------- | ------------------------------ | ---------------------- |
+| `shadow.sm`            | `0 1px 2px rgba(0,0,0,0.05)`   | Cards, nav bar         |
+| `shadow.md`            | `0 10px 15px rgba(0,0,0,0.10)` | Side nav, button hover |
+| `shadow.lg`            | `0 25px 50px rgba(0,0,0,0.25)` | FAB, drawers, modals   |
+| `shadow.blur-backdrop` | `blur(24px)`                   | Frosted glass nav bar  |
 
 ---
 
@@ -97,11 +97,11 @@ Primitive tokens only (no composite objects):
 
 `npm run build:tokens` writes three files:
 
-| File | Format | Use |
-|---|---|---|
-| `src/renderer/styles/tokens.css` | CSS custom properties in `:root` | Runtime — consumed by Tailwind and raw CSS |
-| `src/renderer/styles/tokens.js` | ES module exports | Tooling / build scripts |
-| `src/renderer/styles/tokens.d.ts` | TypeScript declarations | Type safety in JS consumers |
+| File                              | Format                           | Use                                        |
+| --------------------------------- | -------------------------------- | ------------------------------------------ |
+| `src/renderer/styles/tokens.css`  | CSS custom properties in `:root` | Runtime — consumed by Tailwind and raw CSS |
+| `src/renderer/styles/tokens.js`   | ES module exports                | Tooling / build scripts                    |
+| `src/renderer/styles/tokens.d.ts` | TypeScript declarations          | Type safety in JS consumers                |
 
 All CSS variable names follow the pattern `--wf-<category>-<name>`, for example:
 
@@ -110,7 +110,7 @@ All CSS variable names follow the pattern `--wf-<category>-<name>`, for example:
 --wf-font-size-sm: 14px;
 --wf-spacing-4: 16px;
 --wf-border-radius-md: 8px;
---wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+--wf-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
 ```
 
 ---
@@ -118,11 +118,13 @@ All CSS variable names follow the pattern `--wf-<category>-<name>`, for example:
 ## How to use tokens in components
 
 **Tailwind classes (preferred):**
+
 ```tsx
 <div className="bg-surface-card text-text-primary shadow-sm rounded-card p-8">
 ```
 
 **CSS custom properties (for raw CSS or complex values):**
+
 ```css
 .my-component {
   background: var(--wf-color-surface-card);
@@ -132,6 +134,7 @@ All CSS variable names follow the pattern `--wf-<category>-<name>`, for example:
 ```
 
 **JS/TS (for dynamic styles or non-CSS consumers):**
+
 ```ts
 import { tokens } from '@/components/theme';
 const style = { color: tokens.colors.primary };
@@ -243,7 +246,13 @@ The build is configured in `style-dictionary.config.json` at the project root.
       "transforms": ["attribute/cti", "name/kebab", "color/css", "fontFamily/css"],
       "prefix": "wf",
       "buildPath": "src/renderer/styles/",
-      "files": [{ "destination": "tokens.css", "format": "css/variables", "options": { "outputReferences": true } }]
+      "files": [
+        {
+          "destination": "tokens.css",
+          "format": "css/variables",
+          "options": { "outputReferences": true }
+        }
+      ]
     }
   }
 }

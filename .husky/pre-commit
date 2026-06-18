@@ -44,3 +44,4 @@ run_hook() {
 
 run_hook HUSKY_HOOK_TOKEN_GOVERNANCE token-governance.sh
 run_hook HUSKY_HOOK_FALLOW_AUDIT fallow-audit.sh
+npx lint-staged

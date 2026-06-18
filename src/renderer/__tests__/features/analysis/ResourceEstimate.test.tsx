@@ -8,8 +8,9 @@
  * Test File: src/renderer/__tests__/features/analysis/ResourceEstimate.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ResourceEstimate } from '@/features/analysis/ResourceEstimate';
 
 const defaultConfig = {

@@ -33,6 +33,7 @@ Full architecture in [`README.md`](README.md).
 10. Update `src/renderer/components/theme.ts` and `tailwind.config.ts` with changed values.
 
 **Constraints:**
+
 - Never commit or log the Figma token.
 - Never edit `src/renderer/styles/tokens.css` directly — it is auto-generated.
 - Always include `px` units in spacing, font-size, and border-radius token values.
@@ -57,6 +58,7 @@ Full architecture in [`README.md`](README.md).
 7. Run the full area test suite to catch regressions.
 
 **Constraints:**
+
 - Never modify a test file.
 - Never skip or comment out a test case.
 - The story is done only when every test case passes.
@@ -65,15 +67,15 @@ Full architecture in [`README.md`](README.md).
 
 ## File placement conventions
 
-| Type | Path |
-|---|---|
-| Reusable components | `src/renderer/components/` |
-| Feature screens | `src/renderer/features/<area>/` |
-| Zustand stores | `src/renderer/store/` |
-| Custom hooks | `src/renderer/hooks/` |
-| Shared types | `src/shared/types.ts` |
-| Tests | `src/renderer/__tests__/<area>/` |
-| Design token sources | `tokens/*.json` |
+| Type                 | Path                             |
+| -------------------- | -------------------------------- |
+| Reusable components  | `src/renderer/components/`       |
+| Feature screens      | `src/renderer/features/<area>/`  |
+| Zustand stores       | `src/renderer/store/`            |
+| Custom hooks         | `src/renderer/hooks/`            |
+| Shared types         | `src/shared/types.ts`            |
+| Tests                | `src/renderer/__tests__/<area>/` |
+| Design token sources | `tokens/*.json`                  |
 | Generated CSS tokens | `src/renderer/styles/tokens.css` |
 
 ## Tech conventions

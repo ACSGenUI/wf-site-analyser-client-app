@@ -7,8 +7,9 @@
  * Test File: src/renderer/__tests__/features/analysis/LiveDiscoveryStream.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+
 import { LiveDiscoveryStream } from '@/features/analysis/LiveDiscoveryStream';
 
 const mockUrls = [

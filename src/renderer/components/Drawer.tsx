@@ -17,14 +17,19 @@ export function Drawer({
   side = 'right',
   className = '',
 }: DrawerProps): React.ReactElement {
+  let translateClass: string;
+  if (open) {
+    translateClass = 'translate-x-0';
+  } else if (side === 'right') {
+    translateClass = 'translate-x-full';
+  } else {
+    translateClass = '-translate-x-full';
+  }
+
   return (
     <>
       {open && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40"
-          aria-hidden="true"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 bg-black/40 z-40" aria-hidden="true" onClick={onClose} />
       )}
       <div
         role="dialog"
@@ -33,11 +38,7 @@ export function Drawer({
         className={[
           'fixed top-0 bottom-0 z-50 flex w-80 flex-col bg-white shadow-xl transition-transform duration-300',
           side === 'right' ? 'right-0' : 'left-0',
-          open
-            ? 'translate-x-0'
-            : side === 'right'
-              ? 'translate-x-full'
-              : '-translate-x-full',
+          translateClass,
           className,
         ]
           .filter(Boolean)

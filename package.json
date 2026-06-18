@@ -2,14 +2,53 @@
   "name": "wf-site-analyser-client",
   "version": "0.1.0",
   "description": "WF Site Analyser – Electron desktop app for analysing web sites",
+  "author": "Adobe Inc.",
   "private": true,
+  "type": "module",
   "main": "out/main/index.js",
+  "build": {
+    "appId": "com.adobe.wf-site-analyser",
+    "productName": "WF Site Analyser",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "**/*.node"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icons/icon.ico"
+    },
+    "afterSign": "scripts/notarize.mjs",
+    "mac": {
+      "target": {
+        "target": "dmg",
+        "arch": ["universal"]
+      },
+      "icon": "build/icons/icon.png",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "publish": null
+  },
   "scripts": {
     "build:tokens": "style-dictionary build --config style-dictionary.config.json",
-    "dev": "ELECTRON_RUN_AS_NODE= electron-vite dev",
+    "dev": "electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "start": "electron .",
+    "icons": "node scripts/generate-icons.mjs",
+    "package": "npm run icons && npm run build && electron-builder --publish never",
+    "package:mac": "npm run icons && npm run build && electron-builder --mac --universal --publish never",
+    "package:win": "npm run icons && npm run build && electron-builder --win --x64 --publish never",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --reporter=verbose",
     "test:watch": "vitest --reporter=verbose",
@@ -26,6 +65,8 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "dotenv": "^16.4.0",
+    "electron-updater": "^6.3.0",
+    "lucide-react": "^1.14.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.0",
@@ -34,6 +75,9 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
+    "@eslint/eslintrc": "^3.3.5",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.0",
@@ -43,14 +87,20 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vitejs/plugin-react": "^5.2.0",
+    "@electron/notarize": "^2.5.0",
     "autoprefixer": "^10.4.0",
     "electron": "^41.2.0",
+    "electron-builder": "^24.0.0",
     "electron-vite": "^5.0.0",
     "eslint": "^9.0.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "husky": "^9.1.7",
     "jsdom": "^25.0.0",
+    "lint-staged": "^16.4.0",
     "postcss": "^8.4.0",
     "prettier": "^3.4.0",
     "style-dictionary": "^5.4.1",
@@ -58,5 +108,18 @@
     "typescript": "^5.7.0",
     "vite": "^6.4.2",
     "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,html}": [
+      "prettier --write"
+    ]
+  },
+  "overrides": {
+    "eslint": "$eslint",
+    "eslint-plugin-react-hooks": "$eslint-plugin-react-hooks"
   }
 }
