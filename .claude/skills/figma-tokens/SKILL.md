@@ -74,19 +74,33 @@ Token files and their contents:
 
 5. Run the extraction script to mine raw values from the node tree:
 
-   ```python
-   import json
+   ```javascript
+   const fs = require('fs');
+   const data = JSON.parse(fs.readFileSync('/tmp/figma_raw.json', 'utf8'));
 
-   const colors = {}, typography = {}, spacing = {}, effects = {}, radii = {};
+   const colors = {},
+     typography = {},
+     spacing = {},
+     effects = {},
+     radii = {};
 
    function toHex(r, g, b) {
-     return '#' + [r, g, b].map(v => Math.round(v * 255).toString(16).padStart(2, '0')).join('');
+     return (
+       '#' +
+       [r, g, b]
+         .map((v) =>
+           Math.round(v * 255)
+             .toString(16)
+             .padStart(2, '0'),
+         )
+         .join('')
+     );
    }
 
    function traverse(node, path = '') {
      const key = [path, node.name || ''].filter(Boolean).join('/');
 
-     for (const fill of (node.fills || [])) {
+     for (const fill of node.fills || []) {
        if (fill.type === 'SOLID' && fill.color) {
          const c = fill.color;
          colors[key] = { hex: toHex(c.r, c.g, c.b), opacity: fill.opacity ?? 1 };
@@ -100,22 +114,31 @@ Token files and their contents:
      }
 
      if (node.layoutMode === 'HORIZONTAL' || node.layoutMode === 'VERTICAL')
-       spacing[key] = { paddingTop: node.paddingTop, paddingBottom: node.paddingBottom,
-                        paddingLeft: node.paddingLeft, paddingRight: node.paddingRight,
-                        itemSpacing: node.itemSpacing };
+       spacing[key] = {
+         paddingTop: node.paddingTop,
+         paddingBottom: node.paddingBottom,
+         paddingLeft: node.paddingLeft,
+         paddingRight: node.paddingRight,
+         itemSpacing: node.itemSpacing,
+       };
 
      const cr = node.cornerRadius;
      if (cr && cr > 0) radii[key] = cr;
 
-     for (const e of (node.effects || [])) {
+     for (const e of node.effects || []) {
        if (e.type === 'DROP_SHADOW' || e.type === 'INNER_SHADOW') {
          const c = e.color || {};
-         effects[key] = { type: e.type, hex: toHex(c.r ?? 0, c.g ?? 0, c.b ?? 0),
-                          opacity: c.a ?? 1, offset: e.offset || {}, radius: e.radius || 0 };
+         effects[key] = {
+           type: e.type,
+           hex: toHex(c.r ?? 0, c.g ?? 0, c.b ?? 0),
+           opacity: c.a ?? 1,
+           offset: e.offset || {},
+           radius: e.radius || 0,
+         };
        }
      }
 
-     for (const child of (node.children || [])) traverse(child, key);
+     for (const child of node.children || []) traverse(child, key);
    }
 
    traverse(data.document);
@@ -131,14 +154,22 @@ Token files and their contents:
      console.log(`  ${v.hex}  opacity=${v.opacity.toFixed(2)}  — ${v.example.slice(0, 80)}`);
 
    console.log('\nTYPOGRAPHY (first 20):');
-   Object.entries(typography).slice(0, 20).forEach(([k, v]) =>
-     console.log(`  ${v.family}  ${v.size}px  w${v.weight}  — ${k.slice(0, 80)}`));
+   Object.entries(typography)
+     .slice(0, 20)
+     .forEach(([k, v]) =>
+       console.log(`  ${v.family}  ${v.size}px  w${v.weight}  — ${k.slice(0, 80)}`),
+     );
 
-   console.log(`\nCORNER RADII: [${[...new Set(Object.values(radii))].sort((a, b) => a - b).join(', ')}]`);
+   console.log(
+     `\nCORNER RADII: [${[...new Set(Object.values(radii))].sort((a, b) => a - b).join(', ')}]`,
+   );
 
    console.log('\nSHADOWS (first 5):');
-   Object.entries(effects).slice(0, 5).forEach(([, v]) =>
-     console.log(`  ${v.type}  ${v.hex}  blur=${v.radius}  offset=${JSON.stringify(v.offset)}`));
+   Object.entries(effects)
+     .slice(0, 5)
+     .forEach(([, v]) =>
+       console.log(`  ${v.type}  ${v.hex}  blur=${v.radius}  offset=${JSON.stringify(v.offset)}`),
+     );
    ```
 
    From the output, identify:

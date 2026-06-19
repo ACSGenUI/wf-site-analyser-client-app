@@ -29,7 +29,9 @@
     "mac": {
       "target": {
         "target": "dmg",
-        "arch": ["universal"]
+        "arch": [
+          "universal"
+        ]
       },
       "icon": "build/icons/icon.png",
       "hardenedRuntime": true,
@@ -77,6 +79,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
+    "@electron/notarize": "^2.5.0",
     "@eslint/eslintrc": "^3.3.5",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.1.0",
@@ -87,7 +90,6 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vitejs/plugin-react": "^5.2.0",
-    "@electron/notarize": "^2.5.0",
     "autoprefixer": "^10.4.0",
     "electron": "^41.2.0",
     "electron-builder": "^24.0.0",
@@ -121,5 +123,11 @@
   "overrides": {
     "eslint": "$eslint",
     "eslint-plugin-react-hooks": "$eslint-plugin-react-hooks"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "4.60.1",
+    "@rollup/rollup-darwin-x64": "4.60.1",
+    "@rollup/rollup-win32-x64-gnu": "4.60.1",
+    "@rollup/rollup-win32-x64-msvc": "4.60.1"
   }
 }
