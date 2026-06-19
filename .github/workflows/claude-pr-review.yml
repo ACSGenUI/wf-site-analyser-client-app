@@ -12,7 +12,7 @@ permissions:
   issues: write
 
 jobs:
-  claude-review:
+  fallow-audit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -31,7 +31,6 @@ jobs:
 
       - name: Run fallow audit
         id: fallow-audit
-        continue-on-error: true
         run: |
           set +e
           npx fallow@2 audit \
@@ -47,6 +46,9 @@ jobs:
           verdict=$(jq -r '.verdict // "error"' fallow-audit.json)
           echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
           echo "Fallow audit verdict: $verdict (cli exit: $audit_exit)"
+          if [ "$verdict" = "fail" ]; then
+            exit 1
+          fi
 
       - name: Upload fallow audit report
         if: always() && hashFiles('fallow-audit.json') != ''
@@ -56,8 +58,13 @@ jobs:
           path: fallow-audit.json
           if-no-files-found: ignore
 
-      - name: Remove node_modules symlinks (workaround for anthropics/claude-code-action#1205)
-        run: find . -path "*/node_modules/.bin/*" -type l -delete
+  claude-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Run Claude PR Review
         uses: anthropics/claude-code-action@v1
@@ -68,15 +75,12 @@ jobs:
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
 
-            Step 0 — read the pre-computed fallow audit report (already run in CI):
-              cat fallow-audit.json
-
-            Use only findings introduced by this PR (`introduced: true`, or `attribution.*_introduced` counts under `gate: new-only`). Flag dead code, complexity, and duplication issues from fallow in inline comments (on matching + lines in the diff) and in the summary. Ignore inherited findings (`introduced: false`) unless they are error-severity and clearly worsened by the PR.
+            Static analysis (fallow audit) runs in a separate parallel CI job. Focus this review on the PR diff and project conventions below.
 
             Step 1 — fetch the diff with ONE command only:
               gh pr diff ${{ github.event.pull_request.number }}
 
-            Step 2 — review the diff from Step 1 together with fallow findings from Step 0. Do NOT call Read, Grep, Glob, or any other tool to open files. Every manual issue you flag must be traceable to a specific + line in the diff. Fallow findings may reference lines visible in the diff or in fallow-audit.json path/line fields.
+            Step 2 — review ONLY the diff output from Step 1. Do NOT call Read, Grep, Glob, or any other tool to open files. Every issue you flag must be traceable to a specific + line in the diff. If you cannot see the violation in the diff, do not flag it.
 
             WHAT TO IGNORE:
             - Lines starting with space or - (unchanged/removed context) — not your concern
@@ -88,7 +92,7 @@ jobs:
             WHAT TO FLAG:
             Only violations clearly visible in the + lines that would cause a bug, security issue, or break WF Site Analyser project conventions.
 
-            Step 3 — post ALL inline comments in one batch using mcp__github_inline_comment__create_inline_comment (confirmed: true). Only on + lines. Include fallow-introduced issues when the file/line maps to a + line in the diff. If nothing to flag, skip this step.
+            Step 3 — post ALL inline comments in one batch using mcp__github_inline_comment__create_inline_comment (confirmed: true). Only on + lines. If nothing to flag, skip this step.
 
             Step 4 — post ONE summary using: gh pr comment ${{ github.event.pull_request.number }} --body "..."
 
@@ -139,15 +143,10 @@ jobs:
 
             ### Claude WF Site Analyser Code Review
 
-            **Fallow audit** (verdict: pass | warn | fail)
-            - Verdict: <verdict from fallow-audit.json>
-            - Introduced: dead code <n> · complexity <n> · duplication <n>
-            - <bullet per introduced finding with file:line and issue type>
-
             **Critical** (must fix before merge — security, XSS, leaked secrets, broken IPC contract, renderer importing electron)
             - <issue> — <file>:<line>
 
-            **High** (should fix before merge — bugs, convention violations, missing null checks, token/CSS misuse, fallow-introduced dead code/complexity)
+            **High** (should fix before merge — bugs, convention violations, missing null checks, token/CSS misuse)
             - <issue> — <file>:<line>
 
             **Looks good**
@@ -156,12 +155,6 @@ jobs:
             **Areas reviewed:** <list each changed area — e.g. auth, analysis, settings, components, main/preload IPC — pass/fail>
 
           claude_args: >-
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(cat fallow-audit.json)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*)"
         env:
           INPUT_MAX_TURNS: "12"
-
-      - name: Enforce fallow audit gate
-        if: steps.fallow-audit.outputs.verdict == 'fail'
-        run: |
-          echo "::error::fallow audit failed (verdict: fail). Download the fallow-audit artifact for details."
-          exit 1
