@@ -1,0 +1,4 @@
+{
+  "entry": ["src/renderer/index.tsx", "src/renderer/index.html", "scripts/notarize.mjs"],
+  "ignorePatterns": ["src/renderer/styles/tokens.js", "src/renderer/styles/tokens.d.ts"]
+}

@@ -1,0 +1,8 @@
+# Copy to .husky/hooks.local (gitignored) to persist hook preferences.
+#
+#   cp .husky/hooks.local.example .husky/hooks.local
+#
+# Set a hook to 0 to disable it for all local commits:
+
+# HUSKY_HOOK_TOKEN_GOVERNANCE=0
+# HUSKY_HOOK_FALLOW_AUDIT=0
