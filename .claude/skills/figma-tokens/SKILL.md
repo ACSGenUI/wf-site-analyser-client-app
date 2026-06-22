@@ -74,72 +74,102 @@ Token files and their contents:
 
 5. Run the extraction script to mine raw values from the node tree:
 
-   ```python
-   import json
+   ```javascript
+   const fs = require('fs');
+   const data = JSON.parse(fs.readFileSync('/tmp/figma_raw.json', 'utf8'));
 
-   with open('/tmp/figma_raw.json') as f:
-       data = json.load(f)
+   const colors = {},
+     typography = {},
+     spacing = {},
+     effects = {},
+     radii = {};
 
-   colors, typography, spacing, effects, radii = {}, {}, {}, {}, {}
+   function toHex(r, g, b) {
+     return (
+       '#' +
+       [r, g, b]
+         .map((v) =>
+           Math.round(v * 255)
+             .toString(16)
+             .padStart(2, '0'),
+         )
+         .join('')
+     );
+   }
 
-   def to_hex(r, g, b):
-       return '#{:02x}{:02x}{:02x}'.format(int(r*255), int(g*255), int(b*255))
+   function traverse(node, path = '') {
+     const key = [path, node.name || ''].filter(Boolean).join('/');
 
-   def traverse(node, path=""):
-       name = node.get("name", "")
-       key  = f"{path}/{name}".strip("/")
+     for (const fill of node.fills || []) {
+       if (fill.type === 'SOLID' && fill.color) {
+         const c = fill.color;
+         colors[key] = { hex: toHex(c.r, c.g, c.b), opacity: fill.opacity ?? 1 };
+       }
+     }
 
-       for fill in node.get("fills", []):
-           if fill.get("type") == "SOLID" and fill.get("color"):
-               c = fill["color"]
-               colors[key] = {"hex": to_hex(c["r"],c["g"],c["b"]), "opacity": fill.get("opacity",1)}
+     if (node.type === 'TEXT') {
+       const s = node.style || {};
+       if (s.fontFamily)
+         typography[key] = { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+     }
 
-       if node.get("type") == "TEXT":
-           s = node.get("style", {})
-           if s.get("fontFamily"):
-               typography[key] = {"family": s.get("fontFamily"), "size": s.get("fontSize"),
-                                  "weight": s.get("fontWeight")}
+     if (node.layoutMode === 'HORIZONTAL' || node.layoutMode === 'VERTICAL')
+       spacing[key] = {
+         paddingTop: node.paddingTop,
+         paddingBottom: node.paddingBottom,
+         paddingLeft: node.paddingLeft,
+         paddingRight: node.paddingRight,
+         itemSpacing: node.itemSpacing,
+       };
 
-       if node.get("layoutMode") in ("HORIZONTAL","VERTICAL"):
-           spacing[key] = {k: node.get(k) for k in
-                           ("paddingTop","paddingBottom","paddingLeft","paddingRight","itemSpacing")}
+     const cr = node.cornerRadius;
+     if (cr && cr > 0) radii[key] = cr;
 
-       cr = node.get("cornerRadius")
-       if cr and cr > 0:
-           radii[key] = cr
+     for (const e of node.effects || []) {
+       if (e.type === 'DROP_SHADOW' || e.type === 'INNER_SHADOW') {
+         const c = e.color || {};
+         effects[key] = {
+           type: e.type,
+           hex: toHex(c.r ?? 0, c.g ?? 0, c.b ?? 0),
+           opacity: c.a ?? 1,
+           offset: e.offset || {},
+           radius: e.radius || 0,
+         };
+       }
+     }
 
-       for e in node.get("effects", []):
-           if e.get("type") in ("DROP_SHADOW","INNER_SHADOW"):
-               c = e.get("color", {})
-               effects[key] = {"type": e["type"], "hex": to_hex(c.get("r",0),c.get("g",0),c.get("b",0)),
-                               "opacity": c.get("a",1), "offset": e.get("offset",{}), "radius": e.get("radius",0)}
+     for (const child of node.children || []) traverse(child, key);
+   }
 
-       for child in node.get("children", []):
-           traverse(child, key)
+   traverse(data.document);
 
-   traverse(data["document"])
+   const uniqueColors = {};
+   for (const [k, v] of Object.entries(colors)) {
+     const tag = v.opacity < 1 ? `${v.hex}/${v.opacity.toFixed(2)}` : v.hex;
+     if (!uniqueColors[tag]) uniqueColors[tag] = { ...v, example: k };
+   }
 
-   unique_colors = {}
-   for k, v in colors.items():
-       tag = v["hex"] + (f"/{v['opacity']:.2f}" if v["opacity"] < 1 else "")
-       if tag not in unique_colors:
-           unique_colors[tag] = {**v, "example": k}
+   console.log('UNIQUE COLORS:');
+   for (const [, v] of Object.entries(uniqueColors).sort())
+     console.log(`  ${v.hex}  opacity=${v.opacity.toFixed(2)}  — ${v.example.slice(0, 80)}`);
 
-   print("UNIQUE COLORS:")
-   for t, v in sorted(unique_colors.items()):
-       print(f"  {v['hex']}  opacity={v['opacity']:.2f}  — {v['example'][:80]}")
+   console.log('\nTYPOGRAPHY (first 20):');
+   Object.entries(typography)
+     .slice(0, 20)
+     .forEach(([k, v]) =>
+       console.log(`  ${v.family}  ${v.size}px  w${v.weight}  — ${k.slice(0, 80)}`),
+     );
 
-   print("\nTYPOGRAPHY (first 20):")
-   for i,(k,v) in enumerate(typography.items()):
-       if i>=20: break
-       print(f"  {v['family']}  {v['size']}px  w{v['weight']}  — {k[:80]}")
+   console.log(
+     `\nCORNER RADII: [${[...new Set(Object.values(radii))].sort((a, b) => a - b).join(', ')}]`,
+   );
 
-   print("\nCORNER RADII:", sorted(set(radii.values())))
-
-   print("\nSHADOWS (first 5):")
-   for i,(k,v) in enumerate(effects.items()):
-       if i>=5: break
-       print(f"  {v['type']}  {v['hex']}  blur={v['radius']}  offset={v['offset']}")
+   console.log('\nSHADOWS (first 5):');
+   Object.entries(effects)
+     .slice(0, 5)
+     .forEach(([, v]) =>
+       console.log(`  ${v.type}  ${v.hex}  blur=${v.radius}  offset=${JSON.stringify(v.offset)}`),
+     );
    ```
 
    From the output, identify:

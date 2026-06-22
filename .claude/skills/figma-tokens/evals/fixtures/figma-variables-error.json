@@ -1,0 +1,5 @@
+{
+  "error": true,
+  "status": 403,
+  "err": "This endpoint is not available for your plan. file_variables:read scope required."
+}
