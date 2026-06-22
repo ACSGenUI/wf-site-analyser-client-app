@@ -72,10 +72,10 @@ describe('SA-401 – Left Navigation Rail', () => {
   });
 
   // TC-05: Version number displayed at bottom
-  it('TC-05: app version string is rendered at the bottom of the sidebar', () => {
+  it('TC-05: app version string is rendered at the bottom of the sidebar', async () => {
     renderNav();
     // Version should match the mock from setup.ts (window.api.getAppVersion returns '2.4.0')
-    expect(screen.getByText(/V2\.\d+\.\d+|v\d+\.\d+\.\d+/i)).toBeInTheDocument();
+    expect(await screen.findByText(/V2\.\d+\.\d+|v\d+\.\d+\.\d+/i)).toBeInTheDocument();
   });
 
   // TC-06: Sidebar hidden on sign-in route
