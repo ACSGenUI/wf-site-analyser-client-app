@@ -20,6 +20,11 @@ const CATEGORY_LABEL: Record<ReleaseNoteCategory, string> = {
 };
 
 const CATEGORY_TINT: Record<ReleaseNoteCategory, string> = {
+  feature: 'text-primary',
+  security: 'text-error',
+  ui: 'text-primary-dark',
+  bugfix: 'text-warning',
+};
   feature: 'text-blue-600',
   security: 'text-rose-600',
   ui: 'text-violet-600',
