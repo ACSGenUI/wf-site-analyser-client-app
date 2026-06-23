@@ -18,6 +18,7 @@ export interface Tokens {
     neutral: Record<string, string>;
     success: string;
     warning: string;
+    'warning-dark': string;
     error: string;
   };
   typography: {
@@ -61,6 +62,7 @@ export const tokens: Tokens = {
     },
     success: '#10B981',
     warning: '#F59E0B',
+    'warning-dark': '#92400E',
     error: '#BA1A1A',
   },
   typography: {
@@ -113,6 +115,8 @@ export const darkTokens: Pick<Tokens, 'colors'> = {
     },
     success: '#34D399',
     warning: '#FBBF24',
+    // ponytail: same value as light theme for now; design can tune later
+    'warning-dark': '#92400E',
     error: '#F87171',
   },
 };
