@@ -135,10 +135,10 @@ Key variables: `NODE_ENV`, `APP_STAGE`, `API_BASE_URL`.
 
 ### Hooks
 
-| Hook | Script | When it runs |
-| ---- | ------ | ------------ |
+| Hook             | Script                      | When it runs                                                                                                      |
+| ---------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | Token governance | `hooks/token-governance.sh` | Staged files match `tokens/`, `tailwind.config`, `src/renderer/styles/`, `theme.ts`, or `style-dictionary.config` |
-| Fallow audit | `hooks/fallow-audit.sh` | Staged files match `src/`, `tokens/`, `package.json`, or TypeScript/Vite/ESLint/Tailwind config |
+| Fallow audit     | `hooks/fallow-audit.sh`     | Staged files match `src/`, `tokens/`, `package.json`, or TypeScript/Vite/ESLint/Tailwind config                   |
 
 Fallow uses `gate=new-only` (default): only issues **introduced** by your changeset block the commit. The comparison base is `origin/develop`, matching [`.github/workflows/claude-pr-review.yml`](.github/workflows/claude-pr-review.yml).
 
@@ -169,97 +169,35 @@ sh .husky/hooks/fallow-audit.sh
 
 ## Claude PR review (GitHub Actions)
 
-Pull requests targeting `develop` trigger [`.github/workflows/claude-pr-review.yml`](.github/workflows/claude-pr-review.yml). The job:
+Pull requests targeting `develop` trigger [`.github/workflows/claude-pr-review.yml`](.github/workflows/claude-pr-review.yml):
 
-1. Runs **fallow audit** on changed files (fails the workflow on `verdict: fail`)
-2. Runs **Claude Code** to review the PR diff and post inline comments plus a summary
+1. **fallow-audit** — static analysis on changed files (fails on `verdict: fail`)
+2. **claude-review** — AI diff review (same-repo PRs only; see fork note below)
 
-Local `export CLAUDE_CODE_OAUTH_TOKEN=...` is for the Claude CLI on your machine only — GitHub Actions cannot read your shell environment. Authentication must be configured in GitHub.
+Upstream admins must set `CLAUDE_CODE_OAUTH_TOKEN` under **Settings → Secrets and variables → Actions** (from `claude setup-token`). Do not commit the token.
 
-### Generate a token
+### Fork PRs
 
-Requires a Claude **Pro** or **Max** subscription:
+When a PR is opened **from a fork** into upstream `develop`, GitHub **does not expose repository secrets** to the workflow (including `CLAUDE_CODE_OAUTH_TOKEN`). This is a GitHub security rule — your fork’s secrets are not available either.
 
-```bash
-claude setup-token
-```
+| PR type               | fallow-audit (CI) | claude-review (CI)                             |
+| --------------------- | ----------------- | ---------------------------------------------- |
+| Branch PR (same repo) | Yes               | Yes — uses upstream `CLAUDE_CODE_OAUTH_TOKEN`  |
+| Fork PR → upstream    | Yes               | **Skipped** (not failed) — secrets unavailable |
 
-Copy the token (starts with `sk-ant-oat01-...`). Do not commit it to the repository.
-
-### Token management options
-
-| Approach | Best for | How |
-| -------- | -------- | --- |
-| **Repository secret** | Small team, shared subscription | One admin sets `CLAUDE_CODE_OAUTH_TOKEN` under **Settings → Secrets and variables → Actions** |
-| **Fork secret** | Contributors working from a personal fork | Set `CLAUDE_CODE_OAUTH_TOKEN` on the **fork** repo (see fork workflow below) |
-
-### Fork workflow
-
-Use this when you develop on a personal fork and open PRs into the upstream `develop` branch.
-
-```
-upstream (org/wf-site-analyser-client-app)
-    ↑ pull request
-your fork (you/wf-site-analyser-client-app)
-```
-
-**1. Fork and clone**
+**Fork workflow**
 
 ```bash
 gh repo fork <org>/wf-site-analyser-client-app --clone
 cd wf-site-analyser-client-app
 git remote add upstream https://github.com/<org>/wf-site-analyser-client-app.git
 npm install
-```
 
-**2. Set your Claude token on the fork**
-
-GitHub does not expose upstream secrets to PRs opened from forks. Store your token on **your fork**:
-
-```bash
-export CLAUDE_CODE_OAUTH_TOKEN="sk-ant-oat01-..."
-gh secret set CLAUDE_CODE_OAUTH_TOKEN \
-  --body "$CLAUDE_CODE_OAUTH_TOKEN" \
-  --repo <your-username>/wf-site-analyser-client-app
-```
-
-Or via the UI: **your-fork → Settings → Secrets and variables → Actions → New repository secret**.
-
-**3. Branch, commit, push**
-
-Pre-commit hooks run locally (fallow audit, token governance). Push to your fork:
-
-```bash
 git checkout -b feature/my-change
 git commit -m "feat: ..."
 git push origin feature/my-change
-```
 
-**4. Open PR to upstream**
-
-```bash
 gh pr create --repo <org>/wf-site-analyser-client-app --base develop --head <your-username>:feature/my-change
 ```
 
-**5. What runs where**
-
-| PR type | Fallow pre-commit (local) | Upstream CI workflow | Claude token used |
-| ------- | ------------------------- | -------------------- | ----------------- |
-| Branch PR (same repo) | Yes | Yes — full review | Upstream secret or author's environment |
-| Fork PR → upstream | Yes (local) | Yes — but **no fork secrets on upstream run** | Upstream must provide token (repo secret or per-user environment on upstream) |
-| PR within your fork only | Yes | Fork workflow + fork secret | Your fork secret |
-
-For fork PRs into upstream, the Claude review step needs a token configured on the **upstream** repository (shared secret or per-user environment for the PR author). Your fork secret does not flow to upstream's workflow.
-
-**Contributor checklist**
-
-- [ ] Fork cloned, `npm install` (Husky hooks active)
-- [ ] `claude setup-token` run locally
-- [ ] Token stored on fork (for fork-only CI) **or** upstream admin created your GitHub Environment
-- [ ] `origin` points to your fork, `upstream` points to org repo
-- [ ] PRs target `develop` on upstream
-
-**Maintainer checklist (upstream)**
-
-- [ ] `CLAUDE_CODE_OAUTH_TOKEN` set as a repo secret **or** per-user GitHub Environments (one per contributor username)
-- [ ] [`anthropics/claude-code-action`](https://github.com/anthropics/claude-code-action) OAuth token secret present before enabling the workflow on fork PRs
+Fallow still runs locally (Husky pre-commit) and in CI. Claude review on fork PRs requires a **maintainer** to review manually or run Claude locally — there is no safe way to use upstream OAuth tokens on untrusted fork code in `pull_request` workflows.

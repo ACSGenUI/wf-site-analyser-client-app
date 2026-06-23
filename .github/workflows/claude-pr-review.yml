@@ -59,6 +59,8 @@ jobs:
           if-no-files-found: ignore
 
   claude-review:
+    # Fork PRs do not receive upstream secrets (GitHub security). Claude needs CLAUDE_CODE_OAUTH_TOKEN.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -159,3 +161,14 @@ jobs:
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*)"
         env:
           INPUT_MAX_TURNS: "12"
+
+  claude-review-fork-skipped:
+    name: Claude PR Review (fork PR — skipped)
+    if: github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain skipped review
+        run: |
+          echo "::notice title=Claude PR review skipped::This PR is from a fork (${{ github.event.pull_request.head.repo.full_name }}). GitHub does not expose repository secrets (including CLAUDE_CODE_OAUTH_TOKEN) to workflows triggered by fork pull requests."
+          echo "Fallow audit still runs. Maintainers can review manually, or contributors can run Claude locally with claude setup-token."
+          echo "See README.md — Claude PR review (GitHub Actions) for details."
