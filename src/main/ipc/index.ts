@@ -15,7 +15,10 @@ import {
 } from '../../shared/types';
 
 const DEFAULT_UPDATE_CHECK_ENDPOINT = 'https://updates.example.com/api/v1/updates/check';
-const UPDATE_CHECK_ENDPOINT = process.env.UPDATE_SERVER_URL ?? DEFAULT_UPDATE_CHECK_ENDPOINT;
+const UPDATE_CHECK_ENDPOINT =
+  process.env.UPDATE_SERVER_URL?.startsWith('https://')
+    ? process.env.UPDATE_SERVER_URL
+    : DEFAULT_UPDATE_CHECK_ENDPOINT;
 
 const UPDATE_MANIFEST_CACHE_FILE = 'update-manifest.json';
 const UPDATE_MANIFEST_CACHE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
