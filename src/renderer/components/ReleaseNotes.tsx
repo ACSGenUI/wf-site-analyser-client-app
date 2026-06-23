@@ -96,7 +96,7 @@ export function ReleaseNotes({ notes, className = '' }: ReleaseNotesProps): Reac
           const Icon = CATEGORY_ICON[note.category];
           return (
             <li
-              key={`${note.category}-${note.title}-${note.description}`}
+              key={`${note.category}-${note.title}-${i}`}
               className="flex gap-3 items-start"
             >
               <span
