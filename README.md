@@ -116,7 +116,7 @@ Environment-specific variables live in `.env.*` files at the project root:
 - `.env.staging` – staging builds
 - `.env.production` – production builds
 
-Key variables: `NODE_ENV`, `APP_STAGE`, `API_BASE_URL`.
+Key variables: `NODE_ENV`, `APP_STAGE`, `API_BASE_URL`, `UPDATE_SERVER_URL`.
 
 ## Git hooks (Husky)
 
@@ -135,12 +135,12 @@ Key variables: `NODE_ENV`, `APP_STAGE`, `API_BASE_URL`.
 
 ### Hooks
 
-| Hook | Script | When it runs |
-| ---- | ------ | ------------ |
-| Token governance | `hooks/token-governance.sh` | Staged files match `tokens/`, `tailwind.config`, `src/renderer/styles/`, `theme.ts`, or `style-dictionary.config` |
-| Fallow audit | `hooks/fallow-audit.sh` | Staged files match `src/`, `tokens/`, `package.json`, or TypeScript/Vite/ESLint/Tailwind config |
+| Hook             | Script                      | When it runs                                                                                                                       |
+| ---------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Token governance | `hooks/token-governance.sh` | Staged files match `tokens/`, `tailwind.config`, `src/renderer/styles/`, `theme.ts`, or `style-dictionary.config`                  |
+| Fallow audit     | `hooks/fallow-audit.sh`     | Staged files match `src/`, `tokens/`, `package.json`, or TypeScript/Vite/ESLint/Tailwind config, and `fallow` is installed locally |
 
-Fallow uses `gate=new-only` (default): only issues **introduced** by your changeset block the commit. The comparison base is `origin/develop`, matching [`.github/workflows/claude-pr-review.yml`](.github/workflows/claude-pr-review.yml).
+The local Fallow hook is optional and does not download packages during commit. If `node_modules/.bin/fallow` is present, it audits against `origin/develop`; otherwise it skips locally. The PR workflow still runs Fallow in CI, matching [`.github/workflows/claude-pr-review.yml`](.github/workflows/claude-pr-review.yml).
 
 ### Enable or disable hooks
 
@@ -188,10 +188,10 @@ Copy the token (starts with `sk-ant-oat01-...`). Do not commit it to the reposit
 
 ### Token management options
 
-| Approach | Best for | How |
-| -------- | -------- | --- |
-| **Repository secret** | Small team, shared subscription | One admin sets `CLAUDE_CODE_OAUTH_TOKEN` under **Settings → Secrets and variables → Actions** |
-| **Fork secret** | Contributors working from a personal fork | Set `CLAUDE_CODE_OAUTH_TOKEN` on the **fork** repo (see fork workflow below) |
+| Approach              | Best for                                  | How                                                                                           |
+| --------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Repository secret** | Small team, shared subscription           | One admin sets `CLAUDE_CODE_OAUTH_TOKEN` under **Settings → Secrets and variables → Actions** |
+| **Fork secret**       | Contributors working from a personal fork | Set `CLAUDE_CODE_OAUTH_TOKEN` on the **fork** repo (see fork workflow below)                  |
 
 ### Fork workflow
 
@@ -227,7 +227,7 @@ Or via the UI: **your-fork → Settings → Secrets and variables → Actions �
 
 **3. Branch, commit, push**
 
-Pre-commit hooks run locally (fallow audit, token governance). Push to your fork:
+Pre-commit hooks run locally (token governance, plus Fallow only when installed locally). Push to your fork:
 
 ```bash
 git checkout -b feature/my-change
@@ -243,11 +243,11 @@ gh pr create --repo <org>/wf-site-analyser-client-app --base develop --head <you
 
 **5. What runs where**
 
-| PR type | Fallow pre-commit (local) | Upstream CI workflow | Claude token used |
-| ------- | ------------------------- | -------------------- | ----------------- |
-| Branch PR (same repo) | Yes | Yes — full review | Upstream secret or author's environment |
-| Fork PR → upstream | Yes (local) | Yes — but **no fork secrets on upstream run** | Upstream must provide token (repo secret or per-user environment on upstream) |
-| PR within your fork only | Yes | Fork workflow + fork secret | Your fork secret |
+| PR type                  | Fallow pre-commit (local) | Upstream CI workflow                          | Claude token used                                                             |
+| ------------------------ | ------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------- |
+| Branch PR (same repo)    | Yes                       | Yes — full review                             | Upstream secret or author's environment                                       |
+| Fork PR → upstream       | Yes (local)               | Yes — but **no fork secrets on upstream run** | Upstream must provide token (repo secret or per-user environment on upstream) |
+| PR within your fork only | Yes                       | Fork workflow + fork secret                   | Your fork secret                                                              |
 
 For fork PRs into upstream, the Claude review step needs a token configured on the **upstream** repository (shared secret or per-user environment for the PR author). Your fork secret does not flow to upstream's workflow.
 

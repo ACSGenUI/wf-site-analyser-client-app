@@ -17,8 +17,8 @@ import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 
 const BUILD_DIR = 'build';
-const PNG_FILE  = `${BUILD_DIR}/icons/icon.png`;
-const ICO_FILE  = `${BUILD_DIR}/icons/icon.ico`;
+const PNG_FILE = `${BUILD_DIR}/icons/icon.png`;
+const ICO_FILE = `${BUILD_DIR}/icons/icon.ico`;
 
 if (existsSync(PNG_FILE) && existsSync(ICO_FILE)) {
   console.log('Icon files already exist — skipping placeholder generation.');
@@ -69,13 +69,13 @@ function makeSolidPng(size, [r, g, b]) {
   const compressed = deflateSync(raw, { level: 9 });
 
   const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(size, 0);  // width
-  ihdr.writeUInt32BE(size, 4);  // height
-  ihdr[8] = 8;   // bit depth
-  ihdr[9] = 6;   // colour type: RGBA
-  ihdr[10] = 0;  // compression method
-  ihdr[11] = 0;  // filter method
-  ihdr[12] = 0;  // interlace method
+  ihdr.writeUInt32BE(size, 0); // width
+  ihdr.writeUInt32BE(size, 4); // height
+  ihdr[8] = 8; // bit depth
+  ihdr[9] = 6; // colour type: RGBA
+  ihdr[10] = 0; // compression method
+  ihdr[11] = 0; // filter method
+  ihdr[12] = 0; // interlace method
 
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), // PNG signature
@@ -90,14 +90,14 @@ function makeSolidPng(size, [r, g, b]) {
 // PNG directly so no BMP conversion is needed and app-builder can decode it.
 function makeIco(pngData) {
   const entry = Buffer.alloc(16);
-  entry[0] = 0;   // width  (0 = 256 in ICO spec)
-  entry[1] = 0;   // height (0 = 256 in ICO spec)
-  entry[2] = 0;   // color count
-  entry[3] = 0;   // reserved
-  entry.writeUInt16LE(1, 4);                // planes
-  entry.writeUInt16LE(32, 6);               // bit depth
-  entry.writeUInt32LE(pngData.length, 8);   // byte length of PNG data
-  entry.writeUInt32LE(6 + 16, 12);          // offset: ICONDIR(6) + ICONDIRENTRY(16)
+  entry[0] = 0; // width  (0 = 256 in ICO spec)
+  entry[1] = 0; // height (0 = 256 in ICO spec)
+  entry[2] = 0; // color count
+  entry[3] = 0; // reserved
+  entry.writeUInt16LE(1, 4); // planes
+  entry.writeUInt16LE(32, 6); // bit depth
+  entry.writeUInt32LE(pngData.length, 8); // byte length of PNG data
+  entry.writeUInt32LE(6 + 16, 12); // offset: ICONDIR(6) + ICONDIRENTRY(16)
 
   const header = Buffer.alloc(6);
   header.writeUInt16LE(0, 0); // reserved
