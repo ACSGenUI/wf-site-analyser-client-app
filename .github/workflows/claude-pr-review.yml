@@ -31,10 +31,12 @@ jobs:
 
       - name: Run fallow audit
         id: fallow-audit
+        env:
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
           set +e
           npx fallow@2 audit \
-            --base "${{ github.event.pull_request.base.ref }}" \
+            --base "$PR_BASE_REF" \
             --format json --quiet --explain \
             > fallow-audit.json
           audit_exit=$?
@@ -168,7 +170,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Explain skipped review
+        env:
+          HEAD_REPO_FULL_NAME: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
-          echo "::notice title=Claude PR review skipped::This PR is from a fork (${{ github.event.pull_request.head.repo.full_name }}). GitHub does not expose repository secrets (including CLAUDE_CODE_OAUTH_TOKEN) to workflows triggered by fork pull requests."
+          echo "::notice title=Claude PR review skipped::This PR is from a fork (${HEAD_REPO_FULL_NAME}). GitHub does not expose repository secrets (including CLAUDE_CODE_OAUTH_TOKEN) to workflows triggered by fork pull requests."
           echo "Fallow audit still runs. Maintainers can review manually, or contributors can run Claude locally with claude setup-token."
           echo "See README.md — Claude PR review (GitHub Actions) for details."
