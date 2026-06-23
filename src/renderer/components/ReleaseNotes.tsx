@@ -35,7 +35,9 @@ const CATEGORY_ICON: Record<ReleaseNoteCategory, ComponentType<LucideProps>> = {
 
 function renderDescription(text: string): ReactNode[] {
   const parts: ReactNode[] = [];
-  const re = /\*\*([^*]+)\*\*|\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
+  // Match **bold** OR [label](https://url) — https-only so server-supplied
+  // links can't render as http:// (mixed-content / downgrade risk).
+  const re = /\*\*([^*]+)\*\*|\[([^\]]+)\]\((https:\/\/[^)]+)\)/g;
   let lastIndex = 0;
   let key = 0;
   let match: RegExpExecArray | null = re.exec(text);
@@ -49,7 +51,9 @@ function renderDescription(text: string): ReactNode[] {
           {match[1]}
         </strong>,
       );
-    } else if (match[2] && match[3]) {
+    } else if (match[2] && match[3] && match[3].startsWith('https://')) {
+      // Runtime guard in addition to the regex above — defence-in-depth so a
+      // future regex change can't silently allow non-https hrefs.
       parts.push(
         <a
           key={`a-${key}`}
@@ -61,6 +65,9 @@ function renderDescription(text: string): ReactNode[] {
           {match[2]}
         </a>,
       );
+    } else if (match[2]) {
+      // Non-https link → render as plain text, drop the href.
+      parts.push(match[2]);
     }
     key += 1;
     lastIndex = re.lastIndex;
