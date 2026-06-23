@@ -181,7 +181,7 @@ export function VersionChecker(): ReactElement | null {
     setInstallStatus('downloading');
     try {
       await api['analysis:saveAutoSave']();
-    } catch {
+        role="status"
       // Auto-save is best-effort — never block the update on it.
     }
     try {
