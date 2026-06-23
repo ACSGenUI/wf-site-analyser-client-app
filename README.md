@@ -172,32 +172,40 @@ sh .husky/hooks/fallow-audit.sh
 Pull requests targeting `develop` trigger [`.github/workflows/claude-pr-review.yml`](.github/workflows/claude-pr-review.yml):
 
 1. **fallow-audit** — static analysis on changed files (fails on `verdict: fail`)
-2. **claude-review** — AI diff review (same-repo PRs only; see fork note below)
+2. **claude-review** — AI diff review on the PR diff
 
-Upstream admins must set `CLAUDE_CODE_OAUTH_TOKEN` under **Settings → Secrets and variables → Actions** (from `claude setup-token`). Do not commit the token.
+Generate a token with `claude setup-token` (Claude Pro or Max). Store it as the `CLAUDE_CODE_OAUTH_TOKEN` repository secret — never commit it to source.
 
-### Fork PRs
+| Where the PR is opened             | `CLAUDE_CODE_OAUTH_TOKEN` used                                                      |
+| ---------------------------------- | ----------------------------------------------------------------------------------- |
+| Fork repo → fork `develop`         | Secret on the **fork**                                                              |
+| Upstream repo → upstream `develop` | Secret on **upstream**                                                              |
+| Fork → upstream (cross-repo PR)    | **Skipped** — GitHub does not expose secrets to cross-repo `pull_request` workflows |
 
-When a PR is opened **from a fork** into upstream `develop`, GitHub **does not expose repository secrets** to the workflow (including `CLAUDE_CODE_OAUTH_TOKEN`). This is a GitHub security rule — your fork’s secrets are not available either.
+Use the development workflow below to work in a fork first, then promote changes to upstream for integration.
 
-| PR type               | fallow-audit (CI) | claude-review (CI)                             |
-| --------------------- | ----------------- | ---------------------------------------------- |
-| Branch PR (same repo) | Yes               | Yes — uses upstream `CLAUDE_CODE_OAUTH_TOKEN`  |
-| Fork PR → upstream    | Yes               | **Skipped** (not failed) — secrets unavailable |
+### Development workflow
 
-**Fork workflow**
+#### Initial setup
 
-```bash
-gh repo fork <org>/wf-site-analyser-client-app --clone
-cd wf-site-analyser-client-app
-git remote add upstream https://github.com/<org>/wf-site-analyser-client-app.git
-npm install
+1. Fork the upstream repository.
+2. Sync the `develop` branch on your fork with upstream `develop` (keep it current throughout the project).
+3. Add the `CLAUDE_CODE_OAUTH_TOKEN` secret to your **forked** repository (Settings → Secrets and variables → Actions), using a token from `claude setup-token`.
 
-git checkout -b feature/my-change
-git commit -m "feat: ..."
-git push origin feature/my-change
+#### Feature development (forked repository)
 
-gh pr create --repo <org>/wf-site-analyser-client-app --base develop --head <your-username>:feature/my-change
-```
+1. Create a feature branch from `develop` on your fork.
+2. Implement and commit your changes (conventional commit messages; Husky runs fallow audit and token checks locally).
+3. Before opening a PR, sync your fork’s `develop` with upstream `develop`, then rebase or merge `develop` into your feature branch.
+4. Open a pull request on your **fork** — feature branch → fork `develop`. This runs fallow-audit and claude-review using the secret on your fork.
 
-Fallow still runs locally (Husky pre-commit) and in CI. Claude review on fork PRs requires a **maintainer** to review manually or run Claude locally — there is no safe way to use upstream OAuth tokens on untrusted fork code in `pull_request` workflows.
+Repeat sync → develop → feature branch → fork PR for each feature.
+
+#### Final step (promote to upstream)
+
+When the feature is ready for upstream integration:
+
+1. On the **upstream** repository, create a feature branch from `develop` (same branch name as on your fork, if possible).
+2. Push the commits from your fork’s feature branch to that upstream feature branch.
+
+Contributors need write access on upstream to create branches and push; otherwise ask a maintainer to perform this step.
