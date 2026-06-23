@@ -8,11 +8,11 @@ import type { UpdateCheckResult } from '../../shared/types';
  * version-check → force-update modal lifecycle without a real update server.
  */
 const SAMPLE_UPDATE_RESPONSE: UpdateCheckResult = {
-  latestVersion: '2.4.0',
-  minimumVersion: '2.4.0',
+  latestVersion: '3.0.0',
+  minimumVersion: '0.1.0',
   mandatory: true,
   updateAvailable: true,
-  currentVersion: '2.3.0',
+  currentVersion: '0.1.0',
   downloadUrl:
     'https://updates.example.com/site-analyser/2.4.0/Site-Analyser-2.4.0-darwin-universal.zip',
   estimatedUpdateSeconds: 45,

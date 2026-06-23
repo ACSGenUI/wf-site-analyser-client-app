@@ -155,8 +155,8 @@ export function registerIpcHandlers(): void {
       const savedAt = new Date().toISOString();
       const filePath = path.join(app.getPath('userData'), 'autosave.json');
       const body: AutoSavePayload = {
-        schemaVersion: 1,
         ...(payload ?? {}),
+        schemaVersion: 1,
         savedAt,
       };
       await fs.mkdir(path.dirname(filePath), { recursive: true });

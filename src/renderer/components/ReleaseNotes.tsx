@@ -54,6 +54,7 @@ function renderDescription(text: string): ReactNode[] {
         <a
           key={`a-${key}`}
           href={match[3]}
+          target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 underline"
         >
