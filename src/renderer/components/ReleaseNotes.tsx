@@ -25,11 +25,6 @@ const CATEGORY_TINT: Record<ReleaseNoteCategory, string> = {
   ui: 'text-primary-dark',
   bugfix: 'text-warning',
 };
-  feature: 'text-blue-600',
-  security: 'text-rose-600',
-  ui: 'text-violet-600',
-  bugfix: 'text-amber-600',
-};
 
 const CATEGORY_ICON: Record<ReleaseNoteCategory, ComponentType<LucideProps>> = {
   feature: Cog,
