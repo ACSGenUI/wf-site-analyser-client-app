@@ -60,18 +60,18 @@ export function ForceUpdateModal({
   return (
     <Dialog.Root open modal>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-[rgba(25,28,29,0.2)] backdrop-blur-[2px]" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-900/20 backdrop-blur-sm" />
         <Dialog.Content
           aria-modal="true"
           onEscapeKeyDown={(e) => e.preventDefault()}
           onPointerDownOutside={(e) => e.preventDefault()}
           onInteractOutside={(e) => e.preventDefault()}
-          className="fixed left-1/2 top-1/2 z-50 w-[512px] max-w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl bg-white shadow-[0_12px_40px_rgba(25,28,29,0.15)] focus:outline-none"
+          className="fixed left-1/2 top-1/2 z-50 w-[512px] max-w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-modal bg-white shadow-lg focus:outline-none"
         >
           {/* Header */}
           <div className="flex flex-col gap-2 bg-white px-8 pb-6 pt-8">
             <div className="flex items-center justify-between">
-              <span className="rounded bg-[rgba(0,78,173,0.1)] px-2 py-1 text-[10px] font-normal uppercase tracking-[1px] text-primary-dark">
+              <span className="rounded bg-primary-dark/10 px-2 py-1 text-[10px] font-normal uppercase tracking-[1px] text-primary-dark">
                 System Update
               </span>
               <div className="flex items-center gap-2">

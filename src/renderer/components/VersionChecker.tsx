@@ -215,7 +215,7 @@ export function VersionChecker(): ReactElement | null {
     return (
       <aside
         role="status"
-        className="fixed right-4 top-4 z-30 flex items-center gap-2 rounded-md border border-primary-100 bg-primary-50 px-3 py-2 text-sm text-primary-dark shadow-sm"
+        className="fixed right-4 top-4 z-30 flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 px-3 py-2 text-sm text-primary-dark shadow-sm"
       >
         <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-primary" />
         Update available — version {checkState.newVersion}

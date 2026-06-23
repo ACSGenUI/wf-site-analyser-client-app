@@ -40,11 +40,11 @@ const SAMPLE_UPDATE_RESPONSE: UpdateCheckResult = {
       category: 'ui',
     },
     {
-      icon: 'sparkle',
-      title: 'UI Precision Alignment',
+      icon: 'wrench',
+      title: 'Crash on empty CSV upload fixed',
       description:
-        'Sidebar, header, and force-update modal now match Figma spacing and typography tokens.',
-      category: 'ui',
+        'Uploading a CSV with **no rows** no longer crashes the analysis. Empty files now show a clear error message.',
+      category: 'bugfix',
     },
   ],
 };
