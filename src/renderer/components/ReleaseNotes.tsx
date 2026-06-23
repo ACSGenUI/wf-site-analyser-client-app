@@ -54,20 +54,20 @@ function renderDescription(text: string): ReactNode[] {
     } else if (match[2] && match[3] && match[3].startsWith('https://')) {
       // Runtime guard in addition to the regex above — defence-in-depth so a
       // future regex change can't silently allow non-https hrefs.
+      const href = match[3];
+      const label = match[2];
       parts.push(
         <a
           key={`a-${key}`}
-          href={match[3]}
+          href={href}
           onClick={(e) => {
             e.preventDefault();
-            window.api['shell:openExternal']?.(match[3]);
+            window.api['shell:openExternal']?.(href);
           }}
           rel="noopener noreferrer"
           className="text-blue-600 underline cursor-pointer"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline"
         >
-          {match[2]}
+          {label}
         </a>,
       );
     } else if (match[2]) {

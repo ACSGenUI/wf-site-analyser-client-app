@@ -154,7 +154,7 @@ export function VersionChecker(): ReactElement | null {
 
   useEffect(() => {
     const id = setTimeout(() => setShowCheckingIndicator(true), CHECKING_REVEAL_DELAY_MS);
-        currentVersion={currentVersion || 'unknown'}
+    return () => clearTimeout(id);
   }, []);
 
   useEffect(() => {
@@ -181,7 +181,7 @@ export function VersionChecker(): ReactElement | null {
     setInstallStatus('downloading');
     try {
       await api['analysis:saveAutoSave']();
-        role="status"
+    } catch {
       // Auto-save is best-effort — never block the update on it.
     }
     try {
