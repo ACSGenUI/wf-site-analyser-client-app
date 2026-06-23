@@ -58,7 +58,12 @@ function renderDescription(text: string): ReactNode[] {
         <a
           key={`a-${key}`}
           href={match[3]}
-          target="_blank"
+          onClick={(e) => {
+            e.preventDefault();
+            window.api['shell:openExternal']?.(match[3]);
+          }}
+          rel="noopener noreferrer"
+          className="text-blue-600 underline cursor-pointer"
           rel="noopener noreferrer"
           className="text-blue-600 underline"
         >
