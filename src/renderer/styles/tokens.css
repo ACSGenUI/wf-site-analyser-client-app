@@ -77,6 +77,7 @@
   --wf-size-content-max-width: 1152px;
   --wf-size-content-width: 1040px;
   --wf-font-family-base: 'Inter', system-ui, sans-serif;
+  --wf-font-size-xxs: 10px;
   --wf-font-size-xs: 12px;
   --wf-font-size-sm: 14px;
   --wf-font-size-base: 16px;
@@ -84,6 +85,7 @@
   --wf-font-size-xl: 20px;
   --wf-font-size-2xl: 36px;
   --wf-font-size-3xl: 48px;
+  --wf-font-size-display: 30px;
   --wf-font-weight-regular: 400;
   --wf-font-weight-bold: 700;
   --wf-font-weight-black: 900;

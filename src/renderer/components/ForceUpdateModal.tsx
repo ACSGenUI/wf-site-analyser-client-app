@@ -71,28 +71,26 @@ export function ForceUpdateModal({
           {/* Header */}
           <div className="flex flex-col gap-2 bg-white px-8 pb-6 pt-8">
             <div className="flex items-center justify-between">
-              <span className="rounded bg-primary-dark/10 px-2 py-1 text-[10px] font-normal uppercase tracking-[1px] text-primary-dark">
+              <span className="rounded bg-primary-dark/10 px-2 py-1 text-xxs font-normal uppercase tracking-widest text-primary-dark">
                 System Update
               </span>
               <div className="flex items-center gap-2">
-                <span className="text-[12px] uppercase tracking-[-0.3px] text-neutral-800">
-                  Status:
-                </span>
+                <span className="text-xs uppercase tracking-tight text-neutral-800">Status:</span>
                 <span className="flex items-center gap-1">
                   <span
                     aria-hidden="true"
                     className={`inline-block h-2 w-2 rounded-full ${statusStyle.dot}`}
                   />
-                  <span className={`text-[12px] ${statusStyle.text}`}>{statusLabel}</span>
+                  <span className={`text-xs ${statusStyle.text}`}>{statusLabel}</span>
                 </span>
               </div>
             </div>
 
-            <Dialog.Title className="text-[30px] font-normal leading-[37.5px] tracking-[-1.5px] text-neutral-900">
+            <Dialog.Title className="text-display font-normal tracking-tighter text-neutral-900">
               Update Required
             </Dialog.Title>
 
-            <Dialog.Description className="text-base leading-[26px] text-neutral-800">
+            <Dialog.Description className="text-base text-neutral-800">
               A critical update is mandatory to continue using the Site Analyzer environment.
             </Dialog.Description>
           </div>
@@ -100,7 +98,7 @@ export function ForceUpdateModal({
           {/* Version Comparison Pane */}
           <div className="flex items-center justify-between bg-neutral-100 px-8 py-6">
             <div className="flex flex-col items-start">
-              <p className="text-[10px] uppercase tracking-[1px] text-neutral-800/60">
+              <p className="text-xxs uppercase tracking-widest text-neutral-800/60">
                 Current Version
               </p>
               <p className="font-mono text-xl font-bold text-neutral-900">{currentVersion}</p>
@@ -109,7 +107,7 @@ export function ForceUpdateModal({
               →
             </span>
             <div className="flex flex-col items-end">
-              <p className="text-[10px] uppercase tracking-[1px] text-primary">New Version</p>
+              <p className="text-xxs uppercase tracking-widest text-primary">New Version</p>
               <p className="font-mono text-xl font-bold text-primary-dark">{newVersion}</p>
             </div>
           </div>
@@ -123,7 +121,7 @@ export function ForceUpdateModal({
 
           {/* Footer Actions */}
           <div className="flex items-center justify-between bg-neutral-100 px-8 py-6">
-            <p className="max-w-[180px] text-[10px] leading-[12.5px] text-neutral-800">
+            <p className="max-w-[180px] text-xxs text-neutral-800">
               Approximate update time:{' '}
               <span className="text-neutral-900">{estimatedSeconds} seconds</span>. Your work will
               be saved.
@@ -134,21 +132,15 @@ export function ForceUpdateModal({
                 Retry
               </Button>
             ) : (
-              <button
-                type="button"
+              <Button
+                variant="primary-gradient"
                 onClick={onInstall}
+                loading={isInstalling}
                 disabled={ctaDisabled}
                 aria-busy={isInstalling}
-                className="inline-flex items-center justify-center gap-2 rounded bg-gradient-to-br from-primary-dark to-primary px-6 py-3 text-sm font-normal tracking-[-0.35px] text-white shadow-sm transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isInstalling && (
-                  <span
-                    aria-hidden="true"
-                    className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
-                  />
-                )}
                 Restart and Update Now
-              </button>
+              </Button>
             )}
           </div>
         </Dialog.Content>

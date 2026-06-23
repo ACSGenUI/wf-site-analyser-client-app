@@ -29,6 +29,8 @@ export interface Tokens {
     body: TypographyToken;
     caption: TypographyToken;
     small: TypographyToken;
+    xxs: TypographyToken;
+    display: TypographyToken;
   };
   spacing: Record<number, string>;
   borderRadius: {
@@ -73,6 +75,8 @@ export const tokens: Tokens = {
     body: { fontSize: '14px', lineHeight: '1.5', fontWeight: 400 },
     caption: { fontSize: '12px', lineHeight: '1.4', fontWeight: 700 },
     small: { fontSize: '12px', lineHeight: '1.4', fontWeight: 400 },
+    xxs: { fontSize: '10px', lineHeight: '1.25', fontWeight: 400 },
+    display: { fontSize: '30px', lineHeight: '1.25', fontWeight: 400 },
   },
   spacing: {
     4: '4px',
@@ -115,7 +119,6 @@ export const darkTokens: Pick<Tokens, 'colors'> = {
     },
     success: '#34D399',
     warning: '#FBBF24',
-    // ponytail: same value as light theme for now; design can tune later
     'warning-dark': '#92400E',
     error: '#F87171',
   },
