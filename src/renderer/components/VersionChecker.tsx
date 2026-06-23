@@ -154,7 +154,7 @@ export function VersionChecker(): ReactElement | null {
 
   useEffect(() => {
     const id = setTimeout(() => setShowCheckingIndicator(true), CHECKING_REVEAL_DELAY_MS);
-    return () => clearTimeout(id);
+        currentVersion={currentVersion || 'unknown'}
   }, []);
 
   useEffect(() => {
