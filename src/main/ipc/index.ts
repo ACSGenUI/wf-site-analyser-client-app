@@ -101,6 +101,8 @@ async function writeCachedUpdateManifest(result: UpdateCheckResult): Promise<voi
   await fs.writeFile(filePath, JSON.stringify(body, null, 2), 'utf8');
 }
 
+let installInFlight = false;
+
 export function registerIpcHandlers(): void {
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = false;
@@ -152,6 +154,12 @@ export function registerIpcHandlers(): void {
       }
     };
 
+    if (installInFlight) {
+      send(IPC_CHANNELS.UPDATE_STATUS, 'downloading');
+      return;
+    }
+    installInFlight = true;
+
     // Unpackaged builds (dev) have no update feed and electron-updater throws
     // on checkForUpdates(). Fall back to the demo lifecycle so the modal flow
     // is still exercisable locally.
@@ -170,6 +178,7 @@ export function registerIpcHandlers(): void {
         setTimeout(r, 1500);
       });
       send(IPC_CHANNELS.UPDATE_STATUS, 'restarting');
+      installInFlight = false;
       return;
     }
 
@@ -187,12 +196,14 @@ export function registerIpcHandlers(): void {
       send(IPC_CHANNELS.UPDATE_STATUS, 'installing');
       // Brief delay so the renderer can paint 'installing' before the app quits.
       setTimeout(() => {
+        installInFlight = false;
         send(IPC_CHANNELS.UPDATE_STATUS, 'restarting');
         autoUpdater.quitAndInstall();
       }, 500);
     });
 
     autoUpdater.on('error', (err: Error) => {
+      installInFlight = false;
       console.error('[autoUpdater] error:', err);
       send(IPC_CHANNELS.UPDATE_STATUS, 'error');
     });
@@ -200,11 +211,13 @@ export function registerIpcHandlers(): void {
     try {
       const checkResult = await autoUpdater.checkForUpdates();
       if (!checkResult) {
+        installInFlight = false;
         send(IPC_CHANNELS.UPDATE_STATUS, 'error');
         return;
       }
       await autoUpdater.downloadUpdate();
     } catch (err) {
+      installInFlight = false;
       console.error('[autoUpdater] downloadUpdate failed:', err);
       send(IPC_CHANNELS.UPDATE_STATUS, 'error');
     }
