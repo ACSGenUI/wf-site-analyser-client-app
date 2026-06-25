@@ -225,7 +225,7 @@ export function VersionChecker(): ReactElement | null {
 
   if (checkState.kind === 'failed') {
     return (
-      <aside
+        role="status"
         role="alert"
         className="fixed right-4 top-4 z-30 flex items-center gap-2 rounded-md border border-warning/40 bg-warning-surface px-3 py-2 text-sm text-warning-dark shadow-sm"
       >
