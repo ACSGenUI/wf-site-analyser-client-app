@@ -1,7 +1,8 @@
+import { spawn } from 'child_process';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import { ipcMain, app, type IpcMainInvokeEvent } from 'electron';
+import { ipcMain, app, shell, type IpcMainInvokeEvent } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { z } from 'zod';
 
@@ -182,53 +183,58 @@ export function registerIpcHandlers(): void {
       return;
     }
 
-    // Wire electron-updater to the URL returned by the custom REST check.
-    // Without this the two update systems are disconnected and downloads fail.
     const cached = await readCachedUpdateManifest();
     if (!cached?.downloadUrl) {
       installInFlight = false;
       send(IPC_CHANNELS.UPDATE_STATUS, 'error');
       return;
     }
-    autoUpdater.setFeedURL({ provider: 'generic', url: cached.downloadUrl });
-
-    // Reset listeners so retries don't accumulate handlers across invocations.
-    autoUpdater.removeAllListeners('download-progress');
-    autoUpdater.removeAllListeners('update-downloaded');
-    autoUpdater.removeAllListeners('error');
-
-    autoUpdater.on('download-progress', (progress: { percent: number }) => {
-      send(IPC_CHANNELS.UPDATE_STATUS, 'downloading');
-      send(IPC_CHANNELS.UPDATE_PROGRESS, Math.round(progress.percent));
-    });
-
-    autoUpdater.on('update-downloaded', () => {
-      send(IPC_CHANNELS.UPDATE_STATUS, 'installing');
-      // Brief delay so the renderer can paint 'installing' before the app quits.
-      setTimeout(() => {
-        installInFlight = false;
-        send(IPC_CHANNELS.UPDATE_STATUS, 'restarting');
-        autoUpdater.quitAndInstall();
-      }, 500);
-    });
-
-    autoUpdater.on('error', (err: Error) => {
-      installInFlight = false;
-      console.error('[autoUpdater] error:', err);
-      send(IPC_CHANNELS.UPDATE_STATUS, 'error');
-    });
 
     try {
-      const checkResult = await autoUpdater.checkForUpdates();
-      if (!checkResult) {
-        installInFlight = false;
-        send(IPC_CHANNELS.UPDATE_STATUS, 'error');
-        return;
+      send(IPC_CHANNELS.UPDATE_STATUS, 'downloading');
+
+      const res = await fetch(cached.downloadUrl, { signal: AbortSignal.timeout(10 * 60 * 1000) });
+      if (!res.ok) throw new Error(`Download failed: HTTP ${res.status}`);
+      if (!res.body) throw new Error('Download response has no body');
+
+      const total = Number.parseInt(res.headers.get('content-length') ?? '0', 10);
+      const filename = new URL(cached.downloadUrl).pathname.split('/').pop() ?? 'update';
+      const tempPath = path.join(app.getPath('temp'), filename);
+
+      const fileHandle = await fs.open(tempPath, 'w');
+      try {
+        let received = 0;
+        const reader = res.body.getReader();
+        let chunk = await reader.read();
+        while (!chunk.done) {
+          // eslint-disable-next-line no-await-in-loop
+          await fileHandle.write(chunk.value);
+          received += chunk.value.length;
+          if (total > 0) send(IPC_CHANNELS.UPDATE_PROGRESS, Math.round((received / total) * 100));
+          // eslint-disable-next-line no-await-in-loop
+          chunk = await reader.read();
+        }
+      } finally {
+        await fileHandle.close();
       }
-      await autoUpdater.downloadUpdate();
+
+      send(IPC_CHANNELS.UPDATE_STATUS, 'installing');
+      // Brief delay so the renderer can paint 'installing' before the app quits.
+      await new Promise<void>((r) => {
+        setTimeout(r, 500);
+      });
+      send(IPC_CHANNELS.UPDATE_STATUS, 'restarting');
+      installInFlight = false;
+
+      if (process.platform === 'win32') {
+        spawn(tempPath, ['/S'], { detached: true, stdio: 'ignore' }).unref();
+      } else {
+        await shell.openPath(tempPath);
+      }
+      app.quit();
     } catch (err) {
       installInFlight = false;
-      console.error('[autoUpdater] downloadUpdate failed:', err);
+      console.error('[install] download failed:', err);
       send(IPC_CHANNELS.UPDATE_STATUS, 'error');
     }
   });
