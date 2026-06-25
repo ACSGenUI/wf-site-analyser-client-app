@@ -33,6 +33,8 @@ const CATEGORY_ICON: Record<ReleaseNoteCategory, ComponentType<LucideProps>> = {
   bugfix: Wrench,
 };
 
+// TODO(SA-202): populate ALLOWED_EXTERNAL_HOSTS dynamically from window.api.getEnv()
+// once the update-server-url plumbing is in place. For now the list is hardcoded.
 const ALLOWED_EXTERNAL_HOSTS = ['updates.example.com', 'docs.example.com'];
 
 function renderDescription(text: string): ReactNode[] {

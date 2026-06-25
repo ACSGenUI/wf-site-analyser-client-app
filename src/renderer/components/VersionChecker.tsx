@@ -80,7 +80,10 @@ export function VersionChecker(): ReactElement | null {
     const localVersionPromise = window.api
       .getAppVersion()
       .then((v) => v)
-      .catch(() => '');
+      .catch((err: unknown) => {
+        console.error('[VersionChecker] getAppVersion failed:', err);
+        return '';
+      });
 
     localVersionPromise.then((v) => {
       if (!cancelled && v) setCurrentVersion((prev) => prev || v);
@@ -193,7 +196,10 @@ export function VersionChecker(): ReactElement | null {
   }, []);
 
   const handleRetry = useCallback(() => {
-    handleInstall().catch(() => undefined);
+    handleInstall().catch((err: unknown) => {
+      console.error('[VersionChecker] unexpected error in handleRetry:', err);
+      setInstallStatus('error');
+    });
   }, [handleInstall]);
 
   if (checkState.kind === 'mandatory') {
@@ -222,7 +228,6 @@ export function VersionChecker(): ReactElement | null {
       </aside>
     );
   }
-
   if (checkState.kind === 'failed') {
     return (
       <aside

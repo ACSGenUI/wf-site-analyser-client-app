@@ -69,6 +69,8 @@ export interface UpdateCheckResult {
   currentVersion?: string;
   /** Where the update artifact can be downloaded. */
   downloadUrl?: string;
+  /** Expected SHA-256 hex digest for the downloaded update artifact. */
+  sha256?: string;
   /** Approximate seconds the install/restart cycle will take, surfaced in the modal footer. */
   estimatedUpdateSeconds?: number;
   /** ISO-8601 publish timestamp of the release. */
