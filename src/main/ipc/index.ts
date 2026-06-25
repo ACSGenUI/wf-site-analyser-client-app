@@ -198,7 +198,7 @@ export function registerIpcHandlers(): void {
     autoUpdater.removeAllListeners('error');
 
     autoUpdater.on('download-progress', (progress: { percent: number }) => {
-      send(IPC_CHANNELS.UPDATE_STATUS, 'downloading');
+    autoUpdater.setFeedURL({ provider: 'generic', url: cached.downloadUrl.substring(0, cached.downloadUrl.lastIndexOf('/') + 1) });
       send(IPC_CHANNELS.UPDATE_PROGRESS, Math.round(progress.percent));
     });
 
