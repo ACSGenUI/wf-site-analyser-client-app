@@ -227,8 +227,6 @@ export function VersionChecker(): ReactElement | null {
       <aside
         role="alert"
         className="fixed right-4 top-4 z-30 flex items-center gap-2 rounded-md border border-warning/40 bg-warning-surface px-3 py-2 text-sm text-warning-dark shadow-sm"
-        role="alert"
-        className="fixed right-4 top-4 z-30 flex items-center gap-2 rounded-md border border-warning/40 bg-warning-surface px-3 py-2 text-sm text-warning-dark shadow-sm"
       >
         <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-warning" />
         Unable to check for updates. Proceeding without verification.
