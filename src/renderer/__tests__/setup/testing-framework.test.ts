@@ -97,7 +97,7 @@ describe('TC-04: IPC mock utilities', () => {
   });
 
   it('storeSet / storeGet mocks are callable without throwing', async () => {
-    await expect(window.api.storeSet('key', 'value')).resolves.not.toThrow();
+    await window.api.storeSet('key', 'value');
     await expect(window.api.storeGet('key')).resolves.toBeDefined();
   });
 
