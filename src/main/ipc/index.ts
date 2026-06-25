@@ -121,7 +121,7 @@ export function registerIpcHandlers(): void {
     url.searchParams.set('version', app.getVersion());
     url.searchParams.set('platform', process.platform);
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { signal: AbortSignal.timeout(15_000) });
       if (!res.ok) {
         throw new Error(`Update check failed: HTTP ${res.status}`);
       }

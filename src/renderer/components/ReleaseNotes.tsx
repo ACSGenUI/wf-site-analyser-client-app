@@ -33,6 +33,8 @@ const CATEGORY_ICON: Record<ReleaseNoteCategory, ComponentType<LucideProps>> = {
   bugfix: Wrench,
 };
 
+const ALLOWED_EXTERNAL_HOSTS = ['updates.example.com', 'docs.example.com'];
+
 function renderDescription(text: string): ReactNode[] {
   const parts: ReactNode[] = [];
   // Match **bold** OR [label](https://url) — https-only so server-supplied
@@ -62,7 +64,13 @@ function renderDescription(text: string): ReactNode[] {
           href={href}
           onClick={(e) => {
             e.preventDefault();
-            window.api['shell:openExternal']?.(href);
+            try {
+              if (ALLOWED_EXTERNAL_HOSTS.includes(new URL(href).hostname)) {
+                window.api['shell:openExternal']?.(href);
+              }
+            } catch {
+              // malformed URL — do nothing
+            }
           }}
           rel="noopener noreferrer"
           className="text-blue-600 underline cursor-pointer"
