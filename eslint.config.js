@@ -77,6 +77,8 @@ export default [
       'no-confusing-arrow': 'off',
       'object-curly-newline': 'off',
       'operator-linebreak': 'off',
+      'react/jsx-curly-newline': 'off',
+      'react/jsx-one-expression-per-line': 'off',
       // Structured import ordering with blank-line separators (SA-106)
       'import/order': [
         'error',
