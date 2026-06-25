@@ -17,7 +17,15 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 export default [
   // Global ignores
   {
-    ignores: ['node_modules/**', 'out/**', 'dist/**', '*.config.{ts,js,mjs,cjs}', 'src/renderer/styles/tokens.js'],
+    ignores: [
+      'node_modules/**',
+      'out/**',
+      'dist/**',
+      '*.config.{ts,js,mjs,cjs}',
+      'src/renderer/styles/tokens.js',
+      '.claude/**',
+      'scripts/**',
+    ],
   },
 
   // Base JS rules
@@ -47,6 +55,12 @@ export default [
       'react/react-in-jsx-scope': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      // Allow _-prefixed identifiers to signal intentional non-use
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      }],
       // Enforce no any (SA-106 will tighten further)
       '@typescript-eslint/no-explicit-any': 'error',
       // TypeScript handles undefined checking
