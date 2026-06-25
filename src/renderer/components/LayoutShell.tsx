@@ -12,14 +12,18 @@ export function LayoutShell(): React.ReactElement {
   useEffect(() => {
     let cancelled = false;
     async function initSession() {
-      const existing = await window.api.storeGet('sessionId');
-      if (cancelled) return;
-      if (existing) {
-        initGuestSession(existing as string);
-      } else {
-        const newId = crypto.randomUUID();
-        await window.api.storeSet('sessionId', newId);
-        if (!cancelled) initGuestSession(newId);
+      try {
+        const existing = await window.api.storeGet('sessionId');
+        if (cancelled) return;
+        if (typeof existing === 'string' && existing) {
+          initGuestSession(existing);
+        } else {
+          const newId = crypto.randomUUID();
+          await window.api.storeSet('sessionId', newId);
+          if (!cancelled) initGuestSession(newId);
+        }
+      } catch {
+        // IPC unavailable — leave session uninitialised; app can degrade gracefully
       }
     }
     initSession();
