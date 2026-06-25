@@ -198,7 +198,13 @@ export function registerIpcHandlers(): void {
       if (!res.body) throw new Error('Download response has no body');
 
       const total = Number.parseInt(res.headers.get('content-length') ?? '0', 10);
-      const filename = new URL(cached.downloadUrl).pathname.split('/').pop() ?? 'update';
+      const rawName = new URL(cached.downloadUrl).pathname.split('/').pop() ?? 'update';
+      const ALLOWED_EXTS = new Set(['.exe', '.msi', '.dmg', '.deb', '.rpm', '.AppImage']);
+      const ext = path.extname(rawName).toLowerCase();
+      if (!ALLOWED_EXTS.has(ext)) {
+        throw new Error(`Rejected installer with unexpected extension: ${ext || '(none)'}`);
+      }
+      const filename = `update${ext}`;
       const tempPath = path.join(app.getPath('temp'), filename);
 
       const fileHandle = await fs.open(tempPath, 'w');
