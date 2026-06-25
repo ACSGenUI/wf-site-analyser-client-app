@@ -33,16 +33,8 @@ const CATEGORY_ICON: Record<ReleaseNoteCategory, ComponentType<LucideProps>> = {
   bugfix: Wrench,
 };
 
-const UPDATE_HOST = (() => {
-  try {
-    return new URL(
-      (window.api as typeof window.api & { getEnv?: () => Promise<{ UPDATE_SERVER_URL?: string }> })
-        ? '' // populated async — fall through to default
-        : ''
-    ).hostname;
-  } catch { return 'updates.example.com'; }
-})();
-// TODO(SA-202): populate from window.api.getEnv() on mount or share the constant from shared/config.ts
+// TODO(SA-202): populate ALLOWED_EXTERNAL_HOSTS dynamically from window.api.getEnv()
+// once the update-server-url plumbing is in place. For now the list is hardcoded.
 const ALLOWED_EXTERNAL_HOSTS = ['updates.example.com', 'docs.example.com'];
 
 function renderDescription(text: string): ReactNode[] {
