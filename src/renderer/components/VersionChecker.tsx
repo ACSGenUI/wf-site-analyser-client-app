@@ -196,7 +196,10 @@ export function VersionChecker(): ReactElement | null {
   }, []);
 
   const handleRetry = useCallback(() => {
-    handleInstall().catch(() => undefined);
+    handleInstall().catch((err: unknown) => {
+      console.error('[VersionChecker] unexpected error in handleRetry:', err);
+      setInstallStatus('error');
+    });
   }, [handleInstall]);
 
   if (checkState.kind === 'mandatory') {
