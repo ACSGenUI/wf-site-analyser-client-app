@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { createHash } from 'crypto';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -29,6 +30,7 @@ const httpsUrl = z
   .string()
   .url()
   .refine((u) => u.startsWith('https://'), { message: 'must use https://' });
+const sha256Hex = z.string().regex(/^[a-f0-9]{64}$/i);
 
 const releaseNoteSchema = z.object({
   title: z.string(),
@@ -44,6 +46,7 @@ const updateCheckResultSchema: z.ZodType<UpdateCheckResult> = z.object({
   minimumVersion: z.string().optional(),
   currentVersion: z.string().optional(),
   downloadUrl: httpsUrl.optional(),
+  sha256: sha256Hex.optional(),
   estimatedUpdateSeconds: z.number().optional(),
   publishedAt: z.string().optional(),
   releaseNotes: z.array(releaseNoteSchema).optional(),
@@ -192,6 +195,9 @@ export function registerIpcHandlers(): void {
 
     try {
       send(IPC_CHANNELS.UPDATE_STATUS, 'downloading');
+      if (!cached.sha256) {
+        throw new Error('Update manifest missing installer checksum');
+      }
 
       const res = await fetch(cached.downloadUrl, { signal: AbortSignal.timeout(10 * 60 * 1000) });
       if (!res.ok) throw new Error(`Download failed: HTTP ${res.status}`);
@@ -222,6 +228,12 @@ export function registerIpcHandlers(): void {
         }
       } finally {
         await fileHandle.close();
+      }
+
+      const fileBytes = await fs.readFile(tempPath);
+      const actualSha256 = createHash('sha256').update(fileBytes).digest('hex');
+      if (actualSha256.toLowerCase() !== cached.sha256.toLowerCase()) {
+        throw new Error('Installer integrity check failed');
       }
 
       send(IPC_CHANNELS.UPDATE_STATUS, 'installing');
