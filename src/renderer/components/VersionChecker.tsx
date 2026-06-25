@@ -80,7 +80,10 @@ export function VersionChecker(): ReactElement | null {
     const localVersionPromise = window.api
       .getAppVersion()
       .then((v) => v)
-      .catch(() => '');
+      .catch((err: unknown) => {
+        console.error('[VersionChecker] getAppVersion failed:', err);
+        return '';
+      });
 
     localVersionPromise.then((v) => {
       if (!cancelled && v) setCurrentVersion((prev) => prev || v);
