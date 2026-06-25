@@ -182,6 +182,16 @@ export function registerIpcHandlers(): void {
       return;
     }
 
+    // Wire electron-updater to the URL returned by the custom REST check.
+    // Without this the two update systems are disconnected and downloads fail.
+    const cached = await readCachedUpdateManifest();
+    if (!cached?.downloadUrl) {
+      installInFlight = false;
+      send(IPC_CHANNELS.UPDATE_STATUS, 'error');
+      return;
+    }
+    autoUpdater.setFeedURL({ provider: 'generic', url: cached.downloadUrl });
+
     // Reset listeners so retries don't accumulate handlers across invocations.
     autoUpdater.removeAllListeners('download-progress');
     autoUpdater.removeAllListeners('update-downloaded');
