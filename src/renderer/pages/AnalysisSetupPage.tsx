@@ -10,7 +10,7 @@ export function AnalysisSetupPage(): React.ReactElement {
       <h1 className="text-xl font-semibold">New Analysis</h1>
       <p className="text-neutral-400">
         Source:
-        {source}
+        {`Source: ${source}`}
       </p>
     </div>
   );
