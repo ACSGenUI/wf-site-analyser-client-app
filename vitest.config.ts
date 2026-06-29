@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: 'jsdom',
     include: [
       'src/renderer/components/*.test.{ts,tsx}',
       'src/renderer/__tests__/**/*.{ts,tsx}',
