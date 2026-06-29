@@ -5,7 +5,6 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   test: {
-    globals: true,
     include: [
       'src/renderer/components/*.test.{ts,tsx}',
       'src/renderer/__tests__/**/*.{ts,tsx}',
