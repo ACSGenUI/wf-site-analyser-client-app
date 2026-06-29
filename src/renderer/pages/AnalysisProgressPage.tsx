@@ -9,7 +9,7 @@ export function AnalysisProgressPage(): React.ReactElement {
       <h1 className="text-xl font-semibold">Analysis in Progress</h1>
       <p className="text-neutral-400">
         ID:
-        {id}
+        {`ID: ${id}`}
       </p>
     </div>
   );
