@@ -9,7 +9,7 @@ export function SettingsPage(): React.ReactElement {
       <h1 className="text-xl font-semibold">Settings</h1>
       <p className="text-neutral-400">
         Tab:
-        {tab ?? 'general'}
+        {`Tab: ${tab ?? 'general'}`}
       </p>
     </div>
   );
