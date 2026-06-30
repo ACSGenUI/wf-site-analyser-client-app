@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/analysis/FigmaInput.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { FigmaInput } from '@/features/analysis/tabs/FigmaInput';
 
 function renderFigma(onChange = vi.fn()) {

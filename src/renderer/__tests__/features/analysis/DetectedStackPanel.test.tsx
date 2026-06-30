@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/analysis/DetectedStackPanel.test.tsx
  */
 
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect } from 'vitest';
+
 import { DetectedStackPanel } from '@/features/analysis/DetectedStackPanel';
 
 const mockStack = [

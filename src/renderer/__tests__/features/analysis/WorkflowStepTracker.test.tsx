@@ -7,8 +7,9 @@
  * Test File: src/renderer/__tests__/features/analysis/WorkflowStepTracker.test.tsx
  */
 
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+
 import { WorkflowStepTracker } from '@/features/analysis/WorkflowStepTracker';
 
 type StepStatus = 'pending' | 'active' | 'completed' | 'error';
@@ -46,7 +47,9 @@ describe('SA-602 – Workflow Step Tracker', () => {
   it('TC-03: completed steps (Validate, Discover) display a check mark icon', () => {
     renderTracker();
     const validateStep = screen.getByTestId('step-validate');
-    expect(validateStep.querySelector('[data-icon="check"]') ?? validateStep.querySelector('.check')).not.toBeNull();
+    expect(
+      validateStep.querySelector('[data-icon="check"]') ?? validateStep.querySelector('.check'),
+    ).not.toBeNull();
   });
 
   // TC-04: Pending steps are visually de-emphasised
@@ -65,16 +68,16 @@ describe('SA-602 – Workflow Step Tracker', () => {
     const errorStep = screen.getByTestId('step-templates');
     expect(
       errorStep.querySelector('[data-icon="x"]') ??
-      errorStep.querySelector('.error') ??
-      screen.getByRole('img', { name: /error/i })
+        errorStep.querySelector('.error') ??
+        screen.getByRole('img', { name: /error/i }),
     ).not.toBeNull();
   });
 
   // TC-06: Progress line connects completed steps
   it('TC-06: a connecting line exists between step indicators', () => {
     const { container } = renderTracker();
-    const connector = container.querySelector('[class*="connector"]') ??
-      container.querySelector('[class*="line"]');
+    const connector =
+      container.querySelector('[class*="connector"]') ?? container.querySelector('[class*="line"]');
     expect(connector).not.toBeNull();
   });
 });

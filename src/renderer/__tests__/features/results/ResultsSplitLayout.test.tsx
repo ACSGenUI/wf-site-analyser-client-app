@@ -7,9 +7,10 @@
  * Test File: src/renderer/__tests__/features/results/ResultsSplitLayout.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ResultsWorkspace } from '@/features/results/ResultsWorkspace';
 
 const ANALYSIS_ID = 'analysis-123';
@@ -47,8 +48,8 @@ describe('SA-701 – Results Split Layout', () => {
   // TC-03: Split layout uses flex or grid
   it('TC-03: root layout uses a flex or grid container class', () => {
     const { container } = renderResults();
-    const layout = container.querySelector('[class*="flex"]') ??
-      container.querySelector('[class*="grid"]');
+    const layout =
+      container.querySelector('[class*="flex"]') ?? container.querySelector('[class*="grid"]');
     expect(layout).not.toBeNull();
   });
 

@@ -8,9 +8,10 @@
  * Test File: src/renderer/__tests__/features/analysis/AIAssistantSetupGuide.test.tsx
  */
 
-import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+
 import { AIAssistantDrawer } from '@/features/analysis/AIAssistantDrawer';
 
 function renderDrawer(props: { isOpen?: boolean; activeTab?: string; onClose?: () => void } = {}) {
@@ -43,9 +44,7 @@ describe('SA-508 – AI Assistant Setup Guide', () => {
     const { rerender } = renderDrawer({ activeTab: 'url' });
     const urlTipText = screen.getByTestId('pro-tip-card').textContent;
 
-    rerender(
-      <AIAssistantDrawer isOpen={true} activeTab="csv" onClose={vi.fn()} />,
-    );
+    rerender(<AIAssistantDrawer isOpen activeTab="csv" onClose={vi.fn()} />);
     const csvTipText = screen.getByTestId('pro-tip-card').textContent;
     expect(csvTipText).not.toBe(urlTipText);
   });

@@ -49,7 +49,12 @@ export function Table({
             </tr>
           ) : (
             rows.map((row, rowIndex) => (
-              <tr key={rowIndex} className="hover:bg-gray-50 transition-colors">
+              // Generic Table API has no stable row id; index is acceptable here
+              <tr
+                // eslint-disable-next-line react/no-array-index-key
+                key={rowIndex}
+                className="hover:bg-gray-50 transition-colors"
+              >
                 {columns.map((col) => (
                   <td key={col.key} className="px-4 py-3 text-gray-700">
                     {row[col.key]}

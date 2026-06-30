@@ -1,0 +1,47 @@
+#!/usr/bin/env sh
+# Husky pre-commit orchestrator.
+#
+# Hooks live in .husky/hooks/. Enable or disable individually:
+#
+#   1. Environment variable (one-off):
+#        HUSKY_HOOK_TOKEN_GOVERNANCE=0 git commit
+#        HUSKY_HOOK_FALLOW_AUDIT=0 git commit
+#
+#   2. Local overrides file (persistent, gitignored):
+#        cp .husky/hooks.local.example .husky/hooks.local
+#        # edit hooks.local — comment out lines to disable hooks
+#
+# Run a hook manually:
+#   sh .husky/hooks/token-governance.sh
+#   sh .husky/hooks/fallow-audit.sh
+
+HOOK_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/hooks" && pwd)"
+
+# Optional local overrides (gitignored)
+if [ -f "$(dirname -- "$0")/hooks.local" ]; then
+  # shellcheck disable=SC1090
+  . "$(dirname -- "$0")/hooks.local"
+fi
+
+run_hook() {
+  env_var_name=$1
+  script_name=$2
+
+  # Default: enabled (1). Set env var to 0 to skip.
+  enabled=$(eval "printf '%s' \"\${${env_var_name}:-1}\"")
+  if [ "$enabled" = "0" ]; then
+    return 0
+  fi
+
+  script_path="$HOOK_DIR/$script_name"
+  if [ ! -f "$script_path" ]; then
+    echo "pre-commit: hook not found: $script_path" >&2
+    exit 1
+  fi
+
+  sh "$script_path" || exit 1
+}
+
+run_hook HUSKY_HOOK_TOKEN_GOVERNANCE token-governance.sh
+run_hook HUSKY_HOOK_FALLOW_AUDIT fallow-audit.sh
+npx lint-staged

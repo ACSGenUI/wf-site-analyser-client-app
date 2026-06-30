@@ -1,0 +1,238 @@
+{
+  "document": {
+    "id": "0:0",
+    "name": "Document",
+    "type": "DOCUMENT",
+    "children": [
+      {
+        "id": "1:0",
+        "name": "Site Analyser",
+        "type": "CANVAS",
+        "children": [
+          {
+            "id": "2:0",
+            "name": "Colors",
+            "type": "FRAME",
+            "fills": [],
+            "children": [
+              {
+                "id": "2:1",
+                "name": "Primary/Default",
+                "type": "RECTANGLE",
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "color": { "r": 0.0098, "g": 0.396, "b": 0.863 },
+                    "opacity": 1
+                  }
+                ],
+                "children": []
+              },
+              {
+                "id": "2:2",
+                "name": "Neutral/900",
+                "type": "RECTANGLE",
+                "fills": [
+                  { "type": "SOLID", "color": { "r": 0.098, "g": 0.11, "b": 0.114 }, "opacity": 1 }
+                ],
+                "children": []
+              },
+              {
+                "id": "2:3",
+                "name": "Neutral/50",
+                "type": "RECTANGLE",
+                "fills": [
+                  { "type": "SOLID", "color": { "r": 0.973, "g": 0.976, "b": 0.98 }, "opacity": 1 }
+                ],
+                "children": []
+              },
+              {
+                "id": "2:4",
+                "name": "Success/Default",
+                "type": "RECTANGLE",
+                "fills": [
+                  { "type": "SOLID", "color": { "r": 0.063, "g": 0.725, "b": 0.506 }, "opacity": 1 }
+                ],
+                "children": []
+              },
+              {
+                "id": "2:5",
+                "name": "Warning/Default",
+                "type": "RECTANGLE",
+                "fills": [
+                  { "type": "SOLID", "color": { "r": 0.961, "g": 0.62, "b": 0.043 }, "opacity": 1 }
+                ],
+                "children": []
+              },
+              {
+                "id": "2:6",
+                "name": "Error/Default",
+                "type": "RECTANGLE",
+                "fills": [
+                  { "type": "SOLID", "color": { "r": 0.729, "g": 0.102, "b": 0.102 }, "opacity": 1 }
+                ],
+                "children": []
+              },
+              {
+                "id": "2:7",
+                "name": "Info/Default",
+                "type": "RECTANGLE",
+                "fills": [
+                  { "type": "SOLID", "color": { "r": 0.055, "g": 0.647, "b": 0.914 }, "opacity": 1 }
+                ],
+                "children": []
+              },
+              {
+                "id": "2:8",
+                "name": "White/80",
+                "type": "RECTANGLE",
+                "fills": [
+                  { "type": "SOLID", "color": { "r": 1.0, "g": 1.0, "b": 1.0 }, "opacity": 0.8 }
+                ],
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "3:0",
+            "name": "Typography",
+            "type": "FRAME",
+            "fills": [],
+            "children": [
+              {
+                "id": "3:1",
+                "name": "Heading/H1",
+                "type": "TEXT",
+                "style": { "fontFamily": "Inter", "fontSize": 48, "fontWeight": 400 },
+                "fills": [],
+                "children": []
+              },
+              {
+                "id": "3:2",
+                "name": "Heading/H2",
+                "type": "TEXT",
+                "style": { "fontFamily": "Inter", "fontSize": 36, "fontWeight": 400 },
+                "fills": [],
+                "children": []
+              },
+              {
+                "id": "3:3",
+                "name": "Heading/H3",
+                "type": "TEXT",
+                "style": { "fontFamily": "Inter", "fontSize": 20, "fontWeight": 700 },
+                "fills": [],
+                "children": []
+              },
+              {
+                "id": "3:4",
+                "name": "Body/Default",
+                "type": "TEXT",
+                "style": { "fontFamily": "Inter", "fontSize": 14, "fontWeight": 400 },
+                "fills": [],
+                "children": []
+              },
+              {
+                "id": "3:5",
+                "name": "Body/Caption",
+                "type": "TEXT",
+                "style": { "fontFamily": "Inter", "fontSize": 12, "fontWeight": 700 },
+                "fills": [],
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "4:0",
+            "name": "Spacing/Card",
+            "type": "FRAME",
+            "layoutMode": "VERTICAL",
+            "paddingTop": 16,
+            "paddingBottom": 16,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "itemSpacing": 12,
+            "fills": [],
+            "children": []
+          },
+          {
+            "id": "4:1",
+            "name": "Spacing/Compact",
+            "type": "FRAME",
+            "layoutMode": "HORIZONTAL",
+            "paddingTop": 8,
+            "paddingBottom": 8,
+            "paddingLeft": 8,
+            "paddingRight": 8,
+            "itemSpacing": 4,
+            "fills": [],
+            "children": []
+          },
+          {
+            "id": "5:0",
+            "name": "Radius/Medium",
+            "type": "RECTANGLE",
+            "cornerRadius": 8,
+            "fills": [],
+            "children": []
+          },
+          {
+            "id": "5:1",
+            "name": "Radius/Small",
+            "type": "RECTANGLE",
+            "cornerRadius": 4,
+            "fills": [],
+            "children": []
+          },
+          {
+            "id": "5:2",
+            "name": "Radius/Large",
+            "type": "RECTANGLE",
+            "cornerRadius": 12,
+            "fills": [],
+            "children": []
+          },
+          {
+            "id": "5:3",
+            "name": "Radius/Full",
+            "type": "RECTANGLE",
+            "cornerRadius": 9999,
+            "fills": [],
+            "children": []
+          },
+          {
+            "id": "6:0",
+            "name": "Shadow/Medium",
+            "type": "RECTANGLE",
+            "fills": [],
+            "effects": [
+              {
+                "type": "DROP_SHADOW",
+                "color": { "r": 0, "g": 0, "b": 0, "a": 0.1 },
+                "offset": { "x": 0, "y": 10 },
+                "radius": 15,
+                "visible": true
+              }
+            ],
+            "children": []
+          },
+          {
+            "id": "6:1",
+            "name": "Shadow/Subtle",
+            "type": "RECTANGLE",
+            "fills": [],
+            "effects": [
+              {
+                "type": "DROP_SHADOW",
+                "color": { "r": 0, "g": 0, "b": 0, "a": 0.05 },
+                "offset": { "x": 0, "y": 1 },
+                "radius": 2,
+                "visible": true
+              }
+            ],
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}
