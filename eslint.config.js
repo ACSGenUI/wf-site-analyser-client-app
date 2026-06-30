@@ -63,6 +63,8 @@ export default [
       }],
       // Enforce no any (SA-106 will tighten further)
       '@typescript-eslint/no-explicit-any': 'error',
+      // Treat _-prefixed parameters as intentionally unused
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       // TypeScript handles undefined checking
       'no-undef': 'off',
       'react/jsx-filename-extension': 'off',
@@ -110,6 +112,17 @@ export default [
       'no-promise-executor-return': 'off',
       'no-restricted-syntax': 'off',
       'no-await-in-loop': 'off',
+    },
+  },
+
+  // Node.js build/packaging scripts — relax rules that don't apply here
+  {
+    files: ['scripts/**/*.mjs'],
+    rules: {
+      'no-bitwise': 'off',
+      'no-plusplus': 'off',
+      'no-restricted-syntax': 'off',
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
   },
 ];
