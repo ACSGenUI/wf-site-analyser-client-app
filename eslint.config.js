@@ -17,7 +17,15 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 export default [
   // Global ignores
   {
-    ignores: ['node_modules/**', 'out/**', 'dist/**', '*.config.{ts,js,mjs,cjs}', 'src/renderer/styles/tokens.js'],
+    ignores: [
+      'node_modules/**',
+      'out/**',
+      'dist/**',
+      '*.config.{ts,js,mjs,cjs}',
+      'src/renderer/styles/tokens.js',
+      '.claude/**',
+      'scripts/**',
+    ],
   },
 
   // Base JS rules
@@ -47,6 +55,12 @@ export default [
       'react/react-in-jsx-scope': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      // Allow _-prefixed identifiers to signal intentional non-use
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      }],
       // Enforce no any (SA-106 will tighten further)
       '@typescript-eslint/no-explicit-any': 'error',
       // Treat _-prefixed parameters as intentionally unused
@@ -65,6 +79,8 @@ export default [
       'no-confusing-arrow': 'off',
       'object-curly-newline': 'off',
       'operator-linebreak': 'off',
+      'react/jsx-curly-newline': 'off',
+      'react/jsx-one-expression-per-line': 'off',
       // Structured import ordering with blank-line separators (SA-106)
       'import/order': [
         'error',
