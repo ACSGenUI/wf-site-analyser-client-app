@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 import { tokens } from './src/renderer/components/theme';
 
 export default {
-  content: ['./src/renderer/**/*.{ts,tsx,html}'],
+  content: ['./src/renderer/**/*.{ts,tsx,html}', './src/stories/**/*.{ts,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
