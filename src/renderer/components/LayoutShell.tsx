@@ -15,6 +15,10 @@ export function LayoutShell(): React.ReactElement {
       try {
         const existing = await window.api.storeGet('sessionId');
         if (cancelled) return;
+    async function initSession() {
+      try {
+        const existing = await window.api.storeGet('sessionId');
+        if (cancelled) return;
         if (typeof existing === 'string' && existing) {
           initGuestSession(existing);
         } else {
