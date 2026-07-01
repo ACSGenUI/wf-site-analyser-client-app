@@ -14,14 +14,13 @@
  */
 
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { deflateSync } from 'node:zlib';
+import { crc32 as deflateSync } from 'node:zlib';
 
 const BUILD_DIR = 'build';
 const PNG_FILE = `${BUILD_DIR}/icons/icon.png`;
 const ICO_FILE = `${BUILD_DIR}/icons/icon.ico`;
 
 if (existsSync(PNG_FILE) && existsSync(ICO_FILE)) {
-  console.log('Icon files already exist — skipping placeholder generation.');
   process.exit(0);
 }
 
@@ -29,9 +28,9 @@ mkdirSync(BUILD_DIR, { recursive: true });
 
 // ── CRC32 (required by the PNG chunk format) ──────────────────────────────────
 const crcTable = new Uint32Array(256);
-for (let n = 0; n < 256; n++) {
+for (let n = 0; n < 256; n += 1) {
   let c = n;
-  for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+  for (let k = 0; k < 8; k += 1) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
   crcTable[n] = c;
 }
 function crc32(buf) {
@@ -58,7 +57,7 @@ function makeSolidPng(size, [r, g, b]) {
   // Each scanline: filter byte (0 = None) followed by SIZE × [R, G, B, A]
   const row = Buffer.alloc(1 + size * 4); // alloc (zero-filled) avoids uninitialised bytes
   row[0] = 0;
-  for (let x = 0; x < size; x++) {
+  for (let x = 0; x < size; x += 1) {
     row[1 + x * 4] = r;
     row[2 + x * 4] = g;
     row[3 + x * 4] = b;
@@ -112,13 +111,9 @@ const COLOR = [0x14, 0x73, 0xe6];
 
 if (!existsSync(PNG_FILE)) {
   writeFileSync(PNG_FILE, makeSolidPng(512, COLOR));
-  console.log(`Generated ${PNG_FILE} (512×512 RGBA placeholder)`);
 }
 
 if (!existsSync(ICO_FILE)) {
   // 256×256 is the minimum size app-builder accepts for ICO conversion.
   writeFileSync(ICO_FILE, makeIco(makeSolidPng(256, COLOR)));
-  console.log(`Generated ${ICO_FILE} (256×256 RGBA PNG-in-ICO placeholder)`);
 }
-
-console.log('Replace icon.png and icon.ico with real artwork before release.');
