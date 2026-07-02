@@ -23,8 +23,8 @@ export default [
       'dist/**',
       '*.config.{ts,js,mjs,cjs}',
       'src/renderer/styles/tokens.js',
-      '.claude/**',
       'scripts/**',
+      '.claude/**',
     ],
   },
 
@@ -67,6 +67,8 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       // TypeScript handles undefined checking
       'no-undef': 'off',
+      // Allow console.warn/error for legitimate error reporting; block console.log in renderer.
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       'react/jsx-filename-extension': 'off',
       'import/extensions': 'off',
       'import/no-unresolved': 'off',
@@ -103,6 +105,16 @@ export default [
     },
   },
 
+  // Main process: electron/msw are devDependencies by Electron convention.
+  // Console is the standard logging mechanism in the main process.
+  {
+    files: ['src/main/**/*.ts'],
+    rules: {
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+      'no-console': 'off',
+    },
+  },
+
   // Scaffold test files: components/hooks they reference don't exist yet
   {
     files: ['src/renderer/__tests__/**/*.{ts,tsx}'],
@@ -112,6 +124,7 @@ export default [
       'no-promise-executor-return': 'off',
       'no-restricted-syntax': 'off',
       'no-await-in-loop': 'off',
+      'no-plusplus': 'off',
     },
   },
 
