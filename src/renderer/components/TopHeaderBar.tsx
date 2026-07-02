@@ -1,15 +1,16 @@
+import { Bell, User, RefreshCw } from 'lucide-react';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Bell, User, RefreshCw } from 'lucide-react';
-import { useSessionStore } from '../store/sessionStore';
+
 import { ROUTES } from '../routes';
+import { useSessionStore } from '../store/sessionStore';
 
 const ROUTE_LABELS: Record<string, string> = {
-  [ROUTES.DASHBOARD]:     'Dashboard',
-  [ROUTES.ANALYSIS_NEW]:  'New Analysis',
-  [ROUTES.PROJECTS]:      'Projects',
+  [ROUTES.DASHBOARD]: 'Dashboard',
+  [ROUTES.ANALYSIS_NEW]: 'New Analysis',
+  [ROUTES.PROJECTS]: 'Projects',
   [ROUTES.SETTINGS_ROOT]: 'Settings',
-  [ROUTES.HELP]:          'Help',
+  [ROUTES.HELP]: 'Help',
 };
 
 function getBreadcrumb(pathname: string): string {
@@ -36,9 +37,7 @@ export function TopHeaderBar(): React.ReactElement {
         </span>
       )}
 
-      {breadcrumb && (
-        <span className="text-xs text-gray-400">{breadcrumb}</span>
-      )}
+      {breadcrumb && <span className="text-xs text-gray-400">{breadcrumb}</span>}
 
       <div className="ml-auto flex items-center gap-3">
         <span className="text-sm font-semibold text-blue-600">Project Alpha</span>
