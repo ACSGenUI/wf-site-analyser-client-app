@@ -8,12 +8,20 @@
  * Test File: src/renderer/__tests__/features/dashboard/DataSourceCards.test.tsx
  */
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, it, expect, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DataSourceCards } from '@/features/dashboard/DataSourceCards';
+import { ROUTES } from '@/routes';
+
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  return { ...actual, useNavigate: () => mockNavigate };
+});
 
 function renderCards() {
   return render(
@@ -24,69 +32,53 @@ function renderCards() {
 }
 
 describe('SA-405 – Data Source Selection Cards', () => {
+  beforeEach(() => mockNavigate.mockClear());
+
   // TC-01: All three cards render
   it('TC-01: renders URL, CSV Upload, and Figma cards', () => {
     renderCards();
-    expect(screen.getByText(/url/i)).toBeInTheDocument();
-    expect(screen.getByText(/csv/i)).toBeInTheDocument();
-    expect(screen.getByText(/figma/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /website url/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /csv upload/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /figma link/i })).toBeInTheDocument();
   });
 
   // TC-02: URL card navigates with ?source=url
   it('TC-02: clicking URL card navigates to /analysis/new?source=url', async () => {
-    const mockNavigate = vi.fn();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-      return { ...actual, useNavigate: () => mockNavigate };
-    });
+    const user = userEvent.setup();
     renderCards();
-    await userEvent.click(screen.getByRole('button', { name: /url/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/analysis/new?source=url');
+    await user.click(screen.getByRole('button', { name: /website url/i }));
+    expect(mockNavigate).toHaveBeenCalledWith(`${ROUTES.ANALYSIS_NEW}?source=url`);
   });
 
   // TC-03: CSV card navigates with ?source=csv
   it('TC-03: clicking CSV card navigates to /analysis/new?source=csv', async () => {
-    const mockNavigate = vi.fn();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-      return { ...actual, useNavigate: () => mockNavigate };
-    });
+    const user = userEvent.setup();
     renderCards();
-    await userEvent.click(screen.getByRole('button', { name: /csv/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/analysis/new?source=csv');
+    await user.click(screen.getByRole('button', { name: /csv/i }));
+    expect(mockNavigate).toHaveBeenCalledWith(`${ROUTES.ANALYSIS_NEW}?source=csv`);
   });
 
   // TC-04: Figma card navigates with ?source=figma
   it('TC-04: clicking Figma card navigates to /analysis/new?source=figma', async () => {
-    const mockNavigate = vi.fn();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-      return { ...actual, useNavigate: () => mockNavigate };
-    });
+    const user = userEvent.setup();
     renderCards();
-    await userEvent.click(screen.getByRole('button', { name: /figma/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/analysis/new?source=figma');
+    await user.click(screen.getByRole('button', { name: /figma/i }));
+    expect(mockNavigate).toHaveBeenCalledWith(`${ROUTES.ANALYSIS_NEW}?source=figma`);
   });
 
   // TC-05: Cards are keyboard-focusable and activatable
   it('TC-05: cards are accessible via keyboard (Enter activates the card)', async () => {
-    const mockNavigate = vi.fn();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-      return { ...actual, useNavigate: () => mockNavigate };
-    });
+    const user = userEvent.setup();
     renderCards();
-    const urlCard = screen.getByRole('button', { name: /url/i });
-    urlCard.focus();
-    await userEvent.keyboard('{Enter}');
+    screen.getByRole('button', { name: /website url/i }).focus();
+    await user.keyboard('{Enter}');
     expect(mockNavigate).toHaveBeenCalled();
   });
 
-  // TC-06: Cards have descriptive icons
+  // TC-06: Cards contain icon SVG elements
   it('TC-06: each card renders an icon element', () => {
-    renderCards();
-    // Each card should render an svg icon
-    const icons = screen.getAllByRole('img', { hidden: true });
-    expect(icons.length).toBeGreaterThanOrEqual(3);
+    const { container } = renderCards();
+    // Icons are decorative (aria-hidden) so query by element type
+    expect(container.querySelectorAll('svg').length).toBeGreaterThanOrEqual(3);
   });
 });

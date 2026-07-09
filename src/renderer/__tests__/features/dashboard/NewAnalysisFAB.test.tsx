@@ -10,9 +10,17 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, it, expect, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { NewAnalysisFAB } from '@/features/dashboard/NewAnalysisFAB';
+import { ROUTES } from '@/routes';
+
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  return { ...actual, useNavigate: () => mockNavigate };
+});
 
 function renderFAB() {
   return render(
@@ -23,6 +31,8 @@ function renderFAB() {
 }
 
 describe('SA-406 – New Analysis FAB', () => {
+  beforeEach(() => mockNavigate.mockClear());
+
   // TC-01: FAB renders on dashboard
   it('TC-01: FAB button is visible in the DOM', () => {
     renderFAB();
@@ -31,41 +41,31 @@ describe('SA-406 – New Analysis FAB', () => {
 
   // TC-02: FAB navigates to /analysis/new
   it('TC-02: clicking the FAB navigates to /analysis/new', async () => {
-    const mockNavigate = vi.fn();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-      return { ...actual, useNavigate: () => mockNavigate };
-    });
+    const user = userEvent.setup();
     renderFAB();
-    await userEvent.click(screen.getByRole('button', { name: /new analysis/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/analysis/new');
+    await user.click(screen.getByRole('button', { name: /new analysis/i }));
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.ANALYSIS_NEW);
   });
 
   // TC-03: FAB has fixed positioning classes
   it('TC-03: FAB has fixed or sticky Tailwind positioning class', () => {
     renderFAB();
-    const fab = screen.getByRole('button', { name: /new analysis/i });
-    expect(fab.className).toMatch(/fixed|sticky/);
+    expect(screen.getByRole('button', { name: /new analysis/i }).className).toMatch(/fixed|sticky/);
   });
 
-  // TC-04: FAB uses primary blue fill
-  it('TC-04: FAB button has bg-blue-600 Tailwind class', () => {
+  // TC-04: FAB uses primary design token fill
+  it('TC-04: FAB button has bg-primary Tailwind class', () => {
     renderFAB();
-    const fab = screen.getByRole('button', { name: /new analysis/i });
-    expect(fab.className).toMatch(/bg-blue-600/);
+    expect(screen.getByRole('button', { name: /new analysis/i }).className).toMatch(/bg-primary\b/);
   });
 
   // TC-05: FAB is keyboard-accessible
   it('TC-05: FAB is reachable via Tab key and activatable via Enter', async () => {
-    const mockNavigate = vi.fn();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-      return { ...actual, useNavigate: () => mockNavigate };
-    });
+    const user = userEvent.setup();
     renderFAB();
-    await userEvent.tab();
+    await user.tab();
     expect(document.activeElement).toBe(screen.getByRole('button', { name: /new analysis/i }));
-    await userEvent.keyboard('{Enter}');
-    expect(mockNavigate).toHaveBeenCalled();
+    await user.keyboard('{Enter}');
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.ANALYSIS_NEW);
   });
 });

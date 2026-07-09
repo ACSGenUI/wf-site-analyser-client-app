@@ -21,7 +21,10 @@ export default defineConfig({
       '**/*.spec.ts',
       'src/renderer/__tests__/setup.ts',
       'src/renderer/__tests__/auth/**',
-      'src/renderer/__tests__/features/**',
+      'src/renderer/__tests__/features/results/**',
+      'src/renderer/__tests__/features/settings/**',
+      'src/renderer/__tests__/features/analysis/**',
+      'src/renderer/__tests__/features/chat/**',
       'src/renderer/__tests__/lifecycle/**',
     ],
     coverage: {

@@ -185,6 +185,13 @@ export interface PingResult {
   timestamp: number;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  createdAt: string;
+  status: 'completed' | 'running' | 'failed' | 'draft';
+}
+
 export interface AppEnv {
   NODE_ENV: string;
   APP_STAGE: string;
