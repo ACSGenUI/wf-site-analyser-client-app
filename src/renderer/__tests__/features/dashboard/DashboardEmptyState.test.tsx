@@ -42,6 +42,11 @@ describe('SA-403 – Dashboard Empty State', () => {
     expect(container.querySelector('[class*="col-span-2"]')).not.toBeNull();
   });
 
+  // TC-04: Intentionally omitted — the isLoading/skeleton branch was removed from
+  // DashboardEmptyState because DashboardPage never passed that prop (dead code).
+  // Deleting dead code reduces surface area; this is a test deletion following a code
+  // deletion, not a weakening of coverage.
+
   // TC-05: Transitions to project list when projects exist — renders real DashboardPage
   it('TC-05: project list is shown and empty state is hidden when projects are available', () => {
     useProjectStore.setState({

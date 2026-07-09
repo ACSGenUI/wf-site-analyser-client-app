@@ -43,9 +43,8 @@ export function DataSourceCards(): React.ReactElement {
         <button
           key={id}
           type="button"
-          type="button"
           onClick={() => navigate(`${ROUTES.ANALYSIS_NEW}?source=${id}`)}
-          className="flex flex-col gap-3 rounded-2xl bg-white p-6 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="flex flex-col gap-3 rounded-2xl bg-white p-6 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           <span
             className={`flex h-12 w-12 items-center justify-center rounded-xl ${bg} ${iconColor}`}
@@ -54,7 +53,7 @@ export function DataSourceCards(): React.ReactElement {
           </span>
           <span className="font-semibold text-gray-900">{label}</span>
           <span className="text-sm text-gray-500">{description}</span>
-          <span className="mt-auto text-xs font-semibold uppercase tracking-widest text-blue-700">
+          <span className="mt-auto text-xs font-semibold uppercase tracking-widest text-primary-700">
             {cta} ›
           </span>
         </button>

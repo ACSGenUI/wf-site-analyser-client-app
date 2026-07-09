@@ -46,7 +46,7 @@ describe('SA-405 – Data Source Selection Cards', () => {
   it('TC-02: clicking URL card navigates to /analysis/new?source=url', async () => {
     const user = userEvent.setup();
     renderCards();
-    await user.click(screen.getByRole('button', { name: /url/i }));
+    await user.click(screen.getByRole('button', { name: /website url/i }));
     expect(mockNavigate).toHaveBeenCalledWith(`${ROUTES.ANALYSIS_NEW}?source=url`);
   });
 
@@ -70,7 +70,7 @@ describe('SA-405 – Data Source Selection Cards', () => {
   it('TC-05: cards are accessible via keyboard (Enter activates the card)', async () => {
     const user = userEvent.setup();
     renderCards();
-    screen.getByRole('button', { name: /url/i }).focus();
+    screen.getByRole('button', { name: /website url/i }).focus();
     await user.keyboard('{Enter}');
     expect(mockNavigate).toHaveBeenCalled();
   });

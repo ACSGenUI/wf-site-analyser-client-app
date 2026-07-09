@@ -53,10 +53,10 @@ describe('SA-406 – New Analysis FAB', () => {
     expect(screen.getByRole('button', { name: /new analysis/i }).className).toMatch(/fixed|sticky/);
   });
 
-  // TC-04: FAB uses primary blue fill
-  it('TC-04: FAB button has bg-blue-600 Tailwind class', () => {
+  // TC-04: FAB uses primary design token fill
+  it('TC-04: FAB button has bg-primary Tailwind class', () => {
     renderFAB();
-    expect(screen.getByRole('button', { name: /new analysis/i }).className).toMatch(/bg-blue-600/);
+    expect(screen.getByRole('button', { name: /new analysis/i }).className).toMatch(/bg-primary\b/);
   });
 
   // TC-05: FAB is keyboard-accessible

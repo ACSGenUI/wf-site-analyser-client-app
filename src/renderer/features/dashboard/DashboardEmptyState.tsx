@@ -39,7 +39,7 @@ export function DashboardEmptyState({ onCtaClick }: Props): React.ReactElement {
           <button
             type="button"
             onClick={onCtaClick}
-            className="mt-8 inline-flex w-fit items-center gap-3 rounded-lg bg-gradient-to-r from-wf-brand-primary to-wf-brand-primary-light px-8 py-4 text-lg font-semibold text-white shadow-md transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wf-brand-primary"
+            className="mt-8 inline-flex w-fit items-center gap-3 rounded-lg bg-gradient-to-r from-primary-dark to-primary px-8 py-4 text-lg font-semibold text-white shadow-md transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             Launch AI Agent
             <Zap aria-hidden="true" className="h-5 w-5" />
