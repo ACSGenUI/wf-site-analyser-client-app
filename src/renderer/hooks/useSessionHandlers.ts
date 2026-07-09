@@ -1,6 +1,16 @@
-import { useSessionStore } from '../store/sessionStore';
+import { useSessionStore, type SessionProfile } from '../store/sessionStore';
 
-export function useSessionHandlers() {
+interface SessionHandlers {
+  mode: 'guest' | 'authenticated';
+  userId: string | null;
+  userIdSnippet: string | null;
+  profile: SessionProfile | null;
+  syncStatus: 'synced' | 'syncing' | 'offline' | 'error' | null;
+  handleSignOut: () => void;
+  handleSwitchAccount: () => void;
+}
+
+export function useSessionHandlers(): SessionHandlers {
   const { mode, userId, profile, syncStatus } = useSessionStore();
   const userIdSnippet = userId ? userId.slice(0, 8) : null;
 

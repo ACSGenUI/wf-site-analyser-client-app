@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { HashRouter, useRoutes } from 'react-router-dom';
 
+import { VersionChecker } from '@/components/VersionChecker';
+
 import { routes } from './router';
 import { useSessionStore } from './store/sessionStore';
 
@@ -31,9 +33,11 @@ export function App(): React.ReactElement {
 
 // Default export: self-contained app with its own HashRouter — used by the renderer entry point
 // and by tests that render App directly without providing a router context.
+// VersionChecker runs alongside the routes (it renders a modal/toast, not a route).
 function AppWithRouter(): React.ReactElement {
   return (
     <HashRouter>
+      <VersionChecker />
       <App />
     </HashRouter>
   );
