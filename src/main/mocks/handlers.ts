@@ -10,8 +10,8 @@ import type { UpdateCheckResult } from '../../shared/types';
 const SAMPLE_UPDATE_RESPONSE: UpdateCheckResult = {
   latestVersion: '3.0.0',
   minimumVersion: '0.1.0',
-  mandatory: true,
-  updateAvailable: true,
+  mandatory: false,
+  updateAvailable: false,
   currentVersion: '0.1.0',
   downloadUrl:
     'https://updates.example.com/site-analyser/2.4.0/Site-Analyser-2.4.0-darwin-universal.zip',
