@@ -12,7 +12,7 @@ export function NewAnalysisFAB(): React.ReactElement {
       type="button"
       aria-label="New Analysis"
       onClick={() => navigate(ROUTES.ANALYSIS_NEW)}
-      className="fixed bottom-8 right-8 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-xl transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+      className="fixed bottom-8 right-8 flex h-14 w-14 items-center justify-center rounded-full bg-wf-brand-primary text-white shadow-xl transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wf-brand-primary"
     >
       <Plus aria-hidden="true" className="h-6 w-6" />
     </button>
