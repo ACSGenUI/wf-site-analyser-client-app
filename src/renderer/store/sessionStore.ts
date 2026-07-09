@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface SessionProfile {
+export interface SessionProfile {
   name: string;
   email: string;
   org: string;
@@ -22,5 +22,7 @@ export const useSessionStore = create<SessionState>((set) => ({
   createdAt: null,
   syncStatus: null,
   profile: null,
-  initGuestSession: (userId: string) => set({ mode: 'guest', userId, createdAt: new Date() }),
+  initGuestSession: (userId: string) => {
+    set({ mode: 'guest', userId, createdAt: new Date() });
+  },
 }));
