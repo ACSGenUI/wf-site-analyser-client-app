@@ -43,7 +43,7 @@ export function DataSourceCards(): React.ReactElement {
         <button
           key={id}
           type="button"
-          aria-label={label}
+          type="button"
           onClick={() => navigate(`${ROUTES.ANALYSIS_NEW}?source=${id}`)}
           className="flex flex-col gap-3 rounded-2xl bg-white p-6 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
