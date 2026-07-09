@@ -7,7 +7,7 @@ export interface SessionProfile {
   avatarUrl?: string;
 }
 
-export interface SessionState {
+interface SessionState {
   mode: 'guest' | 'authenticated';
   userId: string | null;
   createdAt: Date | null;

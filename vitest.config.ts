@@ -7,7 +7,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['src/renderer/__tests__/setup.ts'],
+    setupFiles: ['src/renderer/__tests__/setup.ts', 'src/renderer/__tests__/setup-matchers.ts'],
     include: [
       'src/renderer/__tests__/**/*.{ts,tsx}',
       'src/renderer/components/**/*.test.{ts,tsx}',
@@ -20,6 +20,7 @@ export default defineConfig({
       'out/**',
       '**/*.spec.ts',
       'src/renderer/__tests__/setup.ts',
+      'src/renderer/__tests__/setup-matchers.ts',
       'src/renderer/__tests__/auth/**',
       'src/renderer/__tests__/features/**',
       'src/renderer/__tests__/lifecycle/**',

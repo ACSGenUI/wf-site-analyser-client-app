@@ -1,6 +1,6 @@
 import { spawn } from 'child_process';
 import { createHash } from 'crypto';
-import { promises as fs } from 'fs';
+import { existsSync, promises as fs, readFileSync, statSync, writeFileSync } from 'fs';
 import path from 'path';
 
 import { ipcMain, app, shell, type IpcMainInvokeEvent } from 'electron';
@@ -106,6 +106,28 @@ async function writeCachedUpdateManifest(result: UpdateCheckResult): Promise<voi
 }
 
 let installInFlight = false;
+
+// ---------------------------------------------------------------------------
+// Local key/value store — a small JSON file in userData. Backs the anonymous
+// session id, the renderer store:* channels, and storage-usage reporting.
+// ---------------------------------------------------------------------------
+function getStorePath(): string {
+  return path.join(app.getPath('userData'), 'app-store.json');
+}
+
+function readStore(): Record<string, unknown> {
+  const p = getStorePath();
+  if (!existsSync(p)) return {};
+  try {
+    return JSON.parse(readFileSync(p, 'utf8')) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
+function writeStore(data: Record<string, unknown>): void {
+  writeFileSync(getStorePath(), JSON.stringify(data, null, 2), 'utf8');
+}
 
 export function registerIpcHandlers(): void {
   autoUpdater.autoDownload = false;
@@ -296,4 +318,31 @@ export function registerIpcHandlers(): void {
       UPDATE_SERVER_URL: UPDATE_CHECK_ENDPOINT,
     }),
   );
+
+  ipcMain.handle(IPC_CHANNELS.GET_SESSION_ID, () => readStore().sessionId ?? null);
+
+  ipcMain.handle(IPC_CHANNELS.STORE_SET, (_event, key: string, value: unknown) => {
+    const data = readStore();
+    data[key] = value;
+    writeStore(data);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.STORE_GET, (_event, key: string) => readStore()[key] ?? null);
+
+  ipcMain.handle(IPC_CHANNELS.STORE_DELETE, (_event, key: string) => {
+    const data = readStore();
+    delete data[key];
+    writeStore(data);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DATA_GET_STORAGE, () => {
+    const storePath = getStorePath();
+    const usedBytes = existsSync(storePath) ? statSync(storePath).size : 0;
+    const totalBytes = 10 * 1024 * 1024 * 1024; // 10 GB soft cap
+    return { usedBytes, totalBytes };
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DATA_CLEAR_OLD, () => {
+    writeStore({});
+  });
 }
